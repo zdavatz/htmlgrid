@@ -27,7 +27,6 @@ $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
 
 require 'test/unit'
-#require 'test/rebuild.rb'
 require 'htmlgrid/component'
 
 module HtmlGrid

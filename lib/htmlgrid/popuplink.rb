@@ -32,7 +32,7 @@ module HtmlGrid
 		def init
 			super
 			@scrollbars = true
-			@resizable = false
+			@resizable = true
 			@toolbar = true
 			@menubar = false
 			@locationbar = false
@@ -40,7 +40,6 @@ module HtmlGrid
 			@height = 460
 		end
 		def href=(url)
-			props = "scrollbars=yes,resizable=no,toolbar=yes,menubar=no,locationbar=no,width=750,height=460";
 			props = {
 				'scrollbars'	=>	yesorno(@scrollbars),
 				'resizable'		=>	yesorno(@resizable),

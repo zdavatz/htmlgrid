@@ -72,6 +72,9 @@ module HtmlGrid
 				inj << context.meta(properties)
 			}
 		end
+		def onload=(script)
+			@attributes['onload'] = script
+		end
 		def other_html_headers(context)
 			''
 		end

@@ -124,6 +124,9 @@ module HtmlGrid
 			}
 			esc
 		end
+		def formname
+			@container.formname if @container.respond_to?(:formname)
+		end
 		def http_headers
 			self::class::HTTP_HEADERS
 		end
@@ -132,6 +135,9 @@ module HtmlGrid
 		end
 		def label=(boolean)
 			@label = boolean
+		end
+		def onload=(onload)
+			@container.onload = onload if(@container.respond_to? :onload=)
 		end
 		def onsubmit=(onsubmit)
 			@container.onsubmit = onsubmit if(@container.respond_to? :onsubmit=)
