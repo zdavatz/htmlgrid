@@ -24,6 +24,7 @@
 # List -- htmlgrid -- 03.03.2003 -- hwyss@ywesee.com 
 
 require 'htmlgrid/composite'
+require 'htmlgrid/link'
 
 module HtmlGrid
 	class List < Composite
@@ -129,7 +130,9 @@ module HtmlGrid
 			@model ||= []
 			@index = 0
 			sort_model()
-			@model = @model.reverse if self::class::SORT_REVERSE
+			if(self::class::SORT_REVERSE && (@session.event != :sort))
+				@model = @model.reverse 
+			end
 			super
 		end
 		def resolve_suffix(model, bg_flag)
