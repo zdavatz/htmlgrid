@@ -148,7 +148,6 @@ void grid_set_dimensions(cg, width, height)
 cGrid *grid_create()
 {
 	long init_cap = 16;
-	long idx;
 	cGrid * cg;
 	cg = ALLOC(cGrid);
 	cg->attributes = rb_hash_new();
@@ -156,10 +155,7 @@ cGrid *grid_create()
 	cg->height = 1;
 	cg->capacity = init_cap;
 	cg->fields = ALLOC_N(cField *, init_cap);
-	for(idx=0; idx<init_cap; idx++)
-	{
-		cg->fields[idx] = grid_create_field();
-	}
+	cg->fields[0] = grid_create_field();
 	return cg;
 }
 
@@ -599,7 +595,7 @@ VALUE grid_set_attributes(self, attr)
 {
 	cGrid * cg;
 	Data_Get_Struct(self, cGrid, cg);
-	rb_iterate(rb_each, attr, grid_set_attribute_pair, cg);
+	rb_iterate(rb_each, attr, grid_set_attribute_pair, (VALUE)cg);
 	return attr;
 }
 
