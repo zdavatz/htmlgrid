@@ -128,7 +128,7 @@ module HtmlGrid
 			@container.formname if @container.respond_to?(:formname)
 		end
 		def http_headers
-			self::class::HTTP_HEADERS
+			self::class::HTTP_HEADERS.dup
 		end
 		def label?
 			@label
