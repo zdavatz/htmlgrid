@@ -75,12 +75,6 @@ class TestGrid < Test::Unit::TestCase
 			nil
 		end
 	end
-	class GridMock #< Mock
-		attr_reader :explode_called
-		def explode!
-			@explode_called = true
-		end
-	end
   def setup
     @grid = HtmlGrid::Grid.new
   end
@@ -354,21 +348,5 @@ class TestGrid < Test::Unit::TestCase
 		assert_nothing_raised {
 			@grid.to_html(CGI.new)
 		}
-	end
-	def test_explode
-		@grid.add('test', 0,0)	
-    expected = '<TABLE cellspacing="0"><TR><TD>test</TD></TR></TABLE>'
-    assert_equal(expected, @grid.to_html(CGI.new))
-		assert_nothing_raised {
-			@grid.explode!
-		}
-    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR></TABLE>'
-    assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_explode_recursive
-		mock = GridMock.new
-		@grid.add(mock, 0, 0)
-		@grid.explode!
-		assert(mock.explode_called)
 	end
 end

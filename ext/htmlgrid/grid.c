@@ -185,14 +185,14 @@ void grid_mark(cg)
 void grid_free(cg)
 	cGrid * cg;
 {
-/*
 	long idx;
-	for(idx=0; idx < cg->capacity; idx++)
+	cField * cf;
+	for(idx=0; idx < (cg->width * cg->height); idx++)
 	{
-		//free(cg->fields[idx]->content);
-		free(cg->fields[idx]);
+		cf = cg->fields[idx];
+		free(cf->content);
+		free(cf);
 	}
-*/
 	free(cg->fields);
 	free(cg);
 }
