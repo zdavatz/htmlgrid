@@ -1,0 +1,37 @@
+HtmlGrid README
+============
+
+  HtmlGrid is a Html-ToolKit.
+
+Requirements
+------------
+
+  * ruby 1.8
+
+Install
+-------
+
+  De-Compress archive and enter its top directory.
+  Then type:
+
+    $ ruby setup.rb config
+    $ ruby setup.rb setup
+   ($ su)
+    # ruby setup.rb install
+
+  You can also install files into your favorite directory
+  by supplying setup.rb some options. Try "ruby setup.rb --help".
+
+Usage
+-----
+
+ No Documentation yet
+
+License
+-------
+
+  LGPL
+
+
+URL: http://download.ywesee.com/ruby/htmlgrid
+Author: Hannes Wyss <hwyss@ywesee.com>
