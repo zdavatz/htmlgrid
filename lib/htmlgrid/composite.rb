@@ -112,6 +112,9 @@ module HtmlGrid
 			components.sort.each { |matrix, component|
 				res = resolve_offset(matrix, offset)
 				comp = create(component, model, @session)
+				if((tab = matrix.at(3)) && comp.respond_to?(:tabindex=))
+					comp.tabindex = tab
+				end
 				@grid.add(label(comp, component), res.at(0), res.at(1), 
 					self::class::VERTICAL)
 			}

@@ -30,6 +30,7 @@ module HtmlGrid
 		LABEL = true
 		def init
 			super
+			self.onload = "document.forms[0][0].focus()"
 			@attributes['type'] = 'text'
 		end
 	end
