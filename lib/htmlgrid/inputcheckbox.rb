@@ -33,7 +33,7 @@ module HtmlGrid
 			if(@value)
 				@attributes.store('checked', true)
 			end
-			@attributes.store('value', '1') if(@attributes['value'].empty?)
+			@attributes.store('value', '1') 
 			@attributes['type'] = 'checkbox'
 		end
 	end
