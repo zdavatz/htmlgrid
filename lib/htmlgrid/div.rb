@@ -21,7 +21,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com
 #
-# Div -- oddb -- 12.08.2003 -- jlang@ywesee.com, usenguel@ywesee.com
+# Div -- oddb -- 12.11.2004 -- jlang@ywesee.com, usenguel@ywesee.com
 
 require 'htmlgrid/component'
 

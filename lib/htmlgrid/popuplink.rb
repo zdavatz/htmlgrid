@@ -39,7 +39,7 @@ module HtmlGrid
 			@width = 750
 			@height = 460
 		end
-		def href=(url)
+		def to_html(context)
 			props = {
 				'scrollbars'	=>	yesorno(@scrollbars),
 				'resizable'		=>	yesorno(@resizable),
@@ -52,9 +52,9 @@ module HtmlGrid
 				[key,val].join('=')
 			}.join(',')
 			name = @lookandfeel.lookup(@name).to_s.gsub(/[^a-z]+/i, '')
-			script = "window.open('#{url}', '#{name}', '#{props}').focus(); return false"
+			script = "window.open('#{@href}', '#{name}', '#{props}').focus(); return false"
 			@attributes.store('onClick', script)
-			super#(url)
+			super
 		end
 		private
 		def yesorno(value)
