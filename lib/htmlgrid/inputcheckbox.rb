@@ -30,6 +30,10 @@ module HtmlGrid
 		LABEL = true
 		def init
 			super
+			if(@value)
+				@attributes['checked'] = true
+			end
+			@attributes['value'] = '1'
 			@attributes['type'] = 'checkbox'
 		end
 	end
