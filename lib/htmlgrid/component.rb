@@ -146,7 +146,7 @@ module HtmlGrid
 			@attributes.store(key, value)
 		end
 		def tabindex=(tab)
-			@attributes.store('tabindex', tab.to_s)
+			@attributes.store('tabIndex', tab.to_s)
 		end
 		def to_html(context)
 			@value.to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
