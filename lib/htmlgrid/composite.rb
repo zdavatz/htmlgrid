@@ -43,6 +43,9 @@ module HtmlGrid
 		def compose(model=@model, offset=[0,0])
 			compose_components(model, offset)
 			compose_css(offset)
+			compose_colspan(offset)
+		end
+		def compose_colspan(offset)
 			colspan_map.each { |matrix, span|
 				res = resolve_offset(matrix, offset)
 				@grid.set_colspan(res.at(0), res.at(1), span)	

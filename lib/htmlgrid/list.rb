@@ -67,6 +67,7 @@ module HtmlGrid
 				@list_index = idx
 				compose_components(mdl, offset)
 				compose_css(offset, resolve_suffix(mdl, bg_flag))
+				compose_colspan(offset)
 				offset = resolve_offset(offset, self::class::OFFSET_STEP)
 				bg_flag = !bg_flag if self::class::STRIPED_BG
 			}
