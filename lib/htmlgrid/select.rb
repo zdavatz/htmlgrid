@@ -37,7 +37,7 @@ module HtmlGrid
 	class Select < AbstractSelect
 		private
 		def selection(context)
-			selected = @model.send(@name).to_s
+			selected = (@model.send(@name).to_s if(@model.respond_to?(@name)))
 			@session.valid_values(@name).collect { |value|
 				attributes = { "value" => value.to_s }
 				attributes.store("selected", true) if(value == selected)
