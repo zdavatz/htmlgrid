@@ -32,6 +32,7 @@ module HtmlGrid
 		CSS_HEAD_MAP = {}
 		DEFAULT_HEAD_CLASS = nil
 		EMPTY_LIST = false 
+		EMPTY_LIST_KEY = :empty_list
 		LOOKANDFEEL_MAP = {}
 		OFFSET_STEP = [0,1]
 		OMIT_HEADER = false
@@ -55,7 +56,8 @@ module HtmlGrid
 		def compose_footer(offset=[0,0])
 		end
 		def compose_empty_list(offset)
-			@grid.add(@lookandfeel.lookup(:empty_list), *offset)
+			@grid.add(@lookandfeel.lookup(self::class::EMPTY_LIST_KEY), 
+				*offset)
 			@grid.add_attribute('class', 'list', *offset)
 			#@grid[*offset].add_style('list')
 			@grid.set_colspan(*offset)

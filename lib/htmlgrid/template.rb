@@ -61,7 +61,7 @@ module HtmlGrid
 				if(block_given?)
 					block.call
 				end.to_s <<
-				context.title { @lookandfeel.lookup(:html_title) } << 
+				title(context) << 
 				css_link(context) <<
 				meta_tags(context) <<
 				other_html_headers(context)
@@ -88,9 +88,12 @@ module HtmlGrid
 		def template_tags(context, &block)
 			block.call
 		end
+		def title(context)
+			context.title { @lookandfeel.lookup(:html_title) }
+		end
 		def to_html(context)
 			template_html(context) {
-				super
+				super(context)
 			}
 		end
 	end
