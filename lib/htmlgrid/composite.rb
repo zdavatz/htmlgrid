@@ -79,6 +79,11 @@ module HtmlGrid
 		def event
 			@container.event if @container.respond_to?(:event)
 		end
+		def explode!
+			super
+			@grid.explode!
+			@grid = nil
+		end
 		def full_colspan
 			raw_span = components.keys.collect{ |key|
 				key.at(0)

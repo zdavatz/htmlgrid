@@ -124,8 +124,23 @@ module HtmlGrid
 			}
 			esc
 		end
+		def explode!
+			@model = nil
+			@label = nil
+			@lookandfeel = nil
+			@container = nil
+			@attributes = nil
+			@session = nil
+			@colspan_map = nil
+			@components = nil
+			@component_css_map = nil
+			@css_map = nil
+			@css_class = nil
+			@value = nil
+			@symbol_map = nil
+		end
 		def http_headers
-			self::class::HTTP_HEADERS
+			self::class::HTTP_HEADERS.dup
 		end
 		def label?
 			@label
