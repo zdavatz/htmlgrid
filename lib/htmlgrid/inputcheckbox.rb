@@ -30,10 +30,10 @@ module HtmlGrid
 		LABEL = true
 		def init
 			super
-			if(@model.respond_to?(@name) && @model.send(@name))
+			if(@value)
 				@attributes.store('checked', true)
 			end
-			@attributes['value'] = '1' if(@attributes['value'].empty?)
+			@attributes.store('value', '1') if(@attributes['value'].empty?)
 			@attributes['type'] = 'checkbox'
 		end
 	end
