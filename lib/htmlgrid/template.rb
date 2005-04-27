@@ -26,7 +26,7 @@
 require 'htmlgrid/divcomposite'
 
 module HtmlGrid
-	class Template < DivComposite
+	class Template < Composite
 		CONTENT = nil
 		FOOT = nil
 		HEAD = nil
