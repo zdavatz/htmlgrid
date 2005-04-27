@@ -55,7 +55,7 @@ module HtmlGrid
 			context.hidden('flavor', @lookandfeel.flavor) << 
 			context.hidden('language', @lookandfeel.language) << 
 			context.hidden('event', event.to_s) << 
-			context.hidden('state_id', @session.state.id.to_s)
+			context.hidden('state_id', @session.state.object_id.to_s)
 		end
 		def init
 			@form_properties = {}
