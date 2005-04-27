@@ -26,27 +26,27 @@
 module HtmlGrid
 	module ErrorMessage
 		private
-		def error_message
+		def error_message(ypos = 0)
 			if(@session.warning?)
 				@session.warnings.each { |warning|
-					message(warning, 'warning')
+					message(warning, 'warning', ypos)
 				}
 			end
 			if(@session.error?)
 				@session.errors.each { |error|
-					message(error, 'processingerror')
+					message(error, 'processingerror', ypos)
 				}
 			end
 		end
-		def message(obj, css_class)
+		def message(obj, css_class, ypos=0)
 			txt = HtmlGrid::Text.new(obj.message, @model, @session, self)
 			if(txt.value.nil?)
 				txt.value = @lookandfeel.lookup(obj.message, escape(obj.value))
 			end
 			unless(txt.value.nil?)
-				@grid.insert_row(0, txt)
-				@grid.set_colspan(0,0)
-				@grid.add_style(css_class, 0, 0)
+				@grid.insert_row(ypos, txt)
+				@grid.set_colspan(0,ypos)
+				@grid.add_style(css_class, 0, ypos)
 			end
 		end
 	end

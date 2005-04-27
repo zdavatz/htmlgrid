@@ -31,35 +31,14 @@ require 'htmlgrid/label'
 require 'htmlgrid/text'
 
 module HtmlGrid
-	class Composite < Component
-		COLSPAN_MAP = {}
-		COMPONENT_CSS_MAP = {}
-		CSS_MAP = {}
-		DEFAULT_CLASS = InputText
-		LABELS = false
-		SYMBOL_MAP = {}
+	class AbstractComposite < Component
 		LEGACY_INTERFACE = true
-		VERTICAL = false
-		def compose(model=@model, offset=[0,0])
-			compose_components(model, offset)
-			compose_css(offset)
-			compose_colspan(offset)
-		end
-		def compose_colspan(offset)
-			colspan_map.each { |matrix, span|
-				res = resolve_offset(matrix, offset)
-				@grid.set_colspan(res.at(0), res.at(1), span)	
-			}
-		end
+		SYMBOL_MAP = {}
 		def create(component, model, session)
-			#p component.class
 			if(component.is_a? Class)
 				component.new(model, session, self)
 			elsif(component.is_a? Symbol)
-				#puts "model is a: #{model.class}"
-				#puts "component is a Symbol: #{component}"
 				if(self.respond_to?(component, true))
-					#puts "calling self for #{component}"
 					args = [model]
 					if(self::class::LEGACY_INTERFACE)
 						args.push(session)
@@ -79,14 +58,42 @@ module HtmlGrid
 				Text.new(component.intern, model, session, self)
 			end
 		end
+		private
+		def components
+			@components ||= self::class::COMPONENTS.dup
+		end
+		def symbol_map
+			@symbol_map ||= self::class::SYMBOL_MAP.dup
+		end
+	end
+	class Composite < AbstractComposite
+		COLSPAN_MAP = {}
+		COMPONENT_CSS_MAP = {}
+		CSS_MAP = {}
+		DEFAULT_CLASS = InputText
+		LABELS = false
+		VERTICAL = false
+		def compose(model=@model, offset=[0,0])
+			compose_components(model, offset)
+			compose_css(offset)
+			compose_colspan(offset)
+		end
+		def compose_colspan(offset)
+			colspan_map.each { |matrix, span|
+				res = resolve_offset(matrix, offset)
+				@grid.set_colspan(res.at(0), res.at(1), span)	
+			}
+		end
 		def event
 			@container.event if @container.respond_to?(:event)
 		end
+=begin
 		def explode!
 			super
 			@grid.explode!
 			@grid = nil
 		end
+=end
 		def full_colspan
 			raw_span = components.keys.collect{ |key|
 				key.at(0)
@@ -109,9 +116,6 @@ module HtmlGrid
 		end
 		def colspan_map
 			@colspan_map ||= self::class::COLSPAN_MAP.dup
-		end
-		def components
-			@components ||= self::class::COMPONENTS.dup
 		end
 		def component_css_map
 			@component_css_map ||= self::class::COMPONENT_CSS_MAP.dup
@@ -152,9 +156,6 @@ module HtmlGrid
 		end
 		def submit(model=@model, session=@session, name=event())
 			Submit.new(name, model, session, self)
-		end
-		def symbol_map
-			@symbol_map ||= self::class::SYMBOL_MAP.dup
 		end
 		def resolve_offset(matrix, offset=[0,0])
 			result = []

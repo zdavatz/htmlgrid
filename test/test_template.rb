@@ -24,6 +24,7 @@
 # TestTemplate -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
+$: << File.dirname(__FILE__)
 
 require 'test/unit'
 require 'stub/cgi'
@@ -58,7 +59,13 @@ class Template < HtmlGrid::Template
 			"content"			=>	"follow, index",
 		},
 	]
-	COMPONENTS = {}
+	COMPONENTS = {
+		[0,0]	=>	:foo,	
+	}
+	LEGACY_INTERFACE = false
+	def foo(model)
+		'foo'
+	end
 end
 
 class TestTemplate < Test::Unit::TestCase

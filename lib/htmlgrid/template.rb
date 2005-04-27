@@ -23,10 +23,10 @@
 #
 # Template -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
 
-require 'htmlgrid/composite'
+require 'htmlgrid/divcomposite'
 
 module HtmlGrid
-	class Template < Composite
+	class Template < DivComposite
 		CONTENT = nil
 		FOOT = nil
 		HEAD = nil
