@@ -37,6 +37,10 @@ module HtmlGrid
 				&& @session.respond_to?(:user_input))
 				@value = @session.user_input(@name)
 			end
+			if(@value.nil? \
+				&& @session.respond_to?(:get_cookie_input))
+				@value = @session.get_cookie_input(@name)
+			end
 			if(@value.is_a? RuntimeError)
 				@value = @value.value 
 			end
