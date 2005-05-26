@@ -43,6 +43,7 @@ VALUE grid_add_tag(long argc, VALUE *argv, VALUE self);
 VALUE grid_add_style(long argc, VALUE *argv, VALUE self);
 VALUE grid_add_component_style(long argc, VALUE *argv, VALUE self);
 VALUE grid_push(VALUE self, VALUE item);
+VALUE grid_row_set_attributes(VALUE self, VALUE ahash, VALUE yval);
 VALUE grid_set_colspan(long argc, VALUE *argv, VALUE self);
 VALUE grid_set_attribute(VALUE self, VALUE key, VALUE value);
 VALUE grid_set_attributes(VALUE self, VALUE hash);
@@ -66,6 +67,7 @@ struct cGrid {
 	long width;
 	long capacity;
 	VALUE attributes;
+	VALUE *row_attributes;
 	cField **fields;
 };
 

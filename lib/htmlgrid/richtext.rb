@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# Richtext -- htmlgrid -- 29.06.2004 -- maege@ywesee.com
+# Richtext -- htmlgrid -- 29.06.2004 -- mhuggler@ywesee.com
 
 require 'htmlgrid/component'
 

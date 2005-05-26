@@ -26,6 +26,7 @@
 module HtmlGrid
 	class Component
 		CSS_CLASS = nil
+		CSS_ID = nil
 		HTML_ATTRIBUTES = {}
 		HTTP_HEADERS = {}
 		LABEL = false
@@ -95,6 +96,9 @@ module HtmlGrid
 			if(css_class())
 				@attributes.store("class", css_class())
 			end
+			if(css_id())
+				@attributes.store("id", css_id())
+			end
 			@value = nil
 			@label = self::class::LABEL
 			init()
@@ -105,6 +109,12 @@ module HtmlGrid
 		end
 		def css_class=(css_class)
 			@css_class = @attributes['class'] = css_class
+		end
+		def css_id
+			@css_id ||= self::class::CSS_ID
+		end
+		def css_id=(css_id)
+			@css_id = @attributes['id'] = css_id
 		end
 		def escape(txt)
 			@@html_entities.inject(txt.to_s.dup) { |str, map| 

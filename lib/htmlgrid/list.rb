@@ -84,7 +84,6 @@ module HtmlGrid
 						link = Link.new(header_key, @model, @session, self)
 						args = {
 							'sortvalue'	=>	component.to_s,
-							'state_id'	=>	@session.state.id,
 						}
 						link.attributes['href'] = @lookandfeel.event_url(:sort, args)
 						if((cls = css_head_map[matrix]) \
