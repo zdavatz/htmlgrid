@@ -21,7 +21,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# InfoMessage -- htmlgrid -- 25.08.2003 -- maege@ywesee.com
+# InfoMessage -- htmlgrid -- 25.08.2003 -- mhuggler@ywesee.com
 
 module HtmlGrid
 	module InfoMessage

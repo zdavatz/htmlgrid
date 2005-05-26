@@ -24,8 +24,18 @@
 # Label -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com 
 
 require 'delegate'
+require 'htmlgrid/namedcomponent'
 
 module HtmlGrid
+	class SimpleLabel < NamedComponent
+		def init
+			super
+			@value = @lookandfeel.lookup(@name)
+		end
+		def to_html(context)
+			context.label(@attributes) { @value }
+		end
+	end
 	class Label < SimpleDelegator
 		include Enumerable
 		def initialize(component, session, label_key=nil)

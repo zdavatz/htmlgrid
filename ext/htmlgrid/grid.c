@@ -35,6 +35,8 @@ void Init_Grid()
 	rb_define_method(grid, "add", grid_add, -1);
 	rb_define_method(grid, "add_field", grid_add_field, 3);
 	rb_define_method(grid, "add_attribute", grid_add_attribute, -1);
+	rb_define_method(grid, "set_row_attributes", 
+			grid_row_set_attributes, 2);
 	rb_define_method(grid, "add_tag", grid_add_tag, -1);
 	rb_define_method(grid, "add_style", grid_add_style, -1);
 	rb_define_method(grid, "add_component_style", 
@@ -84,6 +86,16 @@ void grid_set_dimensions(cg, width, height)
 
 	long stop, fields, idx, xval, yval, mwidth, mheight; 
 
+	/* make space for more rows */
+	if(height > cg->height)
+	{
+		REALLOC_N(cg->row_attributes, VALUE, height);
+		for(yval=cg->height; yval < height; yval++)
+		{
+			cg->row_attributes[yval] = Qnil;	
+		}
+	}
+
 	mheight = (height > cg->height) ? height : cg->height;
 	mwidth = (width > cg->width) ? width : cg->width;
 
@@ -94,7 +106,6 @@ void grid_set_dimensions(cg, width, height)
 	{
 		tmp[idx] = cg->fields[idx];
 	}
-
 
 	/* sufficient capacity? */
 	if(stop > cg->capacity)
@@ -147,7 +158,7 @@ void grid_set_dimensions(cg, width, height)
 
 cGrid *grid_create()
 {
-	long init_cap = 16;
+	long init_cap = 4;
 	cGrid * cg;
 	cg = ALLOC(cGrid);
 	cg->attributes = rb_hash_new();
@@ -156,6 +167,8 @@ cGrid *grid_create()
 	cg->capacity = init_cap;
 	cg->fields = ALLOC_N(cField *, init_cap);
 	cg->fields[0] = grid_create_field();
+	cg->row_attributes = ALLOC_N(VALUE, cg->height);
+	cg->row_attributes[0] = Qnil;
 	return cg;
 }
 
@@ -176,6 +189,10 @@ void grid_mark(cg)
 			rb_gc_mark(cf->content[cdx]);
 		}
 	}
+	for(idx=0; idx < cg->height; idx++)
+	{
+		rb_gc_mark(cg->row_attributes[idx]);	
+	}
 }
 
 void grid_free(cg)
@@ -189,6 +206,7 @@ void grid_free(cg)
 		free(cf->content);
 		free(cf);
 	}
+	free(cg->row_attributes);
 	free(cg->fields);
 	free(cg);
 }
@@ -328,7 +346,11 @@ VALUE grid_to_html(self, cgi)
 	grid_cat_starttag(result, "TABLE", cg->attributes);
 	for(idx=0, yval=0; yval < cg->height; yval++)
 	{
-		rb_str_cat(result, tr_open, 4);
+		if(cg->row_attributes[yval] == Qnil)
+			rb_str_cat(result, tr_open, 4);
+		else
+			grid_cat_starttag(result, "TR", cg->row_attributes[yval]);
+
 		for(xval=0; xval < cg->width; xval++, idx++)
 		{
 			//printf("writing out field at idx:%i\n", idx);
@@ -339,15 +361,18 @@ VALUE grid_to_html(self, cgi)
 				idx += spanplus;
 			}	
 			attrs = rb_hash_new();
+/*
 			for(cdx=0; cdx<cf->content_count; cdx++)
 			{
 				item = cf->content[cdx];
 				if(rb_respond_to(item, attributes))
 				{
+					rb_warn("Outward Propagation of attributes is deprecated");
 					rb_iterate(rb_each, rb_funcall(item, attributes, 0), 
 							grid_store_allowed_attribute, attrs);
 				}
 			}
+*/
 			if(cf->attributes != Qnil)
 				rb_hsh_update(attrs, cf->attributes);
 			if(cf->colspan > 1)
@@ -711,6 +736,20 @@ void grid_field_add_attribute(cf, pair)
 	if(cf->attributes == Qnil)
 		cf->attributes = rb_hash_new();
 	rb_hsh_store_pair(pair, cf->attributes);
+}
+
+VALUE grid_row_set_attributes(self, ahash, yval)
+	VALUE self, ahash, yval;
+{
+	cGrid * cg;
+	long ypos;
+	Data_Get_Struct(self, cGrid, cg);
+	ypos = NUM2INT(yval);
+
+	grid_set_dimensions(cg, cg->width, ypos + 1);
+	cg->row_attributes[ypos] = ahash;
+
+	return ahash;
 }
 
 VALUE grid_add_attribute(argc, argv, self)

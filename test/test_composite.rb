@@ -46,7 +46,7 @@ class StubComposite < HtmlGrid::Composite
 		:bar	=>	HtmlGrid::InputText,
 	}
 	attr_reader :model, :session
-	public :resolve_offset
+	public :resolve_offset, :labels?
 	def init
 		@barcount=0
 		super
@@ -79,6 +79,7 @@ end
 class StubCompositeNoLabel < HtmlGrid::Composite
 	LABELS = false
 	COMPONENTS = {}
+	public :labels?
 end
 class StubCompositeModel
 end
@@ -191,7 +192,7 @@ class TestComposite < Test::Unit::TestCase
 		expected = '<TABLE cellspacing="0"><TR><TD><A>brafoo</A></TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 		composite = StubComposite3.new(StubCompositeModel.new, StubCompositeSession.new)
-		expected = '<TABLE cellspacing="0"><TR><TD class="standard"><A class="standard">brafoo</A></TD></TR></TABLE>'
+		expected = '<TABLE cellspacing="0"><TR><TD><A class="standard">brafoo</A></TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 		composite = StubComposite4.new(StubCompositeModel.new, StubCompositeSession.new)
 		expected = '<TABLE cellspacing="0"><TR><TD class="dradnats"><A class="standard">brafoo</A></TD></TR></TABLE>'

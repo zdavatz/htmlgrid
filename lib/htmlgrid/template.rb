@@ -23,10 +23,10 @@
 #
 # Template -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
 
-require 'htmlgrid/divcomposite'
+require 'htmlgrid/composite'
 
 module HtmlGrid
-	class Template < Composite
+	module TemplateMethods
 		CONTENT = nil
 		FOOT = nil
 		HEAD = nil
@@ -34,6 +34,7 @@ module HtmlGrid
 			"Cache-Control"	=>	"no-cache, max-age=3600, must-revalidate",
 		}
 		META_TAGS = []
+		LEGACY_INTERFACE = true
 		def css_link(context)
 			properties = {
 				"rel"		=>	"stylesheet",
@@ -96,5 +97,8 @@ module HtmlGrid
 				super(context)
 			}
 		end
+	end
+	class Template < Composite
+		include TemplateMethods
 	end
 end

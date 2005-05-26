@@ -32,6 +32,7 @@ require 'htmlgrid/text'
 
 module HtmlGrid
 	class AbstractComposite < Component
+		LABELS = false
 		LEGACY_INTERFACE = true
 		SYMBOL_MAP = {}
 		def create(component, model, session)
@@ -62,6 +63,9 @@ module HtmlGrid
 		def components
 			@components ||= self::class::COMPONENTS.dup
 		end
+		def labels?
+			self::class::LABELS
+		end
 		def symbol_map
 			@symbol_map ||= self::class::SYMBOL_MAP.dup
 		end
@@ -71,7 +75,6 @@ module HtmlGrid
 		COMPONENT_CSS_MAP = {}
 		CSS_MAP = {}
 		DEFAULT_CLASS = InputText
-		LABELS = false
 		VERTICAL = false
 		def compose(model=@model, offset=[0,0])
 			compose_components(model, offset)
@@ -99,9 +102,6 @@ module HtmlGrid
 				key.at(0)
 			}.max.to_i
 			(raw_span > 0) ? raw_span + 1 : nil
-		end
-		def labels?
-			self::class::LABELS
 		end
 		def to_html(context)
 			@grid.set_attributes(@attributes)

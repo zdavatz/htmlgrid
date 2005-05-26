@@ -21,7 +21,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com
 #
-# InputFile -- oddb -- 29.07.2003 -- maege@ywesee.com
+# InputFile -- oddb -- 29.07.2003 -- mhuggler@ywesee.com
 
 require 'htmlgrid/namedcomponent'
 

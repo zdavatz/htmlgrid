@@ -269,8 +269,10 @@ class TestGrid < Test::Unit::TestCase
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_attributes
+		### this test has changed behavior: its not desirable to have magically 
+		### transferred css information from a component to its container
 		@grid.add(StubGridComponent.new, 0,0)
-		expected = '<TABLE cellspacing="0"><TR><TD class="foo">bar</TD></TR></TABLE>'
+		expected = '<TABLE cellspacing="0"><TR><TD>bar</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_set_attribute1
@@ -292,6 +294,16 @@ class TestGrid < Test::Unit::TestCase
 		]
 		result = @grid.to_html(CGI.new)
     assert_equal(true, expected.include?(result), result)
+	end
+	def test_set_row_attributes1
+		@grid.set_row_attributes({'foo' => 'bar'}, 0)
+		expected = '<TABLE cellspacing="0"><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+	end
+	def test_set_row_attributes2
+		@grid.set_row_attributes({'foo' => 'bar'}, 1)
+		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_insert_row
 		assert_equal(1, @grid.height)
