@@ -27,6 +27,7 @@ module HtmlGrid
 	module ErrorMessage
 		private
 		def error_message(ypos = 0)
+			@displayed_messages = []
 			if(@session.warning?)
 				@session.warnings.each { |warning|
 					message(warning, 'warning', ypos)
@@ -39,14 +40,18 @@ module HtmlGrid
 			end
 		end
 		def message(obj, css_class, ypos=0)
-			txt = HtmlGrid::Text.new(obj.message, @model, @session, self)
-			if(txt.value.nil?)
-				txt.value = @lookandfeel.lookup(obj.message, escape(obj.value))
-			end
-			unless(txt.value.nil?)
-				@grid.insert_row(ypos, txt)
-				@grid.set_colspan(0,ypos)
-				@grid.add_style(css_class, 0, ypos)
+			message = obj.message
+			unless(@displayed_messages.include?(message))
+				@displayed_messages.push(message)
+				txt = HtmlGrid::Text.new(message, @model, @session, self)
+				if(txt.value.nil?)
+					txt.value = @lookandfeel.lookup(message, escape(obj.value))
+				end
+				unless(txt.value.nil?)
+					@grid.insert_row(ypos, txt)
+					@grid.set_colspan(0,ypos)
+					@grid.add_style(css_class, 0, ypos)
+				end
 			end
 		end
 	end
