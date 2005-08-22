@@ -56,7 +56,8 @@ module HtmlGrid
 					#p "nothing found for #{component}"
 				end
 			elsif(component.is_a? String)
-				Text.new(component.intern, model, session, self)
+				#Text.new(component.intern, model, session, self)
+				@lookandfeel.lookup(component.intern)
 			end
 		end
 		private

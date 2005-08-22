@@ -35,11 +35,11 @@ module HtmlGrid
 		}
 		META_TAGS = []
 		LEGACY_INTERFACE = true
-		def css_link(context)
+		def css_link(context, path=@lookandfeel.resource(:css))
 			properties = {
 				"rel"		=>	"stylesheet",
 				"type"	=>	"text/css",
-				"href"	=>	@lookandfeel.resource(:css),
+				"href"	=>	path,
 			}
 			context.link(properties)
 		end
