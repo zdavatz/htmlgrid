@@ -57,7 +57,7 @@ module HtmlGrid
 				end
 			elsif(component.is_a? String)
 				#Text.new(component.intern, model, session, self)
-				@lookandfeel.lookup(component.intern)
+				@lookandfeel.lookup(component).to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
 			end
 		end
 		private
