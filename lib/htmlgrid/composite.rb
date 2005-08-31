@@ -59,6 +59,10 @@ module HtmlGrid
 				#Text.new(component.intern, model, session, self)
 				@lookandfeel.lookup(component).to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
 			end
+		rescue StandardError => exc
+			exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)", 
+				self.class, components.index(component).inspect, component))
+			raise exc
 		end
 		private
 		def components

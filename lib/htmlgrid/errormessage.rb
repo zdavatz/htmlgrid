@@ -40,6 +40,7 @@ module HtmlGrid
 			end
 		end
 		def message(obj, css_class, ypos=0)
+			@displayed_messages ||= []
 			message = obj.message
 			unless(@displayed_messages.include?(message))
 				@displayed_messages.push(message)
