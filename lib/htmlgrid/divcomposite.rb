@@ -10,6 +10,7 @@ module HtmlGrid
 		def init
 			super
 			@grid = []
+			@css_grid = []
 			compose()
 		end
 		def compose
@@ -24,14 +25,22 @@ module HtmlGrid
 					ypos = mpos
 					div = []
 					@grid.push(div)
+					css = nil
+					if(klass = css_map[ypos])
+						css = { 'class' => klass }
+					end
+					@css_grid.push(css)
 				end
 				div.push(label(create(component, @model, @session), component))
 			}
 		end
-		def div_attributes
+		def div_attributes(idx=nil)
 			attr = {}
 			if(klass = self.class.const_get(:DIV_CLASS))
 				attr.store('class', klass)
+			end
+			if(idx && (css = @css_grid.at(idx)))
+				attr.update(css)
 			end
 			if(klass = self.class.const_get(:DIV_ID))
 				attr.store('id', klass)
@@ -47,8 +56,9 @@ module HtmlGrid
 			end
 		end
 		def to_html(context)
-			@grid.collect { |div|
-				context.div(div_attributes) { 
+			res = ''
+			@grid.each_with_index { |div, idx|
+				res << context.div(div_attributes(idx)) { 
 					div.flatten.collect { |item| 
 						if(item.respond_to?(:to_html))
 							item.to_html(context)
@@ -57,7 +67,8 @@ module HtmlGrid
 						end
 					}
 				}
-			}.join()
+			}
+			res
 		end
 	end
 end

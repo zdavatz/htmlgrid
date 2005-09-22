@@ -35,6 +35,8 @@ module HtmlGrid
 		LABELS = false
 		LEGACY_INTERFACE = true
 		SYMBOL_MAP = {}
+		CSS_MAP = {}
+		DEFAULT_CLASS = Value
 		def create(component, model, session)
 			if(component.is_a? Class)
 				component.new(model, session, self)
@@ -67,6 +69,9 @@ module HtmlGrid
 		private
 		def components
 			@components ||= self::class::COMPONENTS.dup
+		end
+		def css_map
+			@css_map ||= self::class::CSS_MAP.dup
 		end
 		def labels?
 			self::class::LABELS
@@ -143,9 +148,6 @@ module HtmlGrid
 			component_css_map.sort.each { |matrix, style|
 				@grid.add_component_style(style + suffix, *resolve_offset(matrix, offset))
 			}
-		end
-		def css_map
-			@css_map ||= self::class::CSS_MAP.dup
 		end
 		def init
 			super
