@@ -137,7 +137,7 @@ module HtmlGrid
 			end
 			super
 		end
-		def resolve_suffix(model, bg_flag)
+		def resolve_suffix(model, bg_flag=false)
 			bg_flag ? self::class::BACKGROUND_SUFFIX : ''
 		end
 		def sort_model
