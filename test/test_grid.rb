@@ -28,7 +28,7 @@ $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
 require 'test/unit'
-#require 'rebuild'
+require 'rebuild'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/grid'
