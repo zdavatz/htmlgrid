@@ -75,11 +75,9 @@ rescue LoadError
 					end
 					def add_style(style)
 						@attributes["class"] = style
-=begin
-						@components.each { |component| 
-							component.css = style if component.respond_to?(:css=)
-						}
-=end
+					end
+					def attribute(key)
+						@attributes[key]
 					end
 					def colspan
 						@attributes.fetch("colspan", 1).to_i
@@ -99,25 +97,17 @@ rescue LoadError
 						html = "&nbsp;" if html.empty?
 						html
 					end
-					def compose
-						attributes = {}
-						@components.each { |component|
-							attributes.update(component.attributes) if(component.respond_to?(:attributes))
-						}
-						attributes.delete_if { |key, value| !ALLOWED_ATTRIBUTES.include? key }
-						# FIXME: this is an ugly side_effect
-						#attributes.delete("class") unless @attributes["class"].nil?
-						@attributes = attributes.update(@attributes)
+					def tag=(tag)
+						@tag = tag.to_s.downcase
 					end
 					def to_html(context)
-						compose
 						if(@tag && context.respond_to?(@tag))
-							context.method(@tag)
+							context.send(@tag, @attributes) { 
+								component_html(context) }
 						else
-							context.method(:td)
-						end.call(@attributes) {
-							component_html(context)
-						}
+							context.td(@attributes) {
+								component_html(context) }
+						end
 					end
 				end
 				def initialize
@@ -134,25 +124,6 @@ rescue LoadError
 				def add(item, x)
 					(@fields[x] ||= Field.new).add item
 				end
-=begin
-				def add_background(x, w=1)
-					each_field(x, w) { |field| 
-						field.add_background
-					}
-				end
-				def add_style(style, x, w=1)
-					each_field(x, w) { |field| 
-						field.add_style(style)
-					}
-				end
-				def add_tag(tag, x, w=1)
-					each_field(x, w) { |field| 
-						p field
-						field.tag = tag
-						p field
-					}
-				end
-=end
 				def each_field(x, w=1)
 					x.upto([x+w, @width].min - 1) { |xx|
 						yield(@fields[xx])
@@ -162,6 +133,9 @@ rescue LoadError
 					cgi.tr(@attributes) {
 						field_html(cgi)
 					}
+				end
+				def field_attribute(key, x=0)
+					@fields[x].attribute(key)
 				end
 				def field_html(cgi)
 					html = ""
@@ -175,6 +149,9 @@ rescue LoadError
 						end
 					}
 					html
+				end
+				def set_attributes(attr)
+					@attributes = attr
 				end
 				def [](x)
 					begin
@@ -265,6 +242,9 @@ rescue LoadError
 					}
 				}
 			end
+			def field_attribute(key, x=0, y=0)
+				@rows[y].field_attribute(key, x)
+			end
 			def insert_row(y=0, arg=nil)
 				@rows[y, 0] = Row.new	
 				@height += 1
@@ -280,9 +260,13 @@ rescue LoadError
 			def set_attributes(hash)
 				@attributes.update(hash)
 			end
-			def set_colspan(x=0, y=0, span=@width)
-				initialize_grid(x+1, y+1)
+			def set_colspan(x=0, y=0, span=(@width - x))
+				initialize_grid(x+span, y+1)
 				self[x,y].colspan = span
+			end
+			def set_row_attributes(attr={}, y=0)
+				initialize_grid(0, y+1)
+				@rows[y].set_attributes(attr)
 			end
 			def to_html(cgi)
 				cgi.table(@attributes) {
