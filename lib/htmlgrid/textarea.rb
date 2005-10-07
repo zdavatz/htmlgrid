@@ -29,7 +29,11 @@ module HtmlGrid
 	class Textarea	< Input
 		def to_html(context)
 			context.textarea(@attributes) {
-				@value.to_s.strip
+				if(@value.is_a?(Array))
+					@value.join("\n")
+				else
+					@value.to_s
+				end.strip
 			}
 		end
 	end
