@@ -28,11 +28,15 @@ require 'htmlgrid/submit'
 
 module HtmlGrid
 	module FormMethods
+		AUTOFILL = false
 		EVENT = nil
 		FORM_ACTION = nil
 		FORM_METHOD = 'POST'
 		FORM_NAME = 'stdform'
 		TAG_METHOD	= :form
+		def autofill?
+			self.class.const_get(:AUTOFILL)
+		end
 		def event
 			self::class::EVENT
 		end
