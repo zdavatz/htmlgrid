@@ -361,4 +361,16 @@ class TestGrid < Test::Unit::TestCase
 			@grid.to_html(CGI.new)
 		}
 	end
+	def test_add_negative
+		assert_raises(ArgumentError) { @grid.add('foo', -1, 0) }
+		assert_raises(ArgumentError) { @grid.add('foo', 0, -1) }
+		assert_raises(ArgumentError) { @grid.add(['foo', 'bar'], -1, 0) }
+		assert_raises(ArgumentError) { @grid.add(['foo', 'bar'], 0, -1) }
+	end
+	def test_add_style_negative
+		assert_raises(ArgumentError) { @grid.add_style('bar', -1, 1) }
+		assert_raises(ArgumentError) { @grid.add_style('bar', 1, -1) }
+		assert_raises(ArgumentError) { @grid.add_style('bar', 1, 1, -1) }
+		assert_raises(ArgumentError) { @grid.add_style('bar', 1, 1, 1,-1) }
+	end
 end
