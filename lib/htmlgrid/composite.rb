@@ -85,6 +85,7 @@ module HtmlGrid
 		COMPONENT_CSS_MAP = {}
 		CSS_MAP = {}
 		DEFAULT_CLASS = InputText
+		LOOKANDFEEL_MAP = {}
 		VERTICAL = false
 		def compose(model=@model, offset=[0,0])
 			compose_components(model, offset)
@@ -102,9 +103,8 @@ module HtmlGrid
 		end
 =begin
 		def explode!
-			super
 			@grid.explode!
-			@grid = nil
+			super
 		end
 =end
 		def full_colspan
@@ -156,10 +156,15 @@ module HtmlGrid
 		end
 		def label(component, key=nil)
 			if labels?
-				HtmlGrid::Label.new(component, @session, key)
+				HtmlGrid::Label.new(component, @session, lookandfeel_key(key))
 			else
 				component
 			end
+		end
+		def lookandfeel_key(component)
+			self::class::LOOKANDFEEL_MAP.fetch(component) {
+				component
+			}
 		end
 		def submit(model=@model, session=@session, name=event())
 			Submit.new(name, model, session, self)

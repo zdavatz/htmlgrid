@@ -129,6 +129,9 @@ module HtmlGrid
 			init()
 			#puts "#{self.class} initialized"
 		end
+		def autofill?
+			@container.autofill? if @container.respond_to?(:autofill?)
+		end
 		def css_class
 			@css_class ||= self::class::CSS_CLASS
 		end

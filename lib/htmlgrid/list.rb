@@ -33,7 +33,6 @@ module HtmlGrid
 		DEFAULT_HEAD_CLASS = nil
 		EMPTY_LIST = false 
 		EMPTY_LIST_KEY = :empty_list
-		LOOKANDFEEL_MAP = {}
 		OFFSET_STEP = [0,1]
 		OMIT_HEADER = false
 		OMIT_HEAD_TAG = false
@@ -121,11 +120,6 @@ module HtmlGrid
 		end
 		def css_head_map
 			@css_head_map ||= self::class::CSS_HEAD_MAP.dup
-		end
-		def lookandfeel_key(component)
-			self::class::LOOKANDFEEL_MAP.fetch(component) {
-				component
-			}
 		end
 		private
 		def init

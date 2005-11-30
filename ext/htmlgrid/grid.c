@@ -56,6 +56,16 @@ long grid_pos(cg, xpos, ypos)
 	return ypos * cg->width + xpos;
 }
 
+long grid_coordinate(input, name)
+	VALUE input;
+	const char* name;
+{
+	long output = NUM2LONG(input);
+	if(output < 0) 
+		rb_raise(rb_eArgError, "invalid %s %i", name, output);
+	return output;
+}
+
 VALUE rb_hsh_store_pair(pair, hsh)
 	VALUE pair, hsh;
 {
@@ -336,9 +346,11 @@ VALUE grid_to_html(self, cgi)
 	cGrid * cg;
 	cField * cf;
 	VALUE item, result, attrs;
-	ID to_html = rb_intern("to_html");
-	ID to_s = rb_intern("to_s");
-	ID attributes = rb_intern("attributes");
+	ID id_backtrace = rb_intern("backtrace");
+	ID id_to_html = rb_intern("to_html");
+	ID id_to_s = rb_intern("to_s");
+	//ID id_attributes = rb_intern("attributes");
+	ID id_message = rb_intern("message");
 	long idx, cdx, xval, yval, spanplus, len;
 	Data_Get_Struct(self, cGrid, cg);
 	//attrs = rb_iv_get(self, "@attributes");
@@ -394,9 +406,9 @@ VALUE grid_to_html(self, cgi)
 					item = cf->content[cdx];
 					if(rb_obj_class(item) == rb_cString)
 						rb_str_concat(result, item);
-					else if(rb_respond_to(item, to_html))
+					else if(rb_respond_to(item, id_to_html))
 					{
-						VALUE item_html = rb_funcall(item, to_html, 1, cgi);
+						VALUE item_html = rb_funcall(item, id_to_html, 1, cgi);
 						if(rb_obj_is_kind_of(item_html, rb_cString) != Qtrue)
 							rb_str_cat(result, "&nbsp;", 6);
 						else
@@ -408,18 +420,18 @@ VALUE grid_to_html(self, cgi)
 					{
 						rb_str_cat(result, "<!--\n", 5);
 						rb_str_concat(result, 
-								rb_funcall(rb_obj_class(item), to_s, 0));
+								rb_funcall(rb_obj_class(item), id_to_s, 0));
 						rb_str_cat(result, "\n", 1);
 						rb_str_concat(result, 
-								rb_funcall(item, rb_intern("message"), 0));
+								rb_funcall(item, id_message, 0));
 						rb_str_cat(result, "\n", 1);
-						VALUE bt = rb_funcall(item, rb_intern("backtrace"), 0);
+						VALUE bt = rb_funcall(item, id_backtrace, 0);
 						rb_str_concat(result, rb_funcall(bt, rb_intern("join"), 
 									1, rb_str_new2("\n")));
 						rb_str_cat(result, "-->\n", 4);
 					}
 					else
-						rb_str_concat(result, rb_funcall(item, to_s, 0));
+						rb_str_concat(result, rb_funcall(item, id_to_s, 0));
 				}
 			}
 			grid_cat_endtag(result, cf->tag);
@@ -437,18 +449,8 @@ void grid_field_add_content(cf, content)
 	long pos;
 	if(cf->capacity <= cf->content_count)
 	{
-/*
-		long idx, oldcap, newcap;
-		VALUE tmp[cf->capacity];
-		oldcap = cf->capacity;
-		for(idx=0; idx<oldcap; idx++)
-		{
-			tmp[idx] = cf->content[idx];
-		}
-		newcap = cf->capacity * 2;
-*/
 		cf->capacity *= 2;
-		REALLOC_N(cf->content, VALUE, cf->capacity);//newcap);
+		REALLOC_N(cf->content, VALUE, cf->capacity);
 	}
 	pos = cf->content_count;
 	cf->content_count++;
@@ -467,7 +469,7 @@ VALUE grid_add(argc, argv, self)
 	VALUE item, xval, yval, colflag;
 
 	rb_scan_args(argc, argv, "31", &item, &xval, &yval, &colflag);
-	if(rb_funcall(item, rb_intern("is_a?"), 1, rb_mEnumerable) == Qtrue)
+	if(rb_mod_include_p(rb_obj_class(item), rb_mEnumerable) == Qtrue)
 	{
 		VALUE tmp;
 		if(rb_obj_class(item) == rb_cString)
@@ -501,8 +503,8 @@ VALUE grid_add_field(self, item, xval, yval)
 	long xpos, ypos;
 	Data_Get_Struct(self, cGrid, cg);
 
-	xpos = NUM2INT(xval);
-	ypos = NUM2INT(yval);
+	xpos = grid_coordinate(xval, "x-position");
+	ypos = grid_coordinate(yval, "y-position");
 	grid_set_dimensions(cg, xpos + 1, ypos + 1);
 	
 	cf = cg->fields[grid_pos(cg, xpos, ypos)];
@@ -526,8 +528,8 @@ VALUE grid_add_row(self, item, xval, yval)
 	Data_Get_Struct(self, cGrid, cg);
 
 	len = RARRAY(item)->len;
-	xpos = NUM2INT(xval);
-	ypos = NUM2INT(yval);
+	xpos = grid_coordinate(xval, "x-position");
+	ypos = grid_coordinate(yval, "y-position");
 	stop = xpos + len;
 	grid_set_dimensions(cg, stop, ypos + 1);
 
@@ -548,8 +550,8 @@ VALUE grid_add_column(self, item, xval, yval)
 	Data_Get_Struct(self, cGrid, cg);
 
 	len = RARRAY(item)->len;
-	xpos = NUM2INT(xval);
-	ypos = NUM2INT(yval);
+	xpos = grid_coordinate(xval, "x-position");
+	ypos = grid_coordinate(yval, "y-position");
 	stop = ypos + len;
 	grid_set_dimensions(cg, xpos + 1, stop);
 
@@ -588,12 +590,12 @@ VALUE grid_set_colspan(argc, argv, self)
 	long xpos, ypos, spanval;
 
 	rb_scan_args(argc, argv, "21", &xval, &yval, &span);
-	xpos = NUM2INT(xval);
-	ypos = NUM2INT(yval);
+	xpos = grid_coordinate(xval, "x-position");
+	ypos = grid_coordinate(yval, "y-position");
 	if(span == Qnil)
 		spanval = cg->width - xpos;
 	else
-		spanval = NUM2INT(span);
+		spanval = grid_coordinate(span, "span-value");
 	grid_set_dimensions(cg, xpos + spanval, ypos + 1);
 	cf = cg->fields[grid_pos(cg, xpos, ypos)];
 	cf->colspan = spanval;
@@ -633,7 +635,7 @@ VALUE grid_insert_row(self, yval, item)
 	Data_Get_Struct(self, cGrid, cg);
 	VALUE argv[3];
 
-	yint = NUM2INT(yval);
+	yint = grid_coordinate(yval, "y-position");
 	move = (cg->height - yint) * cg->width;
 	grid_set_dimensions(cg, cg->width, cg->height + 1);
 	first = (cg->height * cg->width);
@@ -688,16 +690,16 @@ VALUE grid_iterate(argc, argv, self, callback, creative)
 
 	rb_scan_args(argc, argv, "32", &value, &xval, &yval, &wval, &hval);
 	Data_Get_Struct(self, cGrid, cg);
-	xint = NUM2INT(xval);
-	yint = NUM2INT(yval);
+	xint = grid_coordinate(xval, "x-position");
+	yint = grid_coordinate(yval, "y-position");
 	if(wval == Qnil)
 		wint = 1;
 	else
-		wint = NUM2INT(wval);
+		wint = grid_coordinate(wval, "width");
 	if(hval == Qnil)
 		hint = 1;
 	else
-		hint = NUM2INT(hval);
+		hint = grid_coordinate(hval, "height");
 
 	if(!creative)
 	{
@@ -744,7 +746,7 @@ VALUE grid_row_set_attributes(self, ahash, yval)
 	cGrid * cg;
 	long ypos;
 	Data_Get_Struct(self, cGrid, cg);
-	ypos = NUM2INT(yval);
+	ypos = grid_coordinate(yval, "y-position");
 
 	grid_set_dimensions(cg, cg->width, ypos + 1);
 	cg->row_attributes[ypos] = ahash;
@@ -784,13 +786,14 @@ void grid_field_add_component_style(cf, style)
 	ID set_attribute = rb_intern("set_attribute");
 	VALUE item;
 	long idx;
+	VALUE str_class = rb_str_new2("class");
 	for(idx=0; idx<cf->content_count; idx++)
 	{
 		item = cf->content[idx];	
 		if(rb_respond_to(item, set_attribute))
 		{
 			rb_funcall(item, set_attribute, 2,
-					rb_str_new2("class"), style);
+					str_class, style);
 		}
 	}
 }
@@ -826,8 +829,8 @@ VALUE grid_field_attribute(self, name, xval, yval)
 	cField * cf; 
 	long xpos, ypos;
 	Data_Get_Struct(self, cGrid, cg);
-	xpos = NUM2INT(xval);
-	ypos = NUM2INT(yval);
+	xpos = grid_coordinate(xval, "x-position");
+	ypos = grid_coordinate(yval, "y-position");
 
 	if((xpos >= cg->width) || (ypos >= cg->height)) 
 		return Qnil;
