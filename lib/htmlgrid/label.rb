@@ -47,6 +47,10 @@ module HtmlGrid
 			if(@component.respond_to?(:error?) && @component.error?)
 				@attributes["class"] = "error" 
 			end
+			if(@component.respond_to?(:attributes) \
+				&& (id = @component.attributes['id']))
+				@attributes.store('id', "label_#{id}")
+			end
 			super(component)
 		end
 		def each

@@ -40,6 +40,7 @@ module HtmlGrid
 	end
 	class List < Composite
 		attr_reader :grid
+		public :lookandfeel_key
 	end
 end
 class StubListViewColumnNames < HtmlGrid::List
