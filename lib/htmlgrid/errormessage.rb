@@ -29,14 +29,10 @@ module HtmlGrid
 		def error_message(ypos = 0)
 			@displayed_messages = []
 			if(@session.warning?)
-				@session.warnings.each { |warning|
-					message(warning, 'warning', ypos)
-				}
+				messages(@session.warnings, 'warning', ypos)
 			end
 			if(@session.error?)
-				@session.errors.each { |error|
-					message(error, 'processingerror', ypos)
-				}
+				messages(@session.errors, 'processingerror', ypos)
 			end
 		end
 		def message(obj, css_class, ypos=0)
@@ -54,6 +50,13 @@ module HtmlGrid
 					@grid.add_style(css_class, 0, ypos)
 				end
 			end
+		end
+		def messages(ary, css_class, ypos=0)
+			ary.sort_by { |item|
+				(components.index(item.key) || [-1,-1])
+			}.reverse.each { |item|
+				message(item, css_class, ypos)
+			}
 		end
 	end
 end
