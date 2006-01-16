@@ -25,11 +25,13 @@
 
 require 'htmlgrid/composite'
 require 'htmlgrid/link'
+require 'htmlgrid/value'
 
 module HtmlGrid
 	class List < Composite
 		BACKGROUND_SUFFIX = '-bg'
 		CSS_HEAD_MAP = {}
+		DEFAULT_CLASS = Value
 		DEFAULT_HEAD_CLASS = nil
 		EMPTY_LIST = false 
 		EMPTY_LIST_KEY = :empty_list

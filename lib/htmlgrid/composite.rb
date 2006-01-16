@@ -50,11 +50,11 @@ module HtmlGrid
 				elsif(klass = symbol_map[component])
 					#puts "creating #{klass} for #{component}"
 					klass.new(component, model, session, self)
-				elsif(model.respond_to?(component))
+				else #if(model.respond_to?(component))
 					#puts "input for #{component}"
 					#Value.new(component, model, session, self)
 					self::class::DEFAULT_CLASS.new(component, model, session, self)
-				else
+				#else
 					#p "nothing found for #{component}"
 				end
 			elsif(component.is_a? String)

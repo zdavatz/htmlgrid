@@ -58,7 +58,8 @@ module HtmlGrid
 			'' << 
 			context.hidden('flavor', @lookandfeel.flavor) << 
 			context.hidden('language', @lookandfeel.language) << 
-			context.hidden('event', event.to_s) << 
+			context.hidden({'NAME' => 'event', 'ID' => 'event', 
+				'VALUE' => event.to_s}) << 
 			context.hidden('state_id', @session.state.object_id.to_s)
 		end
 		def init
@@ -68,6 +69,9 @@ module HtmlGrid
 			end
 			if(defined? self::class::FORM_NAME)
 				@form_properties.store('NAME', self::class::FORM_NAME)
+			end
+			if(defined? self::class::FORM_ID)
+				@form_properties.store('ID', self::class::FORM_ID)
 			end
 			super
 			@form_properties.update({

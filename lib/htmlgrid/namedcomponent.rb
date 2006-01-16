@@ -38,7 +38,7 @@ module HtmlGrid
 			@attributes.update(@lookandfeel.attributes(@name)) if @lookandfeel
 		end
 		def error?
-			if(@model.respond_to? :error?)
+			if(@model.respond_to?(:error?))
 				@model.error?(@name)
 			end
 		end

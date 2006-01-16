@@ -7,6 +7,7 @@ module HtmlGrid
 	class DivComposite < AbstractComposite
 		DIV_CLASS = nil
 		DIV_ID = nil
+		LEGACY_INTERFACE = false
 		def init
 			super
 			@grid = []
@@ -48,12 +49,15 @@ module HtmlGrid
 			attr
 		end
 		def label(component, key)
-			if(labels?)
+			if(labels? && (!component.respond_to?(:label?) || component.label?))
 				label = SimpleLabel.new(key, component, @session, self)
 				[label, component]
 			else
 				component
 			end
+		end
+		def submit(model=@model, name=event())
+			Submit.new(name, model, @session, self)
 		end
 		def to_html(context)
 			res = ''

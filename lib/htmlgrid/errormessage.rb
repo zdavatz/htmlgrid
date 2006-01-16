@@ -44,6 +44,10 @@ module HtmlGrid
 				if(txt.value.nil?)
 					txt.value = @lookandfeel.lookup(message, escape(obj.value))
 				end
+				if(txt.value.nil? && (match = /^(._[^_]+)_(.*)$/.match(message.to_s)) \
+					&& (label = @lookandfeel.lookup(match[2])))
+					txt.value = @lookandfeel.lookup(match[1], label)
+				end
 				unless(txt.value.nil?)
 					@grid.insert_row(ypos, txt)
 					@grid.set_colspan(0,ypos)

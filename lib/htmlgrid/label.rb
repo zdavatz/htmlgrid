@@ -43,7 +43,10 @@ module HtmlGrid
 			@attributes = {}
 			@session = session
 			@lookandfeel = session.lookandfeel
-			@label_key = label_key || (@component.name if @component.respond_to? :name)
+			@label_key = label_key 
+			if(@component.respond_to? :name)
+				@label_key ||= @attributes['for'] = @component.name
+			end
 			if(@component.respond_to?(:error?) && @component.error?)
 				@attributes["class"] = "error" 
 			end

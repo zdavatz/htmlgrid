@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#
+#--
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
 # Andreas Schrafl, Benjamin Fay, Hannes Wyss, Markus Huggler
@@ -22,19 +22,24 @@
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
 # Component -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
+#++
 
 module HtmlGrid
 	class Component
+		# sets the 'class' html-attribute
 		CSS_CLASS = nil
+		# sets the 'id' html-attribute
 		CSS_ID = nil
+		# other html-attributes
 		HTML_ATTRIBUTES = {}
 		HTTP_HEADERS = {}
+		# precede instances of this class with a label?
 		LABEL = false
 		@@html_entities = [
 			['&', 'amp'],
 			['<', 'lt'],
 			['>', 'gt'],
-		]
+		] # :nodoc:
 		@@symbol_entities = {
 			34	=>	"forall",
 			36	=>	"exist",
@@ -108,11 +113,10 @@ module HtmlGrid
 															223	=>	"dArr",
 															229	=>	"sum",
 															242	=>	"int",
-		}
+		} # :nodoc:
 		attr_reader :attributes, :model
 		attr_accessor :value
 		def initialize(model, session=nil, container=nil)
-			#puts "initializing #{self.class}"
 			@model = model
 			@session = session
 			@lookandfeel = session.lookandfeel if session.respond_to?(:lookandfeel)
@@ -127,23 +131,28 @@ module HtmlGrid
 			@value = nil
 			@label = self::class::LABEL
 			init()
-			#puts "#{self.class} initialized"
 		end
+		# delegator to @container, default definition in Form
 		def autofill?
 			@container.autofill? if @container.respond_to?(:autofill?)
 		end
+		# gets the 'class' html-attribute if defined
 		def css_class
 			@css_class ||= self::class::CSS_CLASS
 		end
+		# sets the 'class' html-attribute
 		def css_class=(css_class)
 			@css_class = @attributes['class'] = css_class
 		end
+		# gets the 'id' html-attribute if defined
 		def css_id
 			@css_id ||= self::class::CSS_ID
 		end
+		# sets the 'id' html-attribute
 		def css_id=(css_id)
 			@css_id = @attributes['id'] = css_id
 		end
+		# escape '&', '<' and '>' characters in txt
 		def escape(txt)
 			@@html_entities.inject(txt.to_s.dup) { |str, map| 
 				char, entity = map
@@ -151,6 +160,7 @@ module HtmlGrid
 				str
 			}
 		end
+		# escape symbol-font strings
 		def escape_symbols(txt)
 			esc = ''
 			txt.to_s.each_byte { |byte|
@@ -162,24 +172,29 @@ module HtmlGrid
 			}
 			esc
 		end
+		# delegator to @container, default definition in Form
 		def formname
 			@container.formname if @container.respond_to?(:formname)
 		end
 		def http_headers
 			self::class::HTTP_HEADERS.dup
 		end
+		# precede this instance with a label?
 		def label?
 			@label
 		end
 		def label=(boolean)
 			@label = boolean
 		end
+		# delegator to @container, default definition in Template
 		def onload=(onload)
 			@container.onload = onload if(@container.respond_to? :onload=)
 		end
+		# delegator to @container, default definition in Form
 		def onsubmit=(onsubmit)
 			@container.onsubmit = onsubmit if(@container.respond_to? :onsubmit=)
 		end
+		# set a html attribute
 		def set_attribute(key, value)
 			@attributes.store(key, value)
 		end
