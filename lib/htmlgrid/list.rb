@@ -45,7 +45,6 @@ module HtmlGrid
 		def compose(model=@model, offset=[0,0])
 			unless (self::class::OMIT_HEADER)
 				offset = compose_header(offset) 
-				#offset = resolve_offset(offset, self::class::OFFSET_STEP)
 			end
 			offset = if(model.empty?)
 				compose_empty_list(offset) unless (self::class::EMPTY_LIST)
