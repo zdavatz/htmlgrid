@@ -30,21 +30,22 @@ module HtmlGrid
 		def init
 			super
 			@attributes['name'] = @name.to_s
+			value = nil
 			if(@model.respond_to?(@name))
-				@value = @model.send(@name)
+				value = @model.send(@name)
 			end
-			if(@value.nil? \
+			if(value.nil? \
 				&& @session.respond_to?(:user_input))
-				@value = @session.user_input(@name)
+				value = @session.user_input(@name)
 			end
-			if(@value.nil? && autofill? \
+			if(value.nil? && autofill? \
 				&& @session.respond_to?(:get_cookie_input))
-				@value = @session.get_cookie_input(@name)
+				value = @session.get_cookie_input(@name)
 			end
-			if(@value.is_a? RuntimeError)
-				@value = @value.value 
+			if(value.is_a? RuntimeError)
+				value = value.value 
 			end
-			@attributes['value'] = @value.to_s
+			self.value = value
 		end
 		def value=(value)
 			@attributes.store("value", value.to_s)
