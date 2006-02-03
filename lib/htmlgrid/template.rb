@@ -80,7 +80,11 @@ module HtmlGrid
 			''
 		end
 		def template_html(context, &block)
-			context.html {
+			args = {}
+			if(dtd = @lookandfeel.lookup(:DOCTYPE))
+				args.store('DOCTYPE', dtd)
+			end
+			context.html(args) {
 				html_head(context) << context.body(@attributes) {
 					template_tags(context, &block)
 				}
