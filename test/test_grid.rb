@@ -123,6 +123,13 @@ class TestGrid < Test::Unit::TestCase
     expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
+	def test_add_multiple__2
+	  @grid.add(["test", "foo"], 0, 0)
+    assert_equal(1, @grid.width)
+    assert_equal(1, @grid.height)
+    expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+	end
   def test_add_fieldx
     @grid.add("test", 1, 0)
     assert_equal(2, @grid.width)
@@ -154,42 +161,42 @@ class TestGrid < Test::Unit::TestCase
 
   end
   def test_add_row1
-    @grid.add(["test1", "test2"], 0,0)
+    @grid.add_row(["test1", "test2"], 0,0)
     assert_equal(2, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>test1</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
   def test_add_row2
-    @grid.add(["test1", "test2"], 0,1)
+    @grid.add_row(["test1", "test2"], 0,1)
     assert_equal(2, @grid.width)
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>test1</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
   def test_add_row3
-    @grid.add(["test1", "test2"], 1,0)
+    @grid.add_row(["test1", "test2"], 1,0)
     assert_equal(3, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>test1</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
   def test_add_column1
-    @grid.add(["test1", "test2"], 0,0, true)
+    @grid.add_column(["test1", "test2"], 0,0)
     assert_equal(1, @grid.width)
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>test1</TD></TR><TR><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
   def test_add_column2
-    @grid.add(["test1", "test2"], 0,1, true)
+    @grid.add_column(["test1", "test2"], 0,1)
     assert_equal(1, @grid.width)
     assert_equal(3, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR><TD>test1</TD></TR><TR><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
   def test_add_column3
-    @grid.add(["test1", "test2"], 1,0, true)
+    @grid.add_column(["test1", "test2"], 1,0)
     assert_equal(2, @grid.width)
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>test1</TD></TR><TR><TD>&nbsp;</TD><TD>test2</TD></TR></TABLE>'
