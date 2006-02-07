@@ -38,6 +38,7 @@ class StubTemplateSession
 	def language
 		"de"
 	end
+	alias :default_language :language
 end
 class StubTemplateLookandfeel < SBSM::Lookandfeel
 	RESOURCES = {

@@ -97,6 +97,8 @@ class StubCompositeSession
 	def lookandfeel
 		StubCompositeLookandfeel.new
 	end
+	def error(key)
+	end
 end
 class StubCompositeForm < HtmlGrid::Form
 	COMPONENTS = {

@@ -45,7 +45,7 @@ module HtmlGrid
 			@lookandfeel = session.lookandfeel
 			@label_key = label_key 
 			if(@component.respond_to? :name)
-				@attributes['for'] = @component.name
+				@attributes['for'] = @component.name.to_s
 				@label_key ||= @component.name
 			end
 			if(@session.error(@label_key))
