@@ -37,23 +37,23 @@ module HtmlGrid
 		SYMBOL_MAP = {}
 		CSS_MAP = {}
 		DEFAULT_CLASS = Value
-		def create(component, model, session)
+		def create(component, model=@model)
 			if(component.is_a? Class)
-				component.new(model, session, self)
+				component.new(model, @session, self)
 			elsif(component.is_a? Symbol)
 				if(self.respond_to?(component, true))
 					args = [model]
 					if(self::class::LEGACY_INTERFACE)
-						args.push(session)
+						args.push(@session)
 					end
 					self.send(component, *args)
 				elsif(klass = symbol_map[component])
 					#puts "creating #{klass} for #{component}"
-					klass.new(component, model, session, self)
+					klass.new(component, model, @session, self)
 				else #if(model.respond_to?(component))
 					#puts "input for #{component}"
 					#Value.new(component, model, session, self)
-					self::class::DEFAULT_CLASS.new(component, model, session, self)
+					self::class::DEFAULT_CLASS.new(component, model, @session, self)
 				#else
 					#p "nothing found for #{component}"
 				end
@@ -133,7 +133,7 @@ module HtmlGrid
 		def compose_components(model=@model, offset=[0,0])
 			components.sort.each { |matrix, component|
 				res = resolve_offset(matrix, offset)
-				comp = create(component, model, @session)
+				comp = create(component, model)
 				if((tab = matrix.at(3)) && comp.respond_to?(:tabindex=))
 					comp.tabindex = tab
 				end
