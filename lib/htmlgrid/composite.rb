@@ -87,11 +87,33 @@ module HtmlGrid
 		DEFAULT_CLASS = InputText
 		LOOKANDFEEL_MAP = {}
 		VERTICAL = false
-		def compose(model=@model, offset=[0,0])
+		def compose(model=@model, offset=[0,0], bg_flag=false)
+			comps = components
+			css = css_map
+			ccss = component_css_map
+			colsp = colspan_map
+			suffix = resolve_suffix(model, bg_flag)
+			comps.keys.concat(css.keys).concat(ccss.keys)\
+				.concat(colsp.keys).uniq.sort.each { |key|
+				matrix = resolve_offset(key, offset)
+				compose_component(model, comps[key], matrix)
+				if(style = css[key])
+					@grid.add_style(style + suffix, *matrix)
+				end
+				if(cstyle = ccss[key])
+					@grid.add_component_style(cstyle + suffix, *matrix)
+				end
+				if(span = colsp[key])
+					@grid.set_colspan(matrix.at(0), matrix.at(1), span)	
+				end
+			}
+=begin
 			compose_components(model, offset)
 			compose_css(offset)
 			compose_colspan(offset)
+=end
 		end
+		alias :_compose :compose
 		def compose_colspan(offset)
 			colspan_map.each { |matrix, span|
 				res = resolve_offset(matrix, offset)
@@ -130,8 +152,20 @@ module HtmlGrid
 		def component_css_map
 			@component_css_map ||= self::class::COMPONENT_CSS_MAP.dup
 		end
+		def compose_component(model, component, matrix)
+			if(component)
+				comp = create(component, model)
+				if((tab = matrix.at(3)) && comp.respond_to?(:tabindex=))
+					comp.tabindex = tab
+				end
+				@grid.add(label(comp, component), matrix.at(0), matrix.at(1), 
+					self::class::VERTICAL)
+			end
+		end
+		## compose_components: legacy-code
 		def compose_components(model=@model, offset=[0,0])
-			components.sort.each { |matrix, component|
+			warn "HtmlGrid::List#compose_components is deprecated"
+			each_component { |matrix, component|
 				res = resolve_offset(matrix, offset)
 				comp = create(component, model)
 				if((tab = matrix.at(3)) && comp.respond_to?(:tabindex=))
@@ -141,13 +175,24 @@ module HtmlGrid
 					self::class::VERTICAL)
 			}
 		end
+		## compose_css: legacy-code
 		def compose_css(offset=[0,0], suffix='')
-			css_map.sort.each { |matrix, style| 
+			warn "HtmlGrid::List#compose_css is deprecated"
+			each_css { |matrix, style| 
 				@grid.add_style(style + suffix, *resolve_offset(matrix, offset))
 			}
-			component_css_map.sort.each { |matrix, style|
+			each_component_css { |matrix, style|
 				@grid.add_component_style(style + suffix, *resolve_offset(matrix, offset))
 			}
+		end
+		def each_component(&block)
+			(@sorted_components ||= components.sort).each(&block)
+		end
+		def each_component_css(&block)
+			(@sorted_component_css_map ||= component_css_map.sort).each(&block)
+		end
+		def each_css(&block)
+			(@sorted_css_map ||= css_map.sort).each(&block)
 		end
 		def init
 			super
@@ -169,12 +214,18 @@ module HtmlGrid
 		def submit(model=@model, session=@session, name=event())
 			Submit.new(name, model, session, self)
 		end
+		def suffix_style(style, model, bg_flag)
+			
+		end
 		def resolve_offset(matrix, offset=[0,0])
 			result = []
 			matrix.each_with_index{ |value, index|
 				result.push(value+offset.at(index).to_i)
 			}
 			result
+		end
+		def resolve_suffix(model, bg_flag=false)
+			bg_flag ? self::class::BACKGROUND_SUFFIX : ''
 		end
 	end
 end

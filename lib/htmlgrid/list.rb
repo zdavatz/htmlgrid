@@ -67,9 +67,10 @@ module HtmlGrid
 			bg_flag = false
 			model.each_with_index { |mdl, idx|
 				@list_index = idx
-				compose_components(mdl, offset)
-				compose_css(offset, resolve_suffix(mdl, bg_flag))
-				compose_colspan(offset)
+				_compose(mdl, offset, bg_flag)
+				#compose_components(mdl, offset)
+				#compose_css(offset, resolve_suffix(mdl, bg_flag))
+				#compose_colspan(offset)
 				offset = resolve_offset(offset, self::class::OFFSET_STEP)
 				bg_flag = !bg_flag if self::class::STRIPED_BG
 			}
@@ -100,11 +101,13 @@ module HtmlGrid
 					@grid.add_attribute('class', cls, *matrix)
 					#link.attributes['class'] = cls
 				end
+				@grid.add_tag('TH', *matrix) unless self::class::OMIT_HEAD_TAG
 				if(title = @lookandfeel.lookup(header_key + '_title'))
 					@grid.add_attribute('title', title, *matrix)
 				end
 			}
 			span = full_colspan || 1
+=begin
 			if(style = self::class::DEFAULT_HEAD_CLASS)
 				@grid.add_style(style, offset.at(0), offset.at(1), span)
 			end
@@ -112,6 +115,7 @@ module HtmlGrid
 				@grid.add_style(style, *resolve_offset(matrix, offset))
 			}
 			@grid.add_tag('TH', 0, 0, span) unless self::class::OMIT_HEAD_TAG
+=end
 			step = if(defined?(self::class::HEAD_OFFSET_STEP))
 				self::class::HEAD_OFFSET_STEP
 			else
@@ -131,9 +135,6 @@ module HtmlGrid
 				@model = @model.reverse 
 			end
 			super
-		end
-		def resolve_suffix(model, bg_flag=false)
-			bg_flag ? self::class::BACKGROUND_SUFFIX : ''
 		end
 		def sort_model
 			if(self::class::SORT_DEFAULT && (@session.event != :sort))
