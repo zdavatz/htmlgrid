@@ -214,9 +214,6 @@ module HtmlGrid
 		def submit(model=@model, session=@session, name=event())
 			Submit.new(name, model, session, self)
 		end
-		def suffix_style(style, model, bg_flag)
-			
-		end
 		def resolve_offset(matrix, offset=[0,0])
 			result = []
 			matrix.each_with_index{ |value, index|
