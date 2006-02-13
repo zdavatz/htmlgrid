@@ -263,7 +263,7 @@ VALUE grid_height(self)
 {
 	cGrid * cg;
 	Data_Get_Struct(self, cGrid, cg);
-	return INT2NUM(cg->height);
+	return LONG2NUM(cg->height);
 }
 
 VALUE grid_width(self)
@@ -468,7 +468,15 @@ VALUE grid_label2ary(item, ary)
 VALUE grid_iterate_add_field(item, args)
 	VALUE item, args[3];
 {
-	return grid_add_field(args[0], item, args[1], args[2]);
+	if(Qnil == item)
+	{
+		args[1] = LONG2NUM(NUM2LONG(args[1]) + 1);
+		return Qnil;
+	}
+	else
+	{
+		return grid_add_field(args[0], item, args[1], args[2]);
+	}
 }
 
 VALUE grid_add(argc, argv, self)

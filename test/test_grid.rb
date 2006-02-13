@@ -130,6 +130,13 @@ class TestGrid < Test::Unit::TestCase
     expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
+	def test_add_multiple__3
+	  @grid.add(["test", nil, "foo"], 0, 0)
+    assert_equal(2, @grid.width)
+    assert_equal(1, @grid.height)
+    expected = '<TABLE cellspacing="0"><TR><TD>test</TD><TD>foo</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+	end
   def test_add_fieldx
     @grid.add("test", 1, 0)
     assert_equal(2, @grid.width)
