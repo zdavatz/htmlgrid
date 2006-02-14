@@ -94,7 +94,7 @@ module HtmlGrid
 			colsp = colspan_map
 			suffix = resolve_suffix(model, bg_flag)
 			comps.keys.concat(css.keys).concat(ccss.keys)\
-				.concat(colsp.keys).uniq.sort.each { |key|
+				.concat(colsp.keys).uniq.sort_by { |key| [key.size, key] }.each { |key|
 				matrix = resolve_offset(key, offset)
 				compose_component(model, comps[key], matrix)
 				if(style = css[key])

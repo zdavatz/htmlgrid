@@ -71,6 +71,9 @@ module HtmlGrid
 				#compose_components(mdl, offset)
 				#compose_css(offset, resolve_suffix(mdl, bg_flag))
 				#compose_colspan(offset)
+				if(rcss = row_css(mdl))
+					@grid.set_row_attributes({'class' => rcss}, offset.at(1))
+				end
 				offset = resolve_offset(offset, self::class::OFFSET_STEP)
 				bg_flag = !bg_flag if self::class::STRIPED_BG
 			}
@@ -135,6 +138,8 @@ module HtmlGrid
 				@model = @model.reverse 
 			end
 			super
+		end
+		def row_css(model)
 		end
 		def sort_model
 			if(self::class::SORT_DEFAULT && (@session.event != :sort))
