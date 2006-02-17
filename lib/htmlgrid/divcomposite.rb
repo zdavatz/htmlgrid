@@ -32,7 +32,7 @@ module HtmlGrid
 					end
 					@css_grid.push(css)
 				end
-				div.push(label(create(component, @model, @session), component))
+				div.push(label(create(component), component))
 			}
 		end
 		def div_attributes(idx=nil)

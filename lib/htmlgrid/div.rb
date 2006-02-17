@@ -29,11 +29,7 @@ module HtmlGrid
 	class Div < Component
 		def to_html(context)
 			context.div(@attributes) {
-				if(@value.respond_to?(:to_html))
-					@value.to_html(context)
-				else
-					super
-				end
+				super
 			}
 		end
 	end

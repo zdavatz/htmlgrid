@@ -96,7 +96,7 @@ class TestForm < Test::Unit::TestCase
 		expected = [
 			'<INPUT NAME="flavor" TYPE="hidden" VALUE="gcc">',
 			'<INPUT NAME="language" TYPE="hidden" VALUE="de">',
-			'<INPUT NAME="event" TYPE="hidden" VALUE="foo">',
+			'<INPUT NAME="event" TYPE="hidden" ID="event" VALUE="foo">',
 			'<INPUT NAME="state_id" TYPE="hidden" VALUE="1">',
 		]
 		expected.each { |line|

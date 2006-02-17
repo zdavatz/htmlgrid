@@ -33,7 +33,9 @@ void Init_Grid()
 	rb_define_method(grid, "width", grid_width, 0);
 	rb_define_method(grid, "to_html", grid_to_html, 1);
 	rb_define_method(grid, "add", grid_add, -1);
+	rb_define_method(grid, "add_column", grid_add_column, 3);
 	rb_define_method(grid, "add_field", grid_add_field, 3);
+	rb_define_method(grid, "add_row", grid_add_row, 3);
 	rb_define_method(grid, "add_attribute", grid_add_attribute, -1);
 	rb_define_method(grid, "set_row_attributes", 
 			grid_row_set_attributes, 2);
@@ -261,7 +263,7 @@ VALUE grid_height(self)
 {
 	cGrid * cg;
 	Data_Get_Struct(self, cGrid, cg);
-	return INT2NUM(cg->height);
+	return LONG2NUM(cg->height);
 }
 
 VALUE grid_width(self)
@@ -458,8 +460,23 @@ void grid_field_add_content(cf, content)
 }
 
 VALUE grid_label2ary(item, ary)
+	VALUE item, ary;
 {
 	return rb_ary_push(ary, item);
+}
+
+VALUE grid_iterate_add_field(item, args)
+	VALUE item, args[3];
+{
+	if(Qnil == item)
+	{
+		args[1] = LONG2NUM(NUM2LONG(args[1]) + 1);
+		return Qnil;
+	}
+	else
+	{
+		return grid_add_field(args[0], item, args[1], args[2]);
+	}
 }
 
 VALUE grid_add(argc, argv, self)
@@ -478,7 +495,12 @@ VALUE grid_add(argc, argv, self)
 		}
 		else if(rb_obj_class(item) == rb_cArray)
 		{
-			tmp = item;
+			VALUE args[3];
+			args[0] = self;
+			args[1] = xval;
+			args[2] = yval;
+
+			return rb_iterate(rb_each, item, grid_iterate_add_field, (VALUE)args);
 		}
 		else
 		{

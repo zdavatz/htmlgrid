@@ -45,13 +45,14 @@ module HtmlGrid
 			@lookandfeel = session.lookandfeel
 			@label_key = label_key 
 			if(@component.respond_to? :name)
-				@label_key ||= @attributes['for'] = @component.name
+				@attributes['for'] = @component.name.to_s
+				@label_key ||= @component.name
 			end
 			if(@component.respond_to?(:data_origin) \
 				 && (origin = @component.data_origin))
 				@attributes.store('title', origin.to_s)
 			end
-			if(@component.respond_to?(:error?) && @component.error?)
+			if(@session.error(@label_key))
 				@attributes["class"] = "error" 
 			end
 			if(@component.respond_to?(:attributes) \
@@ -67,13 +68,6 @@ module HtmlGrid
 		def to_html(context)
 			label = @lookandfeel.lookup(@label_key) || if(@component.respond_to?(:name))
 				@lookandfeel.lookup(@component.name)
-			end
-			if @session.error(@label_key)
-				if css_class.nil?
-					@attributes.store('class', 'error')
-				else
-					@attributes.store('class', 'e-' << css_class)
-				end
 			end
 			unless(label.nil?)
 				context.label(@attributes) { label }

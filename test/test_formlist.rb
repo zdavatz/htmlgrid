@@ -102,7 +102,7 @@ class TestFormList < Test::Unit::TestCase
 			'<INPUT name="new_item" type="submit" value="new_item">',
 			'<INPUT NAME="flavor" TYPE="hidden" VALUE="strawberry">',
 			'<INPUT NAME="language" TYPE="hidden" VALUE="de">',
-			'<INPUT NAME="event" TYPE="hidden" VALUE="new_item">',
+			'<INPUT NAME="event" TYPE="hidden" ID="event" VALUE="new_item">',
 			'<INPUT NAME="state_id" TYPE="hidden" VALUE="1">',
 		].each { |expected|
 			assert_not_nil(result.index(expected), "missing:\n#{expected}\nin:\n#{result}")

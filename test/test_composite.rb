@@ -97,6 +97,8 @@ class StubCompositeSession
 	def lookandfeel
 		StubCompositeLookandfeel.new
 	end
+	def error(key)
+	end
 end
 class StubCompositeForm < HtmlGrid::Form
 	COMPONENTS = {
@@ -132,14 +134,14 @@ class TestComposite < Test::Unit::TestCase
 	def test_create_method
 		foo = nil
 		assert_nothing_raised {
-			foo = @composite.create(:foo, @composite.model, nil)
+			foo = @composite.create(:foo, @composite.model)
 		}
 		assert_equal("Foo", foo)
 	end
 	def test_create_symbol
 		bar = nil
 		assert_nothing_raised {
-			bar = @composite.create(:bar, @composite.model, StubCompositeLookandfeel.new)
+			bar = @composite.create(:bar, @composite.model)
 		}
 		assert_equal(HtmlGrid::InputText, bar.class)
 	end
