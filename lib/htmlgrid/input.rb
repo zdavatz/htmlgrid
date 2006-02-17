@@ -46,6 +46,11 @@ module HtmlGrid
 			end
 			@attributes['value'] = @value.to_s
 		end
+		def data_origin
+			if(@model.respond_to?(:data_origin))
+				@model.data_origin(@name)
+			end
+		end
 		def value=(value)
 			@attributes.store("value", value.to_s)
 			@value = value

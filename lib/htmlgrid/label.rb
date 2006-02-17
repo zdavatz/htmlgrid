@@ -47,6 +47,10 @@ module HtmlGrid
 			if(@component.respond_to? :name)
 				@label_key ||= @attributes['for'] = @component.name
 			end
+			if(@component.respond_to?(:data_origin) \
+				 && (origin = @component.data_origin))
+				@attributes.store('title', origin.to_s)
+			end
 			if(@component.respond_to?(:error?) && @component.error?)
 				@attributes["class"] = "error" 
 			end
