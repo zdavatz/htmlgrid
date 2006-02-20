@@ -44,8 +44,9 @@ module HtmlGrid
 		def selection(context)
 			selected = (@model.send(@name).to_s if(@model.respond_to?(@name)))
 			@session.valid_values(@name).collect { |value|
-				attributes = { "value" => value.to_s }
-				attributes.store("selected", true) if(value == selected)
+				val = value.to_s
+				attributes = { "value" => val }
+				attributes.store("selected", true) if(val == selected)
 				context.option(attributes) { @lookandfeel.lookup(value) }
 			}
 		end
