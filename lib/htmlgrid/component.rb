@@ -152,6 +152,9 @@ module HtmlGrid
 		def css_id=(css_id)
 			@css_id = @attributes['id'] = css_id
 		end
+		def dynamic_html(context)
+			''
+		end
 		# escape '&', '<' and '>' characters in txt
 		def escape(txt)
 			@@html_entities.inject(txt.to_s.dup) { |str, map| 

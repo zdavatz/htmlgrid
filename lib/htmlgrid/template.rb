@@ -46,6 +46,9 @@ module HtmlGrid
 		def content(model, session=nil)
 			__standard_component(model, self::class::CONTENT)
 		end
+		def dynamic_html_headers(context)
+			''
+		end
 		def foot(model, session=nil)
 			__standard_component(model, self::class::FOOT)
 		end
@@ -77,7 +80,7 @@ module HtmlGrid
 			@attributes['onload'] = script
 		end
 		def other_html_headers(context)
-			''
+			dynamic_html_headers(context)
 		end
 		def template_html(context, &block)
 			args = {}
