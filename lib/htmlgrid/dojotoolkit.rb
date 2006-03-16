@@ -29,6 +29,12 @@ module HtmlGrid
 						'href'			=>	@dojo_tooltip,
 					}
 					html << context.a(attrs)
+				elsif(@dojo_tooltip.respond_to?(:to_html))
+					@dojo_tooltip.attributes.update({
+						'dojoType'  => 'tooltip',
+						'connectId' =>	css_id,
+					})
+					html << @dojo_tooltip.to_html(context)
 				end
 				html
 			end
@@ -36,7 +42,7 @@ module HtmlGrid
 	end
 	module DojoToolkit
 		module DojoTemplate
-			DOJO_WIDGETS = []
+			DOJO_REQUIRE = []
 			def dynamic_html_headers(context) 
 				headers = super
 				args = {
@@ -49,11 +55,11 @@ module HtmlGrid
 					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 				}
-				widgets = []
-				self.class::DOJO_WIDGETS.each { |widget_name|
-					widgets.push("dojo.require('dojo.widget.#{widget_name}');")
+				requires = []
+				self.class::DOJO_REQUIRE.each { |req|
+					requires.push("dojo.require('#{req}');")
 				}
-				headers << context.script(args) {widgets.join}
+				headers << context.script(args) {requires.join}
 			end
 		end
 	end
