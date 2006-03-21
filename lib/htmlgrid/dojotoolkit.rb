@@ -6,13 +6,13 @@ require 'htmlgrid/component'
 module HtmlGrid
 	class Component
 		attr_accessor :dojo_tooltip
-		def dojo_tag(widget, args)
+		def dojo_tag(widget, args={})
 			dojo_tag = "<dojo:#{widget}"
 			args.each { |key, value|
 				if(value.is_a?(Array))
-					dojo_tag << " #{key} = \"#{value.join(';')}\""	
+					dojo_tag << " #{key}=\"#{value.join(';')}\""	
 				else
-					dojo_tag << " #{key} = \"#{value}\""	
+					dojo_tag << " #{key}=\"#{value}\""	
 				end
 			}
 			dojo_tag << " />"
@@ -42,15 +42,35 @@ module HtmlGrid
 	end
 	module DojoToolkit
 		module DojoTemplate
+			DOJO_PREFIX = []
 			DOJO_REQUIRE = []
+			DOJO_DEBUG = false
 			def dynamic_html_headers(context) 
 				headers = super
+				if(self.class::DOJO_DEBUG)
+					args = {
+						'language'	=> 'JavaScript',
+						'type'			=>	'text/javascript',
+					}	
+					headers << context.script(args) { "djConfig = { isDebug: true };" }
+				end
 				args = {
 					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 					'src'				=>	@lookandfeel.resource_global(:dojo_js),
 				}
 				headers << context.script(args)
+				unless(self.class::DOJO_PREFIX.empty?)
+					args = {
+						'language'	=> 'JavaScript',
+						'type'			=>	'text/javascript',
+					}	
+					headers << context.script(args) { 
+						self.class::DOJO_PREFIX.collect { |prefix, path|
+							"dojo.setModulePrefix('#{prefix}', '#{path}');"
+						}.join
+					}
+				end
 				args = {
 					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
