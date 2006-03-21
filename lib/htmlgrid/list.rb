@@ -80,6 +80,12 @@ module HtmlGrid
 			offset
 		end	
 		def compose_header(offset=[0,0])
+			step = if(defined?(self::class::HEAD_OFFSET_STEP))
+				self::class::HEAD_OFFSET_STEP
+			else
+				self::class::OFFSET_STEP
+			end
+			ystep = step.at(1)
 			components.each { |matrix, component|
 				key = lookandfeel_key(component)
 				header_key = 'th_' << key.to_s
@@ -104,26 +110,14 @@ module HtmlGrid
 					@grid.add_attribute('class', cls, *matrix)
 					#link.attributes['class'] = cls
 				end
-				@grid.add_tag('TH', *matrix) unless self::class::OMIT_HEAD_TAG
+				unless(self::class::OMIT_HEAD_TAG || matrix.at(1) >= ystep)
+					@grid.add_tag('TH', *matrix) 
+				end
 				if(title = @lookandfeel.lookup(header_key + '_title'))
 					@grid.add_attribute('title', title, *matrix)
 				end
 			}
-			span = full_colspan || 1
-=begin
-			if(style = self::class::DEFAULT_HEAD_CLASS)
-				@grid.add_style(style, offset.at(0), offset.at(1), span)
-			end
-			css_head_map.each { |matrix, style| 
-				@grid.add_style(style, *resolve_offset(matrix, offset))
-			}
-			@grid.add_tag('TH', 0, 0, span) unless self::class::OMIT_HEAD_TAG
-=end
-			step = if(defined?(self::class::HEAD_OFFSET_STEP))
-				self::class::HEAD_OFFSET_STEP
-			else
-				self::class::OFFSET_STEP
-			end
+			#span = full_colspan || 1
 			resolve_offset(offset, step)
 		end
 		def css_head_map
