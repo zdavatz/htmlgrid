@@ -28,8 +28,8 @@ require 'htmlgrid/component'
 module HtmlGrid
 	class Div < Component
 		def to_html(context)
-			dynamic_html(context) << context.div(@attributes) {
-				super
+			context.div(@attributes) {
+				dynamic_html(context) << super
 			}
 		end
 	end

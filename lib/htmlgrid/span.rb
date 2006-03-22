@@ -28,8 +28,8 @@ require 'htmlgrid/component'
 module HtmlGrid
 	class Span < Component
 		def to_html(context)
-			dynamic_html(context) << context.span(@attributes) {
-				super
+			context.span(@attributes) {
+				dynamic_html(context) << super
 			}
 		end
 	end
