@@ -28,6 +28,7 @@ require 'htmlgrid/namedcomponent'
 module HtmlGrid
 	class AbstractSelect < NamedComponent
 		LABEL = true
+		attr_accessor :selected, :valid_values
 		def to_html(context)
 			context.select(@attributes) {
 				selection(context)
@@ -42,8 +43,9 @@ module HtmlGrid
 		end
 		private
 		def selection(context)
-			selected = (@model.send(@name).to_s if(@model.respond_to?(@name)))
-			@session.valid_values(@name).collect { |value|
+			@selected ||= (@model.send(@name).to_s if(@model.respond_to?(@name)))
+			@valid_values ||= @session.valid_values(@name)
+			@valid_values.collect { |value|
 				val = value.to_s
 				attributes = { "value" => val }
 				attributes.store("selected", true) if(val == selected)
