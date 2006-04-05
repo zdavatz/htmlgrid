@@ -29,7 +29,7 @@ module HtmlGrid
 	class Div < Component
 		def to_html(context)
 			context.div(@attributes) {
-				dynamic_html(context) << super
+				super << dynamic_html(context)
 			}
 		end
 	end

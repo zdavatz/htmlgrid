@@ -29,7 +29,7 @@ module HtmlGrid
 	class Span < Component
 		def to_html(context)
 			context.span(@attributes) {
-				dynamic_html(context) << super
+				super << dynamic_html(context)
 			}
 		end
 	end
