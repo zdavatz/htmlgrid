@@ -32,12 +32,14 @@ module HtmlGrid
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
 						'href'			=>	@dojo_tooltip,
+						'style'			=>	'display: none',
 					}
 					html << context.a(attrs)
 				elsif(@dojo_tooltip.respond_to?(:to_html))
 					@dojo_tooltip.attributes.update({
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
+						'style'			=>	'display: none',
 					})
 					html << @dojo_tooltip.to_html(context)
 				end

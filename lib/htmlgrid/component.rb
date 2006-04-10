@@ -205,13 +205,13 @@ module HtmlGrid
 			@attributes.store('tabIndex', tab.to_s)
 		end
 		def to_html(context)
-			_to_html(context, @value)
+			_to_html(context, @value).to_s
 		end
 		def _to_html(context, value=@value)
 			if(value.is_a?(Array))
 				value.collect { |item| _to_html(context, item) }.join(' ')
 			elsif(value.respond_to?(:to_html))
-				value.to_html(context)
+				value.to_html(context).to_s
 			else
 				value.to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
 			end
