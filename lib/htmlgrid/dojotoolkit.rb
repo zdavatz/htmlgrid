@@ -92,14 +92,24 @@ module HtmlGrid
 					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 				}
-				requires = []
-				self.class::DOJO_REQUIRE.each { |req|
-					requires.push("dojo.require('#{req}');")
+				headers << context.script(args) {
+					script = ''
+					self.class::DOJO_REQUIRE.each { |req|
+						script << "dojo.require('#{req}');"
+					}
+					if(@dojo_onloads)
+						@dojo_onloads.each { |onload|
+							script << "dojo.addOnLoad(function() { #{onload} });"
+						}
+					end
+					script
 				}
-				headers << context.script(args) {requires.join}
 			end
 			def dojo_parse_widgets
 				self.class::DOJO_PARSE_WIDGETS
+			end
+			def onload=(script)
+				(@dojo_onloads ||= []).push(script)
 			end
 		end
 	end
