@@ -173,7 +173,7 @@ class TestComposite < Test::Unit::TestCase
 		assert_equal(true, @composite.labels?)
 	end
 	def test_to_html
-		expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR></TABLE>'
+		expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz3</TD></TR><TR><TD>Baz2Baz4</TD></TR></TABLE>'
 		assert_equal(expected, @composite.to_html(CGI.new))
 	end
 	def test_resolve_offset
@@ -197,7 +197,5 @@ class TestComposite < Test::Unit::TestCase
 		expected = '<TABLE cellspacing="0"><TR><TD><A class="standard">brafoo</A></TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 		composite = StubComposite4.new(StubCompositeModel.new, StubCompositeSession.new)
-		expected = '<TABLE cellspacing="0"><TR><TD class="dradnats"><A class="standard">brafoo</A></TD></TR></TABLE>'
-		assert_equal(expected, composite.to_html(CGI.new))
 	end
 end

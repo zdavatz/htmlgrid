@@ -97,10 +97,11 @@ module HtmlGrid
 				.concat(colsp.keys).uniq.sort_by { |key| [key.size, key] }.each { |key|
 				matrix = resolve_offset(key, offset)
 				compose_component(model, comps[key], matrix)
-				if(style = css[key])
+				nkey = key[0,2]
+				if(style = css[key] || css[nkey])
 					@grid.add_style(style + suffix, *matrix)
 				end
-				if(cstyle = ccss[key])
+				if(cstyle = ccss[key] || ccss[nkey])
 					@grid.add_component_style(cstyle + suffix, *matrix)
 				end
 				if(span = colsp[key])
