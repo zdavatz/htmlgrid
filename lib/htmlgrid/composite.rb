@@ -95,14 +95,19 @@ module HtmlGrid
 			suffix = resolve_suffix(model, bg_flag)
 			comps.keys.concat(css.keys).concat(ccss.keys)\
 				.concat(colsp.keys).uniq.sort_by { |key| [key.size, key] }.each { |key|
-				matrix = resolve_offset(key, offset)
-				compose_component(model, comps[key], matrix)
 				nkey = key[0,2]
-				if(style = css[key] || css[nkey])
+				matrix = resolve_offset(key, offset)
+				nmatrix = resolve_offset(nkey, offset)
+				compose_component(model, comps[key], matrix)
+				if(style = css[key])
 					@grid.add_style(style + suffix, *matrix)
+				elsif(style = css[nkey])
+					@grid.add_style(style + suffix, *nmatrix)
 				end
-				if(cstyle = ccss[key] || ccss[nkey])
+				if(cstyle = ccss[key])
 					@grid.add_component_style(cstyle + suffix, *matrix)
+				elsif(cstyle = ccss[nkey])
+					@grid.add_component_style(cstyle + suffix, *nmatrix)
 				end
 				if(span = colsp[key])
 					@grid.set_colspan(matrix.at(0), matrix.at(1), span)	
