@@ -35,6 +35,8 @@ module HtmlGrid
 		}
 		META_TAGS = []
 		LEGACY_INTERFACE = true
+		CSS_FILES = []
+		JAVASCRIPTS = []
 		def css_link(context, path=@lookandfeel.resource(:css))
 			properties = {
 				"rel"		=>	"stylesheet",
@@ -42,6 +44,13 @@ module HtmlGrid
 				"href"	=>	path,
 			}
 			context.link(properties)
+		end
+		def css_links(context, path=@lookandfeel.resource(:css))
+			links = self.class.const_get(:CSS_FILES).collect { |key| 
+				css_link(context, @lookandfeel.resource(key)) 
+			}
+			links.push(css_link(context, path)) if(path)
+			links.join
 		end
 		def content(model, session=nil)
 			__standard_component(model, self::class::CONTENT)
@@ -66,10 +75,22 @@ module HtmlGrid
 					block.call
 				end.to_s <<
 				title(context) << 
-				css_link(context) <<
+				css_links(context) <<
 				meta_tags(context) <<
-				other_html_headers(context)
+				other_html_headers(context) <<
+				javascripts(context)
 			}
+		end
+		def javascripts(context)
+			jscripts = self.class.const_get(:JAVASCRIPTS).collect { |key|
+				properties = {
+					"language"	=>	"JavaScript",
+					"type"			=>	"text/javascript",
+					"src"				=>	@lookandfeel.resource_global(:javascript, "#{key}.js"),
+				}		
+				context.script(properties)
+			}
+			jscripts.join
 		end
 		def meta_tags(context)
 			self::class::META_TAGS.inject('') { |inj, properties|

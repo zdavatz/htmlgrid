@@ -49,9 +49,7 @@ module HtmlGrid
 					txt.value = @lookandfeel.lookup(match[1], label)
 				end
 				unless(txt.value.nil?)
-					@grid.insert_row(ypos, txt)
-					@grid.set_colspan(0,ypos)
-					@grid.add_style(css_class, 0, ypos)
+					insert_row(ypos, txt, css_class)
 				end
 			end
 		end

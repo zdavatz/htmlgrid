@@ -4,17 +4,8 @@
 require 'htmlgrid/composite'
 
 module HtmlGrid
-	class DivComposite < AbstractComposite
-		DIV_CLASS = nil
-		DIV_ID = nil
-		LEGACY_INTERFACE = false
-		def init
-			super
-			@grid = []
-			@css_grid = []
-			compose()
-		end
-		def compose
+	class DivComposite < TagComposite
+		def compose(model=@model)
 			ypos = -1
 			xpos = 0
 			div = nil
@@ -26,43 +17,25 @@ module HtmlGrid
 					ypos = mpos
 					div = []
 					@grid.push(div)
-					css = nil
+					css = {}
 					if(klass = css_map[ypos])
-						css = { 'class' => klass }
+						css.store('class', klass)
 					end
-					@css_grid.push(css)
+					if(id = css_id_map[ypos])
+						css.store('id', id)
+					end
+					if(style = css_style_map[ypos])
+						css.store('style', style)
+					end
+					@css_grid.push(css.empty? ? nil : css)
 				end
-				div.push(label(create(component), component))
+				div.push(label(create(component, model), component))
 			}
-		end
-		def div_attributes(idx=nil)
-			attr = {}
-			if(klass = self.class.const_get(:DIV_CLASS))
-				attr.store('class', klass)
-			end
-			if(idx && (css = @css_grid.at(idx)))
-				attr.update(css)
-			end
-			if(klass = self.class.const_get(:DIV_ID))
-				attr.store('id', klass)
-			end
-			attr
-		end
-		def label(component, key)
-			if(labels? && (!component.respond_to?(:label?) || component.label?))
-				label = SimpleLabel.new(key, component, @session, self)
-				[label, component]
-			else
-				component
-			end
-		end
-		def submit(model=@model, name=event())
-			Submit.new(name, model, @session, self)
 		end
 		def to_html(context)
 			res = ''
 			@grid.each_with_index { |div, idx|
-				res << context.div(div_attributes(idx)) { 
+				res << context.div(tag_attributes(idx)) { 
 					div.flatten.collect { |item| 
 						if(item.respond_to?(:to_html))
 							item.to_html(context)

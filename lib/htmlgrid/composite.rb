@@ -36,7 +36,16 @@ module HtmlGrid
 		LEGACY_INTERFACE = true
 		SYMBOL_MAP = {}
 		CSS_MAP = {}
+		CSS_ID_MAP = {}
+		CSS_STYLE_MAP = {}
+		CSS_CLASS = nil
+		CSS_ID = nil
 		DEFAULT_CLASS = Value
+		def init
+			super
+			setup_grid()
+			compose()
+		end
 		def create(component, model=@model)
 			if(component.is_a? Class)
 				component.new(model, @session, self)
@@ -70,14 +79,97 @@ module HtmlGrid
 		def components
 			@components ||= self::class::COMPONENTS.dup
 		end
+		def css_id_map
+			@css_id_map ||= self::class::CSS_ID_MAP.dup
+		end
 		def css_map
 			@css_map ||= self::class::CSS_MAP.dup
+		end
+		def css_style_map
+			@css_style_map ||= self::class::CSS_STYLE_MAP.dup
 		end
 		def labels?
 			self::class::LABELS
 		end
 		def symbol_map
 			@symbol_map ||= self::class::SYMBOL_MAP.dup
+		end
+	end
+	class TagComposite < AbstractComposite
+		def compose(model=@model)
+			components.sort { |a, b|
+				a <=> b
+			}.each { |pos, component|
+				@grid.push(label(create(component, model), component))
+				css = {}
+				if(klass = css_map[pos])
+					css.store('class', klass)
+				end
+				if(id = css_id_map[pos])
+					css.store('id', id)
+				end
+				if(style = css_style_map[pos])
+					css.store('style', style)
+				end
+				@css_grid.push(css.empty? ? nil : css)
+			}
+		end
+		def create(component, model=@model)
+			if(component.is_a? Class)
+				component.new(model, @session, self)
+			elsif(component.is_a? Symbol)
+				if(self.respond_to?(component, true))
+					self.send(component, model)
+				elsif(klass = symbol_map[component])
+					#puts "creating #{klass} for #{component}"
+					klass.new(component, model, @session, self)
+				else #if(model.respond_to?(component))
+					#puts "input for #{component}"
+					#Value.new(component, model, session, self)
+					self::class::DEFAULT_CLASS.new(component, model, @session, self)
+				#else
+					#p "nothing found for #{component}"
+				end
+			elsif(component.is_a? String)
+				#Text.new(component.intern, model, session, self)
+				@lookandfeel.lookup(component).to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
+			end
+		rescue StandardError => exc
+			exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)", 
+				self.class, components.index(component).inspect, component))
+			raise exc
+		end
+		def insert_row(ypos, txt, css_class=nil)
+			@grid[ypos, 0] = [[txt]]
+			@css_grid[ypos, 0] = [css_class ? {'class' => css_class} : nil]
+		end
+		def label(component, key)
+			if(labels? && (!component.respond_to?(:label?) || component.label?))
+				label = SimpleLabel.new(key, component, @session, self)
+				[label, component]
+			else
+				component
+			end
+		end
+		def setup_grid
+			@grid = []
+			@css_grid = []
+		end
+		def submit(model=@model, name=event())
+			Submit.new(name, model, @session, self)
+		end
+		def tag_attributes(idx=nil)
+			attr = {}
+			if(klass = self.class.const_get(:CSS_CLASS))
+				attr.store('class', klass)
+			end
+			if(id = self.class.const_get(:CSS_ID))
+				attr.store('id', id)
+			end
+			if(idx && (css = @css_grid.at(idx)))
+				attr.update(css)
+			end
+			attr
 		end
 	end
 	class Composite < AbstractComposite
@@ -141,6 +233,11 @@ module HtmlGrid
 			}.max.to_i
 			(raw_span > 0) ? raw_span + 1 : nil
 		end
+		def insert_row(ypos, txt, css_class=nil)
+			@grid.insert_row(ypos, txt)
+			@grid.set_colspan(0,ypos)
+			@grid.add_style(css_class, 0, ypos) if(css_class)
+		end
 		def to_html(context)
 			@grid.set_attributes(@attributes)
 			super << @grid.to_html(context)
@@ -200,11 +297,6 @@ module HtmlGrid
 		def each_css(&block)
 			(@sorted_css_map ||= css_map.sort).each(&block)
 		end
-		def init
-			super
-			@grid = Grid.new
-			compose()
-		end
 		def label(component, key=nil)
 			if labels?
 				HtmlGrid::Label.new(component, @session, lookandfeel_key(key))
@@ -216,6 +308,9 @@ module HtmlGrid
 			self::class::LOOKANDFEEL_MAP.fetch(component) {
 				component
 			}
+		end
+		def setup_grid
+			@grid = Grid.new
 		end
 		def submit(model=@model, session=@session, name=event())
 			Submit.new(name, model, session, self)

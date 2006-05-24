@@ -21,42 +21,13 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# UrlLink -- htmlgrid -- 10.06.2003 -- aschrafl@ywesee.com
+# Form -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
 
-require 'htmlgrid/link'
+require 'htmlgrid/form'
+require 'htmlgrid/submit'
 
-module HtmlGrid 
-	class UrlLink < Link
-		def init
-			super
-			if(@model.respond_to?(@name))
-				@value = @model.send(@name).to_s 
-			end
-			compose_link
-		end
-	end
-	class HttpLink < UrlLink
-		LABEL = true
-		def compose_link
-			unless @value.nil?
-				if(@value =~ /^http:/)
-					self.href = @value  
-				else
-					self.href = "http://" + @value
-				end
-				set_attribute('target', '_blank')
-			end
-		end
-	end
-	class MailLink < UrlLink
-		LABEL = true
-		def compose_link
-			unless @value.empty?
-				self.href = @value  
-				unless(@value =~ /^mailto:/)
-					self.href = "mailto:"+@value
-				end
-			end
-		end
+module HtmlGrid
+	class DivForm < DivComposite
+		include FormMethods
 	end
 end
