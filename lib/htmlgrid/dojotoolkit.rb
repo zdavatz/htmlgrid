@@ -7,7 +7,10 @@ module HtmlGrid
 	class Component
 		attr_accessor :dojo_tooltip
 		def dojo_tag(widget, args={})
-			dojo_tag = "<dojo:#{widget}"
+			# <dojo:#{widget} ...> does not work on konqueror as of 
+			# 02.06.2006. In combination with DOJO_DEBUG = true it even 
+			# hangs konqueror.
+			dojo_tag = "<div dojoType=\"#{widget}\""
 			args.each { |key, value|
 				if(value.is_a?(Array))
 					dojo_tag << " #{key}=\"#{value.join(';')}\""	
@@ -15,8 +18,7 @@ module HtmlGrid
 					dojo_tag << " #{key}=\"#{value}\""	
 				end
 			}
-			dojo_tag << " />"
-			dojo_tag
+			dojo_tag << "></div>"
 		end
 		def dojo_parse_widgets
 			if(@container.respond_to?(:dojo_parse_widgets))
