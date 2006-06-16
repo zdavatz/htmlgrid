@@ -29,6 +29,7 @@ require 'htmlgrid/submit'
 module HtmlGrid
 	module FormMethods
 		AUTOFILL = false
+		ACCEPT_CHARSET = 'ISO-8859-1'
 		EVENT = nil
 		FORM_ACTION = nil
 		FORM_METHOD = 'POST'
@@ -77,7 +78,7 @@ module HtmlGrid
 			@form_properties.update({
 				'METHOD'					=>	self::class::FORM_METHOD.dup,
 				'ACTION'					=>	(self::class::FORM_ACTION || @lookandfeel.base_url),
-				'ACCEPT-CHARSET'	=>	'ISO-8859-1',
+				'ACCEPT-CHARSET'	=>	self::class::ACCEPT_CHARSET,
 			})
 		end
 	end

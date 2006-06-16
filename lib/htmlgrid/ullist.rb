@@ -5,7 +5,7 @@ require 'htmlgrid/ulcomposite'
 
 module HtmlGrid
 	class UlList < HtmlGrid::UlComposite
-		def compose
+		def compose(model=@model)
 			@model.each { |item|
 				super(item)
 			}

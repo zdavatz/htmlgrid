@@ -94,6 +94,16 @@ module HtmlGrid
 		def symbol_map
 			@symbol_map ||= self::class::SYMBOL_MAP.dup
 		end
+		def AbstractComposite.component(klass, key, name=nil)
+			methname = klass.to_s.downcase.gsub('::', '_')
+			define_method(methname) { |*args|
+				model, session = args
+				args = [model.send(key), @session, self]
+				args.unshift(name) if(name)
+				klass.new(*args)
+			}
+			methname.to_sym
+		end
 	end
 	class TagComposite < AbstractComposite
 		def compose(model=@model)
