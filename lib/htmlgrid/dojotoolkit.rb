@@ -57,6 +57,7 @@ module HtmlGrid
 	module DojoToolkit
 		module DojoTemplate
 			DOJO_DEBUG = false
+			DOJO_BACK_BUTTON = false
 			DOJO_PARSE_WIDGETS = true
 			DOJO_PREFIX = []
 			DOJO_REQUIRE = []
@@ -70,6 +71,7 @@ module HtmlGrid
 					"djConfig = { 
 						isDebug: #{self.class::DOJO_DEBUG}, 
 						parseWidgets: #{dojo_parse_widgets},
+						preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
 						searchIds: []
 					};" 
 				}
