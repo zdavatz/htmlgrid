@@ -53,4 +53,15 @@ module HtmlGrid
 			}
 		end
 	end
+	class DynSelect < AbstractSelect
+		private
+		def selection(context)
+			@model.selection.collect { |value|
+				val = value.name.to_s
+				attributes = { "value" => value.sid }
+				attributes.store("selected", true) if(value == @model.selected)
+				context.option(attributes) { value.name }
+			}
+		end
+	end
 end

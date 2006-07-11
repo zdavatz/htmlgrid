@@ -95,7 +95,7 @@ module HtmlGrid
 			@symbol_map ||= self::class::SYMBOL_MAP.dup
 		end
 		def AbstractComposite.component(klass, key, name=nil)
-			methname = klass.to_s.downcase.gsub('::', '_')
+			methname = klass.to_s.downcase.gsub('::', '_') << '_' << key.to_s
 			define_method(methname) { |*args|
 				model, session = args
 				args = [model.send(key), @session, self]
