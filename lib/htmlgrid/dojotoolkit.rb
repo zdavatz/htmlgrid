@@ -34,6 +34,8 @@ module HtmlGrid
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
 						'href'			=>	@dojo_tooltip,
+						'toggle'		=>	'fade',
+						'toggleDuration'	=>	'500',
 						'style'			=>	'display: none',
 					}
 					html << context.a(attrs)
@@ -41,6 +43,8 @@ module HtmlGrid
 					@dojo_tooltip.attributes.update({
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
+						'toggle'		=>	'fade',
+						'toggleDuration'	=>	'500',
 						'style'			=>	'display: none',
 					})
 					html << @dojo_tooltip.to_html(context)
