@@ -202,7 +202,7 @@ module HtmlGrid
 			colsp = colspan_map
 			suffix = resolve_suffix(model, bg_flag)
 			comps.keys.concat(css.keys).concat(ccss.keys)\
-				.concat(colsp.keys).uniq.sort_by { |key| [key.size, key] }.each { |key|
+				.concat(colsp.keys).uniq.sort_by { |key| [-key.size, key] }.each { |key|
 				nkey = key[0,2]
 				matrix = resolve_offset(key, offset)
 				nmatrix = resolve_offset(nkey, offset)
