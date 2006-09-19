@@ -73,10 +73,12 @@ module HtmlGrid
 						searchIds: []
 					};" 
 				}
+				dojo_path = @lookandfeel.resource_global(:dojo_js) \
+					|| '/resources/dojo/dojo.js'
 				args = {
 					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
-					'src'				=>	@lookandfeel.resource_global(:dojo_js),
+					'src'				=>	dojo_path,
 				}
 				headers << context.script(args)
 				unless(self.class::DOJO_PREFIX.empty?)

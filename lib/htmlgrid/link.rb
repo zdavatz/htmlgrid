@@ -44,7 +44,7 @@ module HtmlGrid
 					@value.to_html(context)
 				else
 					super
-				end
+				end << dynamic_html(context)
 			}
 		end
 	end
