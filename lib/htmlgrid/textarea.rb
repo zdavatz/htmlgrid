@@ -26,15 +26,19 @@
 require 'htmlgrid/input'
 
 module HtmlGrid
-	class Textarea	< Input
+	class Textarea < Input
+		attr_writer :value
 		def to_html(context)
 			context.textarea(@attributes) {
-				if(@value.is_a?(Array))
-					@value.join("\n")
-				else
-					@value.to_s
-				end.strip
+				_to_html(context, @value)
 			}
+		end
+		def _to_html(context, value=@value)
+			if(value.is_a?(Array))
+				value.join("\n")
+			else
+				value.to_s
+			end.strip
 		end
 	end
 end

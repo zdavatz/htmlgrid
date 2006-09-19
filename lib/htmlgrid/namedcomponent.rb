@@ -37,6 +37,11 @@ module HtmlGrid
 			super
 			@attributes.update(@lookandfeel.attributes(@name)) if @lookandfeel
 		end
+		def data_origin
+			if(@model.respond_to?(:data_origin))
+				@model.data_origin(@name)
+			end
+		end
 		def error?
 			if(@model.respond_to?(:error?))
 				@model.error?(@name)

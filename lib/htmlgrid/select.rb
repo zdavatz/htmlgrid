@@ -36,11 +36,6 @@ module HtmlGrid
 		end
 	end
 	class Select < AbstractSelect
-		def data_origin
-			if(@model.respond_to?(:data_origin))
-				@model.data_origin(@name)
-			end
-		end
 		private
 		def selection(context)
 			@selected ||= (@model.send(@name).to_s if(@model.respond_to?(@name)))

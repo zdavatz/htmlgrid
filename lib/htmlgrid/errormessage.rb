@@ -35,19 +35,24 @@ module HtmlGrid
 				messages(@session.errors, 'processingerror', ypos)
 			end
 		end
+		def error_text(obj)
+			message = obj.message
+			txt = HtmlGrid::Text.new(message, @model, @session, self)
+			if(txt.value.nil?)
+				txt.value = @lookandfeel.lookup(message, escape(obj.value))
+			end
+			if(txt.value.nil? && (match = /^(._[^_]+)_(.*)$/.match(message.to_s)) \
+				&& (label = @lookandfeel.lookup(match[2])))
+				txt.value = @lookandfeel.lookup(match[1], label)
+			end
+			txt
+		end
 		def message(obj, css_class, ypos=0)
 			@displayed_messages ||= []
 			message = obj.message
 			unless(@displayed_messages.include?(message))
 				@displayed_messages.push(message)
-				txt = HtmlGrid::Text.new(message, @model, @session, self)
-				if(txt.value.nil?)
-					txt.value = @lookandfeel.lookup(message, escape(obj.value))
-				end
-				if(txt.value.nil? && (match = /^(._[^_]+)_(.*)$/.match(message.to_s)) \
-					&& (label = @lookandfeel.lookup(match[2])))
-					txt.value = @lookandfeel.lookup(match[1], label)
-				end
+				txt = error_text(obj)
 				unless(txt.value.nil?)
 					insert_row(ypos, txt, css_class)
 				end

@@ -34,6 +34,8 @@ module HtmlGrid
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
 						'href'			=>	@dojo_tooltip,
+						'toggle'		=>	'fade',
+						'toggleDuration'	=>	'500',
 						'style'			=>	'display: none',
 					}
 					html << context.a(attrs)
@@ -41,6 +43,8 @@ module HtmlGrid
 					@dojo_tooltip.attributes.update({
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
+						'toggle'		=>	'fade',
+						'toggleDuration'	=>	'500',
 						'style'			=>	'display: none',
 					})
 					html << @dojo_tooltip.to_html(context)
@@ -57,6 +61,7 @@ module HtmlGrid
 	module DojoToolkit
 		module DojoTemplate
 			DOJO_DEBUG = false
+			DOJO_BACK_BUTTON = false
 			DOJO_PARSE_WIDGETS = true
 			DOJO_PREFIX = []
 			DOJO_REQUIRE = []
@@ -70,6 +75,7 @@ module HtmlGrid
 					"djConfig = { 
 						isDebug: #{self.class::DOJO_DEBUG}, 
 						parseWidgets: #{dojo_parse_widgets},
+						preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
 						searchIds: []
 					};" 
 				}

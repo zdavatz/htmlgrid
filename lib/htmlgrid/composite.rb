@@ -41,6 +41,7 @@ module HtmlGrid
 		CSS_CLASS = nil
 		CSS_ID = nil
 		DEFAULT_CLASS = Value
+		LOOKANDFEEL_MAP = {}
 		def init
 			super
 			setup_grid()
@@ -91,15 +92,21 @@ module HtmlGrid
 		def labels?
 			self::class::LABELS
 		end
+		def lookandfeel_map 
+			@lookandfeel_map ||= self::class::LOOKANDFEEL_MAP.dup
+		end
 		def symbol_map
 			@symbol_map ||= self::class::SYMBOL_MAP.dup
 		end
 		def AbstractComposite.component(klass, key, name=nil)
-			methname = klass.to_s.downcase.gsub('::', '_')
+			methname = klass.to_s.downcase.gsub('::', '_') << '_' << key.to_s
 			define_method(methname) { |*args|
 				model, session = args
 				args = [model.send(key), @session, self]
-				args.unshift(name) if(name)
+				if(name)
+					args.unshift(name)
+					lookandfeel_map.store(methname.to_sym, name.to_sym)
+				end
 				klass.new(*args)
 			}
 			methname.to_sym
@@ -187,7 +194,6 @@ module HtmlGrid
 		COMPONENT_CSS_MAP = {}
 		CSS_MAP = {}
 		DEFAULT_CLASS = InputText
-		LOOKANDFEEL_MAP = {}
 		VERTICAL = false
 		def compose(model=@model, offset=[0,0], bg_flag=false)
 			comps = components
@@ -196,7 +202,7 @@ module HtmlGrid
 			colsp = colspan_map
 			suffix = resolve_suffix(model, bg_flag)
 			comps.keys.concat(css.keys).concat(ccss.keys)\
-				.concat(colsp.keys).uniq.sort_by { |key| [key.size, key] }.each { |key|
+				.concat(colsp.keys).uniq.sort_by { |key| [-key.size, key] }.each { |key|
 				nkey = key[0,2]
 				matrix = resolve_offset(key, offset)
 				nmatrix = resolve_offset(nkey, offset)
@@ -315,7 +321,7 @@ module HtmlGrid
 			end
 		end
 		def lookandfeel_key(component)
-			self::class::LOOKANDFEEL_MAP.fetch(component) {
+			lookandfeel_map.fetch(component) {
 				component
 			}
 		end
