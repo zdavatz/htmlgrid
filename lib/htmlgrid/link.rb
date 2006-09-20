@@ -31,8 +31,10 @@ module HtmlGrid
 			super
 			@value = @lookandfeel.lookup(@name)
 		end
+		def href
+			@attributes['href']
+		end
 		def href=(url)
-			@href = url
 			@attributes['href'] = url
 		end
 		def target=(trg)
@@ -44,7 +46,7 @@ module HtmlGrid
 					@value.to_html(context)
 				else
 					super
-				end << dynamic_html(context)
+				end
 			}
 		end
 	end
