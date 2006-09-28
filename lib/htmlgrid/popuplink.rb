@@ -52,7 +52,7 @@ module HtmlGrid
 				[key,val].join('=')
 			}.join(',')
 			name = @lookandfeel.lookup(@name).to_s.gsub(/[^a-z]+/i, '')
-			script = "window.open('#{@href}', '#{name}', '#{props}').focus(); return false"
+			script = "window.open('#{href}', '#{name}', '#{props}').focus(); return false"
 			@attributes.store('onClick', script)
 			super
 		end
