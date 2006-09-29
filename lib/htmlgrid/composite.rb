@@ -149,7 +149,8 @@ module HtmlGrid
 				end
 			elsif(component.is_a? String)
 				#Text.new(component.intern, model, session, self)
-				@lookandfeel.lookup(component).to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
+				val = @lookandfeel.lookup(component) { component.to_s }
+        val.gsub(/(\r\n)|(\n)|(\r)/, '<br>')
 			end
 		rescue StandardError => exc
 			exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)", 

@@ -38,7 +38,7 @@ void Init_Grid()
 	rb_define_method(grid, "add_row", grid_add_row, 3);
 	rb_define_method(grid, "add_attribute", grid_add_attribute, -1);
 	rb_define_method(grid, "set_row_attributes", 
-			grid_row_set_attributes, 2);
+			grid_row_set_attributes, -1);
 	rb_define_method(grid, "add_tag", grid_add_tag, -1);
 	rb_define_method(grid, "add_style", grid_add_style, -1);
 	rb_define_method(grid, "add_component_style", 
@@ -411,13 +411,9 @@ VALUE grid_to_html(self, cgi)
 					else if(rb_respond_to(item, id_to_html))
 					{
 						VALUE item_html = rb_funcall(item, id_to_html, 1, cgi);
-						if(rb_obj_is_kind_of(item_html, rb_cString) != Qtrue)
-							rb_str_cat(result, "&nbsp;", 6);
-						else
+						if(rb_obj_is_kind_of(item_html, rb_cString) == Qtrue)
 							rb_str_concat(result, item_html);
 					}
-					else if(item == Qnil)
-						rb_str_cat(result, "&nbsp;", 6);
 					else if(rb_obj_is_kind_of(item, rb_eException) == Qtrue)
 					{
 						rb_str_cat(result, "<!--\n", 5);
@@ -762,16 +758,31 @@ void grid_field_add_attribute(cf, pair)
 	rb_hsh_store_pair(pair, cf->attributes);
 }
 
-VALUE grid_row_set_attributes(self, ahash, yval)
-	VALUE self, ahash, yval;
+//VALUE grid_row_set_attributes(self, ahash, yval)
+//	VALUE self, ahash, yval;
+VALUE grid_row_set_attributes(argc, argv, self)
+	long argc;
+	VALUE *argv, self;
 {
-	cGrid * cg;
-	long ypos;
-	Data_Get_Struct(self, cGrid, cg);
-	ypos = grid_coordinate(yval, "y-position");
+	VALUE ahash, yval, hval;
+	cGrid *internal;
 
-	grid_set_dimensions(cg, cg->width, ypos + 1);
-	cg->row_attributes[ypos] = ahash;
+	rb_scan_args(argc, argv, "21", &ahash, &yval, &hval);
+
+	cGrid * cg;
+	long ypos, hint, idx;
+	Data_Get_Struct(self, cGrid, cg);
+
+  if(hval == Qnil)
+    hint = 1;
+  else
+    hint = grid_coordinate(hval, "height");
+
+	ypos = grid_coordinate(yval, "y-position");
+	grid_set_dimensions(cg, cg->width, ypos + hint);
+  for(idx = 0; idx < hint; idx++) {
+	  cg->row_attributes[ypos+idx] = ahash;
+  }
 
 	return ahash;
 }

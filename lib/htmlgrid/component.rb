@@ -32,7 +32,6 @@ module HtmlGrid
 		CSS_ID = nil
 		# other html-attributes
 		HTML_ATTRIBUTES = {}
-		HTTP_HEADERS = {}
 		# precede instances of this class with a label?
 		LABEL = false
 		@@html_entities = [
@@ -188,6 +187,9 @@ module HtmlGrid
 		end
 		def label=(boolean)
 			@label = boolean
+		end
+		def onclick=(onclick)
+      @attributes['onclick'] = onclick
 		end
 		# delegator to @container, default definition in Template
 		def onload=(onload)

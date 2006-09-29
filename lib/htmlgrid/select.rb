@@ -44,7 +44,7 @@ module HtmlGrid
 				val = value.to_s
 				attributes = { "value" => val }
 				attributes.store("selected", true) if(val == selected)
-				context.option(attributes) { @lookandfeel.lookup(value) }
+				context.option(attributes) { @lookandfeel.lookup(value) { val } }
 			}
 		end
 	end

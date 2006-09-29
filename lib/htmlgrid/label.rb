@@ -31,6 +31,10 @@ module HtmlGrid
 		def init
 			super
 			@value = @lookandfeel.lookup(@name)
+      state = @session.state
+      if(state.respond_to?(:mandatory?) && state.mandatory?(@name))
+        @value += "*"
+      end 
 		end
 		def to_html(context)
 			context.label(@attributes) { @value }
@@ -66,10 +70,17 @@ module HtmlGrid
 			yield @component
 		end
 		def to_html(context)
-			label = @lookandfeel.lookup(@label_key) || if(@component.respond_to?(:name))
-				@lookandfeel.lookup(@component.name)
+      key = @label_key
+			label = @lookandfeel.lookup(key) 
+      if(!label && @component.respond_to?(:name))
+        key = @component.name
+				label = @lookandfeel.lookup(key)
 			end
-			unless(label.nil?)
+      state = @session.state
+      if(label && state.respond_to?(:mandatory?) && state.mandatory?(key))
+        label += "*"
+      end 
+			if(label)
 				context.label(@attributes) { label }
 			end
 		end

@@ -319,6 +319,11 @@ class TestGrid < Test::Unit::TestCase
 		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
+	def test_set_row_attributes3
+		@grid.set_row_attributes({'foo' => 'bar'}, 1, 2)
+		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+	end
 	def test_insert_row
 		assert_equal(1, @grid.height)
 		@grid.add("testfeld", 0, 1)

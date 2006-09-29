@@ -29,6 +29,7 @@ require 'htmlgrid/value'
 
 module HtmlGrid
 	class List < Composite
+    BACKGROUND_ROW = nil
 		BACKGROUND_SUFFIX = '-bg'
 		CSS_HEAD_MAP = {}
 		DEFAULT_CLASS = Value
@@ -71,8 +72,9 @@ module HtmlGrid
 				#compose_components(mdl, offset)
 				#compose_css(offset, resolve_suffix(mdl, bg_flag))
 				#compose_colspan(offset)
-				if(rcss = row_css(mdl))
-					@grid.set_row_attributes({'class' => rcss}, offset.at(1))
+				if(rcss = row_css(mdl, bg_flag))
+					@grid.set_row_attributes({'class' => rcss}, offset.at(1),
+                                  self::class::OFFSET_STEP.at(1))
 				end
 				offset = resolve_offset(offset, self::class::OFFSET_STEP)
 				bg_flag = !bg_flag if self::class::STRIPED_BG
@@ -91,16 +93,7 @@ module HtmlGrid
 				header_key = 'th_' << key.to_s
 				if(txt = @lookandfeel.lookup(header_key))
 					if(self::class::SORT_HEADER)
-						link = Link.new(header_key, @model, @session, self)
-						args = {
-							'sortvalue'	=>	component.to_s,
-						}
-						link.attributes['href'] = @lookandfeel.event_url(:sort, args)
-						if((cls = css_head_map[matrix]) \
-							|| (cls = self::class::DEFAULT_HEAD_CLASS))
-							link.attributes['class'] = cls
-						end
-						@grid.add(link, *matrix)
+						@grid.add(sort_link(header_key, matrix, component), *matrix)
 					else
 						@grid.add(txt, *matrix)
 					end
@@ -133,8 +126,21 @@ module HtmlGrid
 			end
 			super
 		end
-		def row_css(model)
-		end
+    def row_css(model, bg_flag)
+      self::class::BACKGROUND_ROW if(bg_flag)
+    end
+    def sort_link(header_key, matrix, component)
+      link = Link.new(header_key, @model, @session, self)
+      args = {
+        'sortvalue'	=>	component.to_s,
+      }
+      link.attributes['href'] = @lookandfeel.event_url(:sort, args)
+      if((cls = css_head_map[matrix]) \
+        || (cls = self::class::DEFAULT_HEAD_CLASS))
+        link.attributes['class'] = cls
+      end
+      link
+    end
 		def sort_model
 			if(self::class::SORT_DEFAULT && (@session.event != :sort))
 				begin

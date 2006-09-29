@@ -30,9 +30,6 @@ module HtmlGrid
 		CONTENT = nil
 		FOOT = nil
 		HEAD = nil
-		HTTP_HEADERS = {
-			"Cache-Control"	=>	"no-cache, max-age=3600, must-revalidate",
-		}
 		META_TAGS = []
 		LEGACY_INTERFACE = true
 		CSS_FILES = []
