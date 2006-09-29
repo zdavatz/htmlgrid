@@ -31,8 +31,10 @@ module HtmlGrid
 			super
 			@value = @lookandfeel.lookup(@name)
 		end
+		def href
+			@attributes['href']
+		end
 		def href=(url)
-			@href = url
 			@attributes['href'] = url
 		end
 		def target=(trg)
