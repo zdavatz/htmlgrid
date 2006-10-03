@@ -69,7 +69,8 @@ module HtmlGrid
 				end
 			elsif(component.is_a? String)
 				#Text.new(component.intern, model, session, self)
-				@lookandfeel.lookup(component).to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
+				val = @lookandfeel.lookup(component) { component.to_s }
+        val.gsub(/(\r\n)|(\n)|(\r)/, '<br>')
 			end
 		rescue StandardError => exc
 			exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)", 
@@ -199,6 +200,7 @@ module HtmlGrid
 		def compose(model=@model, offset=[0,0], bg_flag=false)
 			comps = components
 			css = css_map
+      cids = css_id_map
 			ccss = component_css_map
 			colsp = colspan_map
 			suffix = resolve_suffix(model, bg_flag)
@@ -207,7 +209,7 @@ module HtmlGrid
 				nkey = key[0,2]
 				matrix = resolve_offset(key, offset)
 				nmatrix = resolve_offset(nkey, offset)
-				compose_component(model, comps[key], matrix)
+				comp = compose_component(model, comps[key], matrix)
 				if(style = css[key])
 					@grid.add_style(style + suffix, *matrix)
 				elsif(style = css[nkey])
@@ -218,6 +220,9 @@ module HtmlGrid
 				elsif(cstyle = ccss[nkey])
 					@grid.add_component_style(cstyle + suffix, *nmatrix)
 				end
+        if(id = cids[key] || cids[nkey])
+          comp.css_id = id
+        end
 				if(span = colsp[key])
 					@grid.set_colspan(matrix.at(0), matrix.at(1), span)	
 				end
@@ -280,6 +285,7 @@ module HtmlGrid
 				end
 				@grid.add(label(comp, component), matrix.at(0), matrix.at(1), 
 					self::class::VERTICAL)
+        comp
 			end
 		end
 		## compose_components: legacy-code
