@@ -32,6 +32,11 @@ module HtmlGrid
 		CSS_ID = nil
 		# other html-attributes
 		HTML_ATTRIBUTES = {}
+    # default http-headers
+    HTTP_HEADERS = {
+      "Content-Type"  => "text/html",
+      "Cache-Control" => "no-cache, max-age=3600, must-revalidate",
+    }
 		# precede instances of this class with a label?
 		LABEL = false
 		@@html_entities = [
