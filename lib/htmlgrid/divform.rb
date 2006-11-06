@@ -24,6 +24,7 @@
 # Form -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
 
 require 'htmlgrid/form'
+require 'htmlgrid/divcomposite'
 require 'htmlgrid/submit'
 
 module HtmlGrid

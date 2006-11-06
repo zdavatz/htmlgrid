@@ -71,11 +71,13 @@ module HtmlGrid
 					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 				}	
+        encoding = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
 				headers << context.script(args) { 
 					"djConfig = { 
 						isDebug: #{self.class::DOJO_DEBUG}, 
 						parseWidgets: #{dojo_parse_widgets},
 						preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
+            bindEncoding: '#{encoding}',
 						searchIds: []
 					};" 
 				}
