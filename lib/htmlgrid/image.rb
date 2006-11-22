@@ -33,7 +33,7 @@ module HtmlGrid
 				@attributes['src'] = @lookandfeel.resource(@name)
 				@attributes['alt'] = @lookandfeel.lookup(@name)
 			end
-			@attributes['border'] = "0"
+			#@attributes['border'] = "0"
 		end
 		def to_html(context)
 			context.img(@attributes)
