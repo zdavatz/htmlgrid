@@ -56,13 +56,8 @@ module HtmlGrid
 		end
 		def compose_footer(offset=[0,0])
 		end
-		def compose_empty_list(offset)
-			@grid.add(@lookandfeel.lookup(self::class::EMPTY_LIST_KEY), 
-				*offset)
-			@grid.add_attribute('class', 'list', *offset)
-			#@grid[*offset].add_style('list')
-			@grid.set_colspan(*offset)
-			resolve_offset(offset, self::class::OFFSET_STEP)
+		def compose_empty_list(offset, klass='list')
+      fill_row(offset, self::class::EMPTY_LIST_KEY, klass)
 		end
 		def compose_list(model=@model, offset=[0,0])
 			bg_flag = false
@@ -116,6 +111,12 @@ module HtmlGrid
 		def css_head_map
 			@css_head_map ||= self::class::CSS_HEAD_MAP.dup
 		end
+    def fill_row(offset, key, klass)
+      @grid.add(@lookandfeel.lookup(key), *offset)
+      @grid.add_attribute('class', klass, *offset)
+      @grid.set_colspan(*offset)
+      resolve_offset(offset, self::class::OFFSET_STEP)
+    end
 		private
 		def init
 			@model ||= []
