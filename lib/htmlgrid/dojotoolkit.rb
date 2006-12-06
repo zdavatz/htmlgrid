@@ -20,6 +20,11 @@ module HtmlGrid
 			}
 			dojo_tag << "></div>"
 		end
+    def dojo_title=(value)
+      tooltip = HtmlGrid::Div.new(@model, @session, self)
+      tooltip.value = value
+      self.dojo_tooltip = tooltip
+    end
 		def dojo_parse_widgets
 			if(@container.respond_to?(:dojo_parse_widgets))
 				@container.dojo_parse_widgets
@@ -68,7 +73,6 @@ module HtmlGrid
 			def dynamic_html_headers(context) 
 				headers = super
 				args = {
-					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 				}	
         encoding = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
@@ -84,14 +88,12 @@ module HtmlGrid
 				dojo_path = @lookandfeel.resource_global(:dojo_js) \
 					|| '/resources/dojo/dojo.js'
 				args = {
-					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 					'src'				=>	dojo_path,
 				}
 				headers << context.script(args)
 				unless(self.class::DOJO_PREFIX.empty?)
 					args = {
-						'language'	=> 'JavaScript',
 						'type'			=>	'text/javascript',
 					}	
 					headers << context.script(args) { 
@@ -101,7 +103,6 @@ module HtmlGrid
 					}
 				end
 				args = {
-					'language'	=> 'JavaScript',
 					'type'			=>	'text/javascript',
 				}
 				headers << context.script(args) {

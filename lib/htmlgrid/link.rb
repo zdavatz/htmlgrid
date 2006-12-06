@@ -47,7 +47,7 @@ module HtmlGrid
 				else
 					super
 				end
-			}
+			} << dynamic_html(context)
 		end
 	end
 end
