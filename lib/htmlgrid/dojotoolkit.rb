@@ -38,6 +38,7 @@ module HtmlGrid
 					attrs = {
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
+						'id'        =>  "#{css_id}_widget",
 						'href'			=>	@dojo_tooltip,
 						'toggle'		=>	'fade',
 						'toggleDuration'	=>	'500',
@@ -48,6 +49,7 @@ module HtmlGrid
 					@dojo_tooltip.attributes.update({
 						'dojoType'  => 'tooltip',
 						'connectId' =>	css_id,
+						'id'        =>  "#{css_id}_widget",
 						'toggle'		=>	'fade',
 						'toggleDuration'	=>	'500',
 						'style'			=>	'display: none',
