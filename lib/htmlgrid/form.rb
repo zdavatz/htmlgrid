@@ -51,7 +51,7 @@ module HtmlGrid
 		end
 		def to_html(context)
 			context.send(self::class::TAG_METHOD, @form_properties) {
-				super << context.div { hidden_fields(context) }
+				super << context.div('style'=>'display:none') { hidden_fields(context) }
 			}
 		end
 		private
