@@ -163,7 +163,8 @@ module HtmlGrid
 			@css_grid[ypos, 0] = [css_class ? {'class' => css_class} : nil]
 		end
 		def label(component, key)
-			if(labels? && (!component.respond_to?(:label?) || component.label?))
+			if(labels? \
+         && (!component.respond_to?(:label?) || component.label?))
 				label = SimpleLabel.new(key, component, @session, self)
 				[label, component]
 			else
@@ -204,8 +205,9 @@ module HtmlGrid
 			ccss = component_css_map
 			colsp = colspan_map
 			suffix = resolve_suffix(model, bg_flag)
-			comps.keys.concat(css.keys).concat(ccss.keys)\
-				.concat(colsp.keys).uniq.sort_by { |key| [-key.size, key] }.each { |key|
+			comps.keys.concat(css.keys).concat(colsp.keys).uniq.sort_by { |key| 
+        [-key.size, key] 
+      }.each { |key|
 				nkey = key[0,2]
 				matrix = resolve_offset(key, offset)
 				nmatrix = resolve_offset(nkey, offset)
@@ -215,11 +217,6 @@ module HtmlGrid
 				elsif(style = css[nkey])
 					@grid.add_style(style + suffix, *nmatrix)
 				end
-				if(cstyle = ccss[key])
-					@grid.add_component_style(cstyle + suffix, *matrix)
-				elsif(cstyle = ccss[nkey])
-					@grid.add_component_style(cstyle + suffix, *nmatrix)
-				end
         if(id = cids[key] || cids[nkey])
           comp.css_id = id
         end
@@ -227,6 +224,11 @@ module HtmlGrid
 					@grid.set_colspan(matrix.at(0), matrix.at(1), span)	
 				end
 			}
+      # component-styles depend on components having been initialized 
+      # -> separate iteration
+      ccss.each { |matrix, cstyle|
+        @grid.add_component_style(cstyle + suffix, *matrix)
+      }
 =begin
 			compose_components(model, offset)
 			compose_css(offset)
