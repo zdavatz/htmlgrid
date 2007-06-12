@@ -58,17 +58,11 @@ module HtmlGrid
 					end
 					self.send(component, *args)
 				elsif(klass = symbol_map[component])
-					#puts "creating #{klass} for #{component}"
 					klass.new(component, model, @session, self)
-				else #if(model.respond_to?(component))
-					#puts "input for #{component}"
-					#Value.new(component, model, session, self)
+				else
 					self::class::DEFAULT_CLASS.new(component, model, @session, self)
-				#else
-					#p "nothing found for #{component}"
 				end
 			elsif(component.is_a? String)
-				#Text.new(component.intern, model, session, self)
 				val = @lookandfeel.lookup(component) { component.to_s }
         val.gsub(/(\r\n)|(\n)|(\r)/, '<br>')
 			end
@@ -139,17 +133,11 @@ module HtmlGrid
 				if(self.respond_to?(component, true))
 					self.send(component, model)
 				elsif(klass = symbol_map[component])
-					#puts "creating #{klass} for #{component}"
 					klass.new(component, model, @session, self)
-				else #if(model.respond_to?(component))
-					#puts "input for #{component}"
-					#Value.new(component, model, session, self)
+				else
 					self::class::DEFAULT_CLASS.new(component, model, @session, self)
-				#else
-					#p "nothing found for #{component}"
 				end
 			elsif(component.is_a? String)
-				#Text.new(component.intern, model, session, self)
 				val = @lookandfeel.lookup(component) { component.to_s }
         val.gsub(/(\r\n)|(\n)|(\r)/, '<br>')
 			end
@@ -226,7 +214,8 @@ module HtmlGrid
 			}
       # component-styles depend on components having been initialized 
       # -> separate iteration
-      ccss.each { |matrix, cstyle|
+      ccss.each { |key, cstyle|
+        matrix = resolve_offset(key, offset)
         @grid.add_component_style(cstyle + suffix, *matrix)
       }
 =begin
