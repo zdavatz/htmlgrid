@@ -10,6 +10,7 @@ module HtmlGrid
 			# <dojo:#{widget} ...> does not work on konqueror as of 
 			# 02.06.2006. In combination with DOJO_DEBUG = true it even 
 			# hangs konqueror.
+=begin
 			dojo_tag = "<div dojoType=\"#{widget}\""
 			args.each { |key, value|
 				if(value.is_a?(Array))
@@ -19,6 +20,16 @@ module HtmlGrid
 				end
 			}
 			dojo_tag << "></div>"
+=end
+      div = HtmlGrid::Div.new(@model, @session, self)
+      div.set_attribute('dojoType', widget)
+      args.each { |key, value|
+        if(value.is_a?(Array))
+          value = value.join(';')
+        end
+        div.set_attribute(key, value)
+      }
+      div
 		end
     def dojo_title=(value)
       tooltip = HtmlGrid::Div.new(@model, @session, self)

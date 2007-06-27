@@ -56,7 +56,8 @@ module HtmlGrid
 				 && (origin = @component.data_origin))
 				@attributes.store('title', origin.to_s)
 			end
-			if(@session.error(@label_key))
+			if(@session.error(@label_key) \
+         || (@component.respond_to?(:name) && @session.error(@component.name)))
 				@attributes["class"] = "error" 
 			end
 			if(@component.respond_to?(:attributes) \
