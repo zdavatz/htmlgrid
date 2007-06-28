@@ -35,10 +35,10 @@ require 'htmlgrid/form'
 class StubComposite < HtmlGrid::Composite
 	attr_writer :container
 	COMPONENTS = {
-		[0,0]		=>	:baz,
+		[0,0,0]	=>	:baz,
 		[0,0,1]	=>	:foo,
 		[0,0,2]	=>	:baz,
-		[0,1]		=>	:baz,
+		[0,1,0]	=>	:baz,
 		[0,1,1]	=>	:baz,	
 	}
 	LABELS = true
@@ -173,7 +173,7 @@ class TestComposite < Test::Unit::TestCase
 		assert_equal(true, @composite.labels?)
 	end
 	def test_to_html
-		expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz3</TD></TR><TR><TD>Baz2Baz4</TD></TR></TABLE>'
+		expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR></TABLE>'
 		assert_equal(expected, @composite.to_html(CGI.new))
 	end
 	def test_resolve_offset
