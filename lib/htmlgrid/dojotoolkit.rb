@@ -2,6 +2,7 @@
 # HtmlGrid::DojoToolkit -- davaz.com -- 14.03.2006 -- mhuggler@ywesee.com
 
 require 'htmlgrid/component'
+require 'htmlgrid/div'
 
 module HtmlGrid
 	class Component
