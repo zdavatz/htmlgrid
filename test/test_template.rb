@@ -38,6 +38,12 @@ class StubTemplateSession
 	def language
 		"de"
 	end
+  def http_protocol
+    'http'
+  end
+  def server_name
+    "testserver.com"
+  end
 	alias :default_language :language
 end
 class StubTemplateLookandfeel < SBSM::Lookandfeel
@@ -81,7 +87,7 @@ class TestTemplate < Test::Unit::TestCase
 		}
 		expected = [
 			'<TITLE>Test</TITLE>',
-			'<LINK href="/resources/gcc/test.css" rel="stylesheet" type="text/css">',
+			'<LINK href="http://testserver.com/resources/gcc/test.css" rel="stylesheet" type="text/css">',
 			'<META content="follow, index" http-equiv="robots">',
 		]
 		expected.each { |line|
