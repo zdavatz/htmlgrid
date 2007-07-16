@@ -101,7 +101,12 @@ void grid_set_dimensions(cg, width, height)
 	/* make space for more rows */
 	if(height > cg->height)
 	{
-		REALLOC_N(cg->row_attributes, VALUE, height);
+    if(height > cg->row_capacity)
+    {
+      while(height > cg->row_capacity)
+        cg->row_capacity *= 2;
+		  REALLOC_N(cg->row_attributes, VALUE, cg->row_capacity);
+    }
 		for(yval=cg->height; yval < height; yval++)
 		{
 			cg->row_attributes[yval] = Qnil;	
@@ -177,9 +182,10 @@ cGrid *grid_create()
 	cg->width = 1;
 	cg->height = 1;
 	cg->capacity = init_cap;
+  cg->row_capacity = init_cap;
 	cg->fields = ALLOC_N(cField *, init_cap);
 	cg->fields[0] = grid_create_field();
-	cg->row_attributes = ALLOC_N(VALUE, cg->height);
+	cg->row_attributes = ALLOC_N(VALUE, init_cap);
 	cg->row_attributes[0] = Qnil;
 	return cg;
 }

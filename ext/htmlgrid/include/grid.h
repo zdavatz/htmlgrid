@@ -66,6 +66,7 @@ struct cGrid {
 	long height;
 	long width;
 	long capacity;
+  long row_capacity;
 	VALUE attributes;
 	VALUE *row_attributes;
 	cField **fields;
