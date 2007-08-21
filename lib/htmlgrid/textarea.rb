@@ -35,9 +35,9 @@ module HtmlGrid
 		end
 		def _to_html(context, value=@value)
 			if(value.is_a?(Array))
-				value.join("\n")
+				value.collect { |elm| escape elm.to_s }.join("\n")
 			else
-				value.to_s
+				escape value.to_s
 			end.strip
 		end
 	end
