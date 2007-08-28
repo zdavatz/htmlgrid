@@ -46,26 +46,24 @@ module HtmlGrid
 			alias :dojo_dynamic_html :dynamic_html
 			def dynamic_html(context)
 				html = ''
-				if(@dojo_tooltip.is_a?(String))
-					attrs = {
-						'dojoType'  => 'tooltip',
-						'connectId' =>	css_id,
-						'id'        =>  "#{css_id}_widget",
-						'href'			=>	@dojo_tooltip,
-						'toggle'		=>	'fade',
+        attrs = {
+          'dojoType'  => 'tooltip',
+          'connectId' =>	css_id,
+          'id'        =>  "#{css_id}_widget",
+          'style'			=>	'display: none',
+        }
+        unless((match = /MSIE\s*(\d)/.match(@session.user_agent)) \
+               && match[1].to_i < 7)
+          attrs.update({
+						'toggle'		      =>	'fade',
 						'toggleDuration'	=>	'500',
-						'style'			=>	'display: none',
-					}
+          })
+        end
+				if(@dojo_tooltip.is_a?(String))
+					attrs.store('href', @dojo_tooltip)
 					html << context.a(attrs)
 				elsif(@dojo_tooltip.respond_to?(:to_html))
-					@dojo_tooltip.attributes.update({
-						'dojoType'  => 'tooltip',
-						'connectId' =>	css_id,
-						'id'        =>  "#{css_id}_widget",
-						'toggle'		=>	'fade',
-						'toggleDuration'	=>	'500',
-						'style'			=>	'display: none',
-					})
+					@dojo_tooltip.attributes.update(attrs)
 					html << @dojo_tooltip.to_html(context)
 				end
 				unless(html.empty? || dojo_parse_widgets)
