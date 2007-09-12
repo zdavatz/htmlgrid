@@ -7,6 +7,9 @@ require 'htmlgrid/div'
 module HtmlGrid
 	class Component
 		attr_accessor :dojo_tooltip
+    def dojo_9?
+      defined?(DOJO_VERSION) && DOJO_VERSION >= '0.9'
+    end
 		def dojo_tag(widget, args={})
 			# <dojo:#{widget} ...> does not work on konqueror as of 
 			# 02.06.2006. In combination with DOJO_DEBUG = true it even 
@@ -24,9 +27,10 @@ module HtmlGrid
 =end
       div = HtmlGrid::Div.new(@model, @session, self)
       div.set_attribute('dojoType', widget)
+      lim = dojo_9? ? "," : ";"
       args.each { |key, value|
         if(value.is_a?(Array))
-          value = value.join(';')
+          value = value.join(lim)
         end
         div.set_attribute(key, value)
       }
@@ -47,7 +51,7 @@ module HtmlGrid
 			def dynamic_html(context)
 				html = ''
         attrs = {
-          'dojoType'  => 'tooltip',
+          'dojoType'  => dojo_9? ? 'ywesee.widget.Tooltip' : 'tooltip',
           'connectId' =>	css_id,
           'id'        =>  "#{css_id}_widget",
           'style'			=>	'display: none',
@@ -60,8 +64,8 @@ module HtmlGrid
           })
         end
 				if(@dojo_tooltip.is_a?(String))
-					attrs.store('href', @dojo_tooltip)
-					html << context.a(attrs)
+          attrs.store('href', @dojo_tooltip)
+					html << context.div(attrs)
 				elsif(@dojo_tooltip.respond_to?(:to_html))
 					@dojo_tooltip.attributes.update(attrs)
 					html << @dojo_tooltip.to_html(context)
@@ -84,33 +88,40 @@ module HtmlGrid
 			DOJO_REQUIRE = []
 			def dynamic_html_headers(context) 
 				headers = super
-				args = {
-					'type'			=>	'text/javascript',
-				}	
         encoding = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
-				headers << context.script(args) { 
-					"djConfig = { 
-						isDebug: #{self.class::DOJO_DEBUG}, 
-						parseWidgets: #{dojo_parse_widgets},
-						preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
-            bindEncoding: '#{encoding}',
-						searchIds: []
-					};" 
-				}
-				dojo_path = @lookandfeel.resource_global(:dojo_js) \
-					|| '/resources/dojo/dojo.js'
-				args = {
-					'type'			=>	'text/javascript',
-					'src'				=>	dojo_path,
-				}
+        dojo_path = @lookandfeel.resource_global(:dojo_js)
+        args = {
+          'type'			=>	'text/javascript',
+        }	
+        if(dojo_9?)
+          dojo_path ||= '/resources/dojo/dojo/dojo.js'
+          config = [ "parseOnLoad:true",
+                     "isDebug:#{self.class::DOJO_DEBUG}",
+                     "preventBackButtonFix:#{!self.class::DOJO_BACK_BUTTON}",
+                     "bindEncoding:'#{encoding}'", ].join(',')
+          args.store('djConfig', config)
+        else
+          headers << context.script(args.dup) { 
+            "djConfig = { 
+              isDebug: #{self.class::DOJO_DEBUG}, 
+              parseWidgets: #{dojo_parse_widgets},
+              preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
+              bindEncoding: '#{encoding}',
+              searchIds: []
+            };" 
+          }
+          dojo_path ||= '/resources/dojo/dojo.js'
+        end
+				args.store('src', dojo_path)
 				headers << context.script(args)
 				unless(self.class::DOJO_PREFIX.empty?)
+          register = dojo_9? ? 'registerModulePath' : 'setModulePrefix'
 					args = {
 						'type'			=>	'text/javascript',
 					}	
 					headers << context.script(args) { 
 						self.class::DOJO_PREFIX.collect { |prefix, path|
-							"dojo.setModulePrefix('#{prefix}', '#{path}');"
+							"dojo.#{register}('#{prefix}', '#{path}');"
 						}.join
 					}
 				end
@@ -129,6 +140,15 @@ module HtmlGrid
 					end
 					script
 				}
+        if(dojo_9?)
+          dojo_dir = File.dirname(dojo_path)
+          headers << context.style(:type => "text/css") { <<-EOS
+              @import "#{File.join(dojo_dir, "/resources/dojo.css")}";
+              @import "#{File.join(dojo_dir, "../dijit/themes/tundra/tundra.css")}";
+            EOS
+          }
+        end
+        headers
 			end
 			def dojo_parse_widgets
 				self.class::DOJO_PARSE_WIDGETS
