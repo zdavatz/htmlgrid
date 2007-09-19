@@ -28,16 +28,22 @@ require 'htmlgrid/input'
 module HtmlGrid
 	class Textarea < Input
 		attr_writer :value
+    attr_accessor :unescaped
 		def to_html(context)
-			context.textarea(@attributes) {
+			html = context.textarea(@attributes) {
 				_to_html(context, @value)
 			}
+      puts html
+      html
 		end
+    def escape_value(elm)
+      @unescaped ? elm.to_s : escape(elm.to_s)
+    end
 		def _to_html(context, value=@value)
 			if(value.is_a?(Array))
-				value.collect { |elm| escape elm.to_s }.join("\n")
+				value.collect { |elm| escape_value elm }.join("\n")
 			else
-				escape value.to_s
+				escape_value value
 			end.strip
 		end
 	end
