@@ -30,11 +30,9 @@ module HtmlGrid
 		attr_writer :value
     attr_accessor :unescaped
 		def to_html(context)
-			html = context.textarea(@attributes) {
+			context.textarea(@attributes) {
 				_to_html(context, @value)
 			}
-      puts html
-      html
 		end
     def escape_value(elm)
       @unescaped ? elm.to_s : escape(elm.to_s)
