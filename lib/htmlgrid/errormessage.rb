@@ -29,10 +29,10 @@ module HtmlGrid
 		def error_message(ypos = 0)
 			@displayed_messages = []
 			if(@session.warning?)
-				messages(@session.warnings, 'warning', ypos)
+				__messages(@session.warnings, 'warning', ypos)
 			end
 			if(@session.error?)
-				messages(@session.errors, 'processingerror', ypos)
+				__messages(@session.errors, 'processingerror', ypos)
 			end
 		end
 		def error_text(obj)
@@ -47,7 +47,7 @@ module HtmlGrid
 			end
 			txt
 		end
-		def message(obj, css_class, ypos=0)
+		def __message(obj, css_class, ypos=0)
 			@displayed_messages ||= []
 			message = obj.message
 			unless(@displayed_messages.include?(message))
@@ -58,11 +58,11 @@ module HtmlGrid
 				end
 			end
 		end
-		def messages(ary, css_class, ypos=0)
+		def __messages(ary, css_class, ypos=0)
 			ary.sort_by { |item|
 				(components.index(item.key) || [-1,-1]).reverse
 			}.reverse.each { |item|
-				message(item, css_class, ypos)
+				__message(item, css_class, ypos)
 			}
 		end
 	end
