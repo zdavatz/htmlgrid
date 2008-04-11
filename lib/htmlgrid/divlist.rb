@@ -6,7 +6,8 @@ require 'htmlgrid/divcomposite'
 module HtmlGrid
 	class DivList < HtmlGrid::DivComposite
 		def compose
-			@model.each { |item|
+			@model.each_with_index { |item, idx|
+        @list_index = idx
 				super(item)
 			} 
 =begin
