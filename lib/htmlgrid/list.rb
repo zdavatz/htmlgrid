@@ -47,10 +47,10 @@ module HtmlGrid
 			unless (self::class::OMIT_HEADER)
 				offset = compose_header(offset) 
 			end
-			offset = if(model.empty?)
-				compose_empty_list(offset) unless (self::class::EMPTY_LIST)
+			if(model.empty?)
+				offset = compose_empty_list(offset) unless (self::class::EMPTY_LIST)
 			else
-				compose_list(model, offset)
+				offset = compose_list(model, offset)
 			end
 			compose_footer(offset)
 		end
