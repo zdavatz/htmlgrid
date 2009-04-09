@@ -72,9 +72,9 @@ module HtmlGrid
 					block.call
 				end.to_s <<
 				title(context) << 
-				css_links(context) <<
 				meta_tags(context) <<
 				other_html_headers(context) <<
+				css_links(context) <<
 				javascripts(context)
 			}
 		end

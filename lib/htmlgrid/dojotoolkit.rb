@@ -8,7 +8,7 @@ module HtmlGrid
 	class Component
 		attr_accessor :dojo_tooltip
     def dojo_9?
-      defined?(DOJO_VERSION) && DOJO_VERSION >= '0.9'
+      defined?(::DOJO_VERSION) && ::DOJO_VERSION >= '0.9'
     end
 		def dojo_tag(widget, args={})
 			# <dojo:#{widget} ...> does not work on konqueror as of 
@@ -64,7 +64,7 @@ module HtmlGrid
           })
         end
 				if(@dojo_tooltip.is_a?(String))
-          attrs.store('href', @dojo_tooltip)
+          attrs.store('href', "'#@dojo_tooltip'")
 					html << context.div(attrs)
 				elsif(@dojo_tooltip.respond_to?(:to_html))
 					@dojo_tooltip.attributes.update(attrs)
@@ -83,33 +83,35 @@ module HtmlGrid
 		module DojoTemplate
 			DOJO_DEBUG = false
 			DOJO_BACK_BUTTON = false
+      DOJO_ENCODING = nil
 			DOJO_PARSE_WIDGETS = true
 			DOJO_PREFIX = []
 			DOJO_REQUIRE = []
 			def dynamic_html_headers(context) 
 				headers = super
-        encoding = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
+        encoding = self.class::DOJO_ENCODING || $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
         dojo_path = @lookandfeel.resource_global(:dojo_js)
         args = {
           'type'			=>	'text/javascript',
         }	
+        headers << context.script(args.dup) {
+          "djConfig = {
+            isDebug: #{self.class::DOJO_DEBUG},
+            parseWidgets: #{dojo_parse_widgets},
+            preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
+            bindEncoding: '#{encoding}',
+            searchIds: []
+          };"
+        }
         if(dojo_9?)
           dojo_path ||= '/resources/dojo/dojo/dojo.js'
           config = [ "parseOnLoad:true",
                      "isDebug:#{self.class::DOJO_DEBUG}",
                      "preventBackButtonFix:#{!self.class::DOJO_BACK_BUTTON}",
-                     "bindEncoding:'#{encoding}'", ].join(',')
+                     "bindEncoding:'#{encoding}'",
+                     "searchIds:[]" ].join(',')
           args.store('djConfig', config)
         else
-          headers << context.script(args.dup) { 
-            "djConfig = { 
-              isDebug: #{self.class::DOJO_DEBUG}, 
-              parseWidgets: #{dojo_parse_widgets},
-              preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
-              bindEncoding: '#{encoding}',
-              searchIds: []
-            };" 
-          }
           dojo_path ||= '/resources/dojo/dojo.js'
         end
 				args.store('src', dojo_path)
