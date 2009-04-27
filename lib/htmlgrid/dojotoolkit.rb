@@ -64,7 +64,7 @@ module HtmlGrid
           })
         end
 				if(@dojo_tooltip.is_a?(String))
-          attrs.store('href', "'#@dojo_tooltip'")
+          attrs.store('href', dojo_9? ? "'#@dojo_tooltip'" : @dojo_tooltip)
 					html << context.div(attrs)
 				elsif(@dojo_tooltip.respond_to?(:to_html))
 					@dojo_tooltip.attributes.update(attrs)
