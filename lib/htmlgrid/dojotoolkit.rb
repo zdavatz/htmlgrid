@@ -100,7 +100,8 @@ module HtmlGrid
             parseWidgets: #{dojo_parse_widgets},
             preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
             bindEncoding: '#{encoding}',
-            searchIds: []
+            searchIds: [],
+	    urchin: ''
           };"
         }
         if(dojo_9?)
@@ -109,7 +110,8 @@ module HtmlGrid
                      "isDebug:#{self.class::DOJO_DEBUG}",
                      "preventBackButtonFix:#{!self.class::DOJO_BACK_BUTTON}",
                      "bindEncoding:'#{encoding}'",
-                     "searchIds:[]" ].join(',')
+                     "searchIds:[]",
+		     "urchin: ''" ].join(',')
           args.store('djConfig', config)
         else
           dojo_path ||= '/resources/dojo/dojo.js'
