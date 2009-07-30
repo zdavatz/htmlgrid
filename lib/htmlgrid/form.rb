@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -29,7 +30,11 @@ require 'htmlgrid/submit'
 module HtmlGrid
 	module FormMethods
 		AUTOFILL = false
-		ACCEPT_CHARSET = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
+    if RUBY_VERSION >= '1.9'
+      ACCEPT_CHARSET = Encoding.default_external || 'UTF-8'
+    else
+      ACCEPT_CHARSET = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
+    end
 		EVENT = nil
 		FORM_ACTION = nil
 		FORM_METHOD = 'POST'

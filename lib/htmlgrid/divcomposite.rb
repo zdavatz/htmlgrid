@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 # DivComposite -- HtmlGrid -- 19.04.2005 -- hwyss@ywesee.com
 
 require 'htmlgrid/composite'
@@ -35,15 +36,15 @@ module HtmlGrid
 		def to_html(context)
 			res = ''
 			@grid.each_with_index { |div, idx|
-				res << context.div(tag_attributes(idx)) { 
-					div.flatten.collect { |item| 
-						if(item.respond_to?(:to_html))
-							item.to_html(context)
-						else
-							item
-						end
-					}
-				}
+        res << context.div(tag_attributes(idx)) {
+          div.flatten.inject('') { |html, item|
+            html << if(item.respond_to?(:to_html))
+                      item.to_html(context)
+                    else
+                      item.to_s
+                    end
+          }
+        }
 			}
 			res
 		end

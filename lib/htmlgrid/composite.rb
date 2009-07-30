@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -64,11 +65,11 @@ module HtmlGrid
 				end
 			elsif(component.is_a? String)
 				val = @lookandfeel.lookup(component) { component.to_s }
-        val.gsub(/(\r\n)|(\n)|(\r)/, '<br>')
+        val.gsub(@@nl2br_ptrn, '<br>')
 			end
 		rescue StandardError => exc
 			exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)", 
-				self.class, components.index(component).inspect, component))
+				self.class, components.key(component).inspect, component))
 			raise exc
 		end
 		private
@@ -139,7 +140,7 @@ module HtmlGrid
 				end
 			elsif(component.is_a? String)
 				val = @lookandfeel.lookup(component) { component.to_s }
-        val.gsub(/(\r\n)|(\n)|(\r)/, '<br>')
+        val.gsub(@@nl2br_ptrn, '<br>')
 			end
 		rescue StandardError => exc
 			exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)", 

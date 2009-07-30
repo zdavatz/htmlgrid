@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 # HtmlGrid::SpanList -- davaz.com -- 04.05.2006 -- mhuggler@ywesee.com
 
 require 'htmlgrid/spancomposite'

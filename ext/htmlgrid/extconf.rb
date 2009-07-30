@@ -25,5 +25,9 @@
 
 require 'mkmf'
 
+if RUBY_VERSION >= '1.9'
+  $CPPFLAGS += " -DRUBY_19"
+end
+
 dir_config('htmlgrid', '.')
 create_makefile('htmlgrid')

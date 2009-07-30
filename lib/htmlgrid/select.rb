@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -31,7 +32,7 @@ module HtmlGrid
 		attr_accessor :selected, :valid_values
 		def to_html(context)
 			context.select(@attributes) {
-				selection(context)
+				selection(context).join
 			}
 		end
 	end

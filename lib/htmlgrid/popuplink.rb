@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -39,6 +40,7 @@ module HtmlGrid
 			@width = 750
 			@height = 460
 		end
+    @@name_ptrn = /[^a-z]+/i
 		def to_html(context)
 			props = {
 				'scrollbars'	=>	yesorno(@scrollbars),
@@ -51,7 +53,7 @@ module HtmlGrid
 			}.collect { |key, val|
 				[key,val].join('=')
 			}.join(',')
-			name = @lookandfeel.lookup(@name).to_s.gsub(/[^a-z]+/i, '')
+			name = @lookandfeel.lookup(@name).to_s.gsub(@@name_ptrn, '')
 			script = "window.open('#{href}', '#{name}', '#{props}').focus(); return false"
 			@attributes.store('onClick', script)
 			super

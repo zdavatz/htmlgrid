@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 # HtmlGrid::DojoToolkit -- davaz.com -- 14.03.2006 -- mhuggler@ywesee.com
 
 require 'htmlgrid/component'
@@ -6,6 +7,7 @@ require 'htmlgrid/div'
 
 module HtmlGrid
 	class Component
+    @@msie_ptrn = /MSIE\s*(\d)/
 		attr_accessor :dojo_tooltip
     def dojo_9?
       defined?(::DOJO_VERSION) && ::DOJO_VERSION >= '0.9'
@@ -56,7 +58,7 @@ module HtmlGrid
           'id'        =>  "#{css_id}_widget",
           'style'			=>	'display: none',
         }
-        unless((match = /MSIE\s*(\d)/.match(@session.user_agent)) \
+        unless((match = @@msie_ptrn.match(@session.user_agent)) \
                && match[1].to_i < 7)
           attrs.update({
 						'toggle'		      =>	'fade',
@@ -89,7 +91,12 @@ module HtmlGrid
 			DOJO_REQUIRE = []
 			def dynamic_html_headers(context) 
 				headers = super
-        encoding = self.class::DOJO_ENCODING || $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
+        encoding = self.class::DOJO_ENCODING
+        encoding ||= if RUBY_VERSION >= '1.9'
+                       Encoding.default_external
+                     else
+                       $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
+                     end
         dojo_path = @lookandfeel.resource_global(:dojo_js)
         args = {
           'type'			=>	'text/javascript',
@@ -100,7 +107,8 @@ module HtmlGrid
             parseWidgets: #{dojo_parse_widgets},
             preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
             bindEncoding: '#{encoding}',
-            searchIds: []
+            searchIds: [],
+            urchin: ''
           };"
         }
         if(dojo_9?)
@@ -109,7 +117,8 @@ module HtmlGrid
                      "isDebug:#{self.class::DOJO_DEBUG}",
                      "preventBackButtonFix:#{!self.class::DOJO_BACK_BUTTON}",
                      "bindEncoding:'#{encoding}'",
-                     "searchIds:[]" ].join(',')
+                     "searchIds:[]",
+                     "urchin:''" ].join(',')
           args.store('djConfig', config)
         else
           dojo_path ||= '/resources/dojo/dojo.js'

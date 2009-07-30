@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 # Richtext -- htmlgrid -- 29.06.2004 -- mhuggler@ywesee.com
 
 require 'htmlgrid/component'

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #--
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -214,13 +215,14 @@ module HtmlGrid
 		def to_html(context)
 			_to_html(context, @value).to_s
 		end
+    @@nl2br_ptrn = /(\r\n)|(\n)|(\r)/
 		def _to_html(context, value=@value)
 			if(value.is_a?(Array))
 				value.collect { |item| _to_html(context, item) }.join(' ')
 			elsif(value.respond_to?(:to_html))
 				value.to_html(context).to_s
 			else
-				value.to_s.gsub(/(\n)|(\r)|(\r\n)/, '<br>')
+				value.to_s.gsub(@@nl2br_ptrn, '<br>')
 			end
 		end
 		private

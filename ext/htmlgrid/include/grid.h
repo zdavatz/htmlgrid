@@ -26,6 +26,10 @@
 
 #include "htmlgrid.h"
 
+#ifndef RUBY_19
+# define RHASH_TBL(arg) RHASH(arg)->tbl
+#endif
+
 VALUE grid;
 
 void Init_Grid();

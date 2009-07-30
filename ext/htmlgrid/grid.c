@@ -22,7 +22,12 @@
  */
 
 #include "grid.h"
-#include "st.h"
+#ifdef RUBY_19
+# include "ruby/st.h"
+# include "ruby/encoding.h"
+#else
+# include "st.h"
+#endif
 
 void Init_Grid()
 {
@@ -64,7 +69,7 @@ long grid_coordinate(input, name)
 {
 	long output = NUM2LONG(input);
 	if(output < 0) 
-		rb_raise(rb_eArgError, "invalid %s %i", name, output);
+		rb_raise(rb_eArgError, "invalid %s %li", name, output);
 	return output;
 }
 
@@ -255,7 +260,7 @@ VALUE grid_initialize(self, attr)
 	Data_Get_Struct(self, cGrid, cg);
 
 	key = rb_str_new2("cellspacing");
-	if(!st_lookup(RHASH(attr)->tbl, key, 0))
+	if(!st_lookup(RHASH_TBL(attr), key, 0))
 	{
 		rb_hash_aset(attr, key, rb_str_new2("0"));
 	}
@@ -404,7 +409,6 @@ VALUE grid_to_html(self, cgi)
 			}
 
 			grid_cat_starttag(result, cf->tag, attrs);
-			
 			if(cf->content_count == 0)
 				rb_str_cat(result, "&nbsp;", 6);
 			else
@@ -551,7 +555,7 @@ VALUE grid_add_row(self, item, xval, yval)
 	long xpos, ypos, pos, len, stop, idx;
 	Data_Get_Struct(self, cGrid, cg);
 
-	len = RARRAY(item)->len;
+	len = RARRAY_LEN(item);
 	xpos = grid_coordinate(xval, "x-position");
 	ypos = grid_coordinate(yval, "y-position");
 	stop = xpos + len;
@@ -573,7 +577,7 @@ VALUE grid_add_column(self, item, xval, yval)
 	long xpos, ypos, pos, len, stop, idx;
 	Data_Get_Struct(self, cGrid, cg);
 
-	len = RARRAY(item)->len;
+	len = RARRAY_LEN(item);
 	xpos = grid_coordinate(xval, "x-position");
 	ypos = grid_coordinate(yval, "y-position");
 	stop = ypos + len;
@@ -771,7 +775,6 @@ VALUE grid_row_set_attributes(argc, argv, self)
 	VALUE *argv, self;
 {
 	VALUE ahash, yval, hval;
-	cGrid *internal;
 
 	rb_scan_args(argc, argv, "21", &ahash, &yval, &hval);
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -36,10 +37,11 @@ module HtmlGrid
 		end
 	end
 	class HttpLink < UrlLink
+    @@http_ptrn = /^http:/
 		LABEL = true
 		def compose_link
 			unless @value.nil?
-				if(@value =~ /^http:/)
+				if @http_ptrn.match(@value)
 					self.href = @value  
 				else
 					self.href = "http://" + @value
@@ -50,10 +52,11 @@ module HtmlGrid
 	end
 	class MailLink < UrlLink
 		LABEL = true
+    @@mailto_ptrn = /^mailto:/
 		def compose_link
 			unless @value.empty?
 				self.href = @value  
-				unless(@value =~ /^mailto:/)
+				unless @@mailto_ptrn.match(@value)
 					self.href = "mailto:"+@value
 				end
 			end
