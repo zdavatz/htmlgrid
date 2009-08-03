@@ -41,7 +41,7 @@ module HtmlGrid
 		LABEL = true
 		def compose_link
 			unless @value.nil?
-				if @http_ptrn.match(@value)
+				if @@http_ptrn.match(@value)
 					self.href = @value  
 				else
 					self.href = "http://" + @value
