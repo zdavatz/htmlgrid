@@ -31,6 +31,12 @@ require 'htmlgrid/inputtext'
 require 'htmlgrid/label'
 require 'htmlgrid/text'
 
+if RUBY_VERSION < '1.9'
+  class Hash
+    alias :key :index
+  end
+end
+
 module HtmlGrid
 	class AbstractComposite < Component
 		LABELS = false
