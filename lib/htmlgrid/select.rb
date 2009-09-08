@@ -32,7 +32,8 @@ module HtmlGrid
 		attr_accessor :selected, :valid_values
 		def to_html(context)
 			context.select(@attributes) {
-				selection(context).join
+				sel = selection(context)
+				sel.is_a?(Array) ? sel.join : sel.to_s
 			}
 		end
 	end
