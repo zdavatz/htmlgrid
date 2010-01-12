@@ -12,7 +12,7 @@ module HtmlGrid
     def dojo_9?
       defined?(::DOJO_VERSION) && ::DOJO_VERSION >= '0.9'
     end
-		def dojo_tag(widget, args={})
+		def dojo_tag(widget, args={}, inner_html='')
 			# <dojo:#{widget} ...> does not work on konqueror as of 
 			# 02.06.2006. In combination with DOJO_DEBUG = true it even 
 			# hangs konqueror.
@@ -36,6 +36,7 @@ module HtmlGrid
         end
         div.set_attribute(key, value)
       }
+      div.value = inner_html
       div
 		end
     def dojo_title=(value)
