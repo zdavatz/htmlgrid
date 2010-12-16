@@ -1,0 +1,6 @@
+=== 1.0.0 / 16.12.2010
+
+* htmlgrid is now Ruby 1.9 ready.
+
+  * Birthday!
+

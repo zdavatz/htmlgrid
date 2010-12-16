@@ -23,8 +23,8 @@
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
 # Grid -- htmlgrid -- hwyss@ywesee.com
-
 begin
+  VERSION = '1.0.0'
 	require 'htmlgrid.so'
 rescue LoadError
 	puts "could not find htmlgrid.so, falling back to pure-ruby class"
