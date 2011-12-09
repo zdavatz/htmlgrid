@@ -22,7 +22,8 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Component -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
+# HtmlGrid::Component -- htmlgrid -- 09.12.2012 -- mhatakeyama@ywesee.com 
+# HtmlGrid::Component -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
 #++
 
 module HtmlGrid
@@ -213,8 +214,12 @@ module HtmlGrid
 			@attributes.store('tabIndex', tab.to_s)
 		end
 		def to_html(context)
-			_to_html(context, @value).to_s
-		end
+      if RUBY_VERSION > "1.9"
+        _to_html(context, @value).to_s.force_encoding('utf-8')
+      else
+        _to_html(context, @value).to_s
+      end
+    end
     @@nl2br_ptrn = /(\r\n)|(\n)|(\r)/
 		def _to_html(context, value=@value)
 			if(value.is_a?(Array))
