@@ -22,10 +22,19 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Grid -- htmlgrid -- hwyss@ywesee.com
+# HtmlGrid::Grid -- htmlgrid -- 09.12.2011 -- mhatakeyama@ywesee.com
+# HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
 begin
   VERSION = '1.0.0'
-	require 'htmlgrid.so'
+  begin
+    # for gem install
+    ext_dir = File.expand_path('../../ext/htmlgrid', File.dirname(__FILE__))
+    ext_lib = File.join(ext_dir, 'htmlgrid.so')
+    require ext_lib
+  rescue LoadError
+    # for setup.rb install
+    require 'htmlgrid.so'
+  end
 rescue LoadError
 	puts "could not find htmlgrid.so, falling back to pure-ruby class"
 	module HtmlGrid
