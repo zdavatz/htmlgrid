@@ -1,3 +1,8 @@
+=== 1.0.1 / 09.12.2011
+
+* Updated component.rb to be compatible for both Ruby 1.8 and 1.9
+* Fixed require grid.o for gem install case
+
 === 1.0.0 / 16.12.2010
 
 * htmlgrid is now Ruby 1.9 ready.
