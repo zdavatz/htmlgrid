@@ -288,14 +288,16 @@ VALUE grid_width(self)
 VALUE grid_cat_attribute(pair, string)
 	VALUE pair, string;
 {
-	VALUE val;
+	VALUE val, tmp1, tmp2;
 	char *key, *value;
 	long len;
 	val = rb_ary_entry(pair, 1);
 	if(val == Qnil)
 		return string;
-	key = STR2CSTR(rb_ary_entry(pair, 0));
-	value = STR2CSTR(rb_funcall(val, rb_intern("to_s"), 0));
+  tmp1 = rb_ary_entry(pair, 0);
+	key = StringValuePtr(tmp1);
+  tmp2 = rb_funcall(val, rb_intern("to_s"), 0);
+	value = StringValuePtr(tmp2);
 	char attr[strlen(key) + strlen(value) + 5];
 	len = sprintf(attr, " %s=\"%s\"", key, value);
 	return rb_str_cat(string, attr, len);
@@ -333,8 +335,9 @@ VALUE grid_store_allowed_attribute(pair, attrs)
 	VALUE pair, attrs;
 {
 	char* key;
-
-	key = STR2CSTR(rb_ary_entry(pair, 0));
+  VALUE tmp;
+  tmp = rb_ary_entry(pair, 0);
+	key = StringValuePtr(tmp);
 	if( strcasecmp(key, "align") == 0 
 			|| strcasecmp(key, "class") == 0
 			|| strcasecmp(key, "colspan") == 0 
@@ -367,6 +370,7 @@ VALUE grid_to_html(self, cgi)
 	long idx, cdx, xval, yval, spanplus, len;
 	Data_Get_Struct(self, cGrid, cg);
 	//attrs = rb_iv_get(self, "@attributes");
+//printf("getin grid_to_html\n");
 	result = rb_str_new2("");
 	grid_cat_starttag(result, "TABLE", cg->attributes);
 	for(idx=0, yval=0; yval < cg->height; yval++)
@@ -416,13 +420,25 @@ VALUE grid_to_html(self, cgi)
 				for(cdx=0; cdx<cf->content_count; cdx++)
 				{
 					item = cf->content[cdx];
+//item => ODDB::View::WelcomeHead
+//printf("item.encoding = %s \n", StringValuePtr(item));
+//printf("item.encoding = %s \n", rb_enc_get(item)->name);
 					if(rb_obj_class(item) == rb_cString)
 						rb_str_concat(result, item);
 					else if(rb_respond_to(item, id_to_html))
 					{
 						VALUE item_html = rb_funcall(item, id_to_html, 1, cgi);
-						if(rb_obj_is_kind_of(item_html, rb_cString) == Qtrue)
+						if(rb_obj_is_kind_of(item_html, rb_cString) == Qtrue){
+// koko
+//result = rb_str_force_encoding(result, "UTF-8");
+//item_html = rb_str_force_encoding(item_html, "UTF-8");
+//VALUE enc;
+//enc = rb_obj_encoding(result);
+//printf("encoding type ");
+//printf("%s %s\n", rb_enc_get(result)->name, rb_enc_get(item_html)->name);
 							rb_str_concat(result, item_html);
+//printf("4\n");
+            }
 					}
 					else if(rb_obj_is_kind_of(item, rb_eException) == Qtrue)
 					{
@@ -441,12 +457,14 @@ VALUE grid_to_html(self, cgi)
 					else
 						rb_str_concat(result, rb_funcall(item, id_to_s, 0));
 				}
+//printf("10\n");
 			}
 			grid_cat_endtag(result, cf->tag);
 		}
 		rb_str_cat(result, tr_close, 5);
 	}
 	rb_str_cat(result, "</TABLE>", 8);
+//printf("end grid_to_html\n");
 	return result;
 }
 
@@ -749,7 +767,7 @@ void grid_field_add_tag(cf, tagname)
 	cField * cf;
 	VALUE tagname;
 {
-	strcpy(cf->tag, STR2CSTR(tagname));
+	strcpy(cf->tag, StringValuePtr(tagname));
 }
 
 VALUE grid_add_tag(argc, argv, self)
