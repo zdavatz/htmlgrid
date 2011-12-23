@@ -22,7 +22,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# HtmlGrid::Component -- htmlgrid -- 09.12.2012 -- mhatakeyama@ywesee.com 
+# HtmlGrid::Component -- htmlgrid -- 23.12.2012 -- mhatakeyama@ywesee.com 
 # HtmlGrid::Component -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
 #++
 
@@ -176,7 +176,11 @@ module HtmlGrid
 				esc << if(entity = @@symbol_entities[byte])
 					'&' << entity << ';'
 				else
-					byte.chr
+          if RUBY_VERSION >= '1.9'
+            byte
+          else
+            byte.chr
+          end
 				end
 			}
 			esc
