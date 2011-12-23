@@ -1,3 +1,11 @@
+=== 1.0.3 / 23.12.2011
+
+* patch grid.c for Ruby 1.9.3
+
+=== 1.0.2 / 23.12.2011
+
+* Fix FachinfoDocument encoding error
+
 === 1.0.1 / 09.12.2011
 
 * Updated component.rb to be compatible for both Ruby 1.8 and 1.9
