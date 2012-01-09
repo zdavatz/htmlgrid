@@ -1,3 +1,7 @@
+=== 1.0.4 / 23.12.2011
+
+* Added force_encoding('utf-8') to the return value of Grid#to_html method
+
 === 1.0.3 / 23.12.2011
 
 * patch grid.c for Ruby 1.9.3
