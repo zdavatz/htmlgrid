@@ -22,6 +22,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
+# Template -- htmlgrid -- 09.01.2012 -- mhatakeyama@ywesee.com 
 # Template -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
 
 require 'htmlgrid/grid'
@@ -260,7 +261,7 @@ module HtmlGrid
 		end
 		def to_html(context)
 			@grid.set_attributes(@attributes)
-			super << @grid.to_html(context)
+			super << @grid.to_html(context).force_encoding('utf-8')
 		end
 		private
 		def back(model=@model, session=@session)
