@@ -22,7 +22,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# HtmlGrid::Grid -- htmlgrid -- 09.12.2011 -- mhatakeyama@ywesee.com
+# HtmlGrid::Grid -- htmlgrid -- 21.02.2012 -- mhatakeyama@ywesee.com
 # HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
 begin
   VERSION = '1.0.4'
@@ -120,7 +120,7 @@ rescue LoadError
 						end
 					end
 				end
-				def initialize
+				def initialize # Row
 					@width = 1
 					@fields = [Field.new]
 					@attributes = {}
@@ -172,7 +172,7 @@ rescue LoadError
 				end
 			end
 			public
-			def initialize(attributes={})
+			def initialize(attributes={}) # Grid
 				@height = 1
 				@width = 1
 				@rows = [Row.new]
@@ -192,14 +192,22 @@ rescue LoadError
 			end
 			def add(arg, x, y, col=false)
 				if arg.kind_of? Enumerable
-					if(col)
-						add_column(arg, x, y)
-					else
-						add_row(arg, x, y)
-					end
-				else
-					add_field(arg, x, y)
-				end
+          if arg.kind_of? String
+            add_field(arg, x, y)
+          elsif arg.kind_of? Array
+            arg.each do |item|
+              add_field(item, x, y) 
+            end
+          else
+            if(col)
+              add_column(arg, x, y)
+            else
+              add_row(arg, x, y)
+            end
+          end
+        else
+          add_field(arg, x, y)
+        end
 			end
 			def add_attribute(key, value, x, y, w=1, h=1)
 				each_field(x, y, w, h) { |field|
