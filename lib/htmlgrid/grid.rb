@@ -22,7 +22,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# HtmlGrid::Grid -- htmlgrid -- 21.02.2012 -- mhatakeyama@ywesee.com
+# HtmlGrid::Grid -- htmlgrid -- 22.02.2012 -- mhatakeyama@ywesee.com
 # HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
 begin
   VERSION = '1.0.4'
@@ -155,7 +155,7 @@ rescue LoadError
 							html << field.to_html(cgi)
 							span = field.colspan
 						else
-							span.step(-1)
+              span -= 1
 						end
 					}
 					html
