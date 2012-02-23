@@ -22,7 +22,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# HtmlGrid::Grid -- htmlgrid -- 22.02.2012 -- mhatakeyama@ywesee.com
+# HtmlGrid::Grid -- htmlgrid -- 23.02.2012 -- mhatakeyama@ywesee.com
 # HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
 begin
   VERSION = '1.0.4'
@@ -282,7 +282,10 @@ rescue LoadError
 				initialize_grid(x+span, y+1)
 				self[x,y].colspan = span
 			end
-			def set_row_attributes(attr={}, y=0)
+			def set_row_attributes(attr={}, y=0, offset=0)
+        # TODO
+        # At the moment, offset value is not used
+        # But probably offset value is used in grid.c
 				initialize_grid(0, y+1)
 				@rows[y].set_attributes(attr)
 			end
