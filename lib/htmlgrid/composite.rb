@@ -22,7 +22,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Template -- htmlgrid -- 09.01.2012 -- mhatakeyama@ywesee.com 
+# Template -- htmlgrid -- 23.02.2012 -- mhatakeyama@ywesee.com 
 # Template -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
 
 require 'htmlgrid/grid'
@@ -202,7 +202,7 @@ module HtmlGrid
 			colsp = colspan_map
 			suffix = resolve_suffix(model, bg_flag)
 			comps.keys.concat(css.keys).concat(colsp.keys).uniq.sort_by { |key| 
-        [-key.size, key] 
+        [key.size, key] 
       }.each { |key|
 				nkey = key[0,2]
 				matrix = resolve_offset(key, offset)
