@@ -279,6 +279,7 @@ rescue LoadError
 				@attributes.update(hash)
 			end
 			def set_colspan(x=0, y=0, span=(@width - x))
+				span = span.to_i
 				initialize_grid(x+span, y+1)
 				self[x,y].colspan = span
 			end
