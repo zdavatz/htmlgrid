@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
+# HtmlGrid::DojoToolkit -- davaz.com -- 06.04.2012 -- yasaka@ywesee.com
 # HtmlGrid::DojoToolkit -- davaz.com -- 14.03.2006 -- mhuggler@ywesee.com
 
 require 'htmlgrid/component'
@@ -9,9 +10,8 @@ module HtmlGrid
 	class Component
     @@msie_ptrn = /MSIE\s*(\d)/
 		attr_accessor :dojo_tooltip
-    def dojo_9?
-      defined?(::DOJO_VERSION) && ::DOJO_VERSION >= '0.9'
-    end
+    # FIXME
+    # DOJO_VERSION >= 1.7.0 only (removed old version support)
 		def dojo_tag(widget, args={}, inner_html='')
 			# <dojo:#{widget} ...> does not work on konqueror as of 
 			# 02.06.2006. In combination with DOJO_DEBUG = true it even 
@@ -29,7 +29,7 @@ module HtmlGrid
 =end
       div = HtmlGrid::Div.new(@model, @session, self)
       div.set_attribute('dojoType', widget)
-      lim = dojo_9? ? "," : ";"
+      lim = ","
       args.each { |key, value|
         if(value.is_a?(Array))
           value = value.join(lim)
@@ -38,7 +38,7 @@ module HtmlGrid
       }
       div.value = inner_html
       div
-		end
+    end
     def dojo_title=(value)
       tooltip = HtmlGrid::Div.new(@model, @session, self)
       tooltip.value = value
@@ -49,38 +49,38 @@ module HtmlGrid
 				@container.dojo_parse_widgets
 			end
 		end
-		unless(method_defined?(:dojo_dynamic_html))
-			alias :dojo_dynamic_html :dynamic_html
-			def dynamic_html(context)
-				html = ''
+    unless(method_defined?(:dojo_dynamic_html))
+      alias :dojo_dynamic_html :dynamic_html
+      def dynamic_html(context)
+        html = ''
         attrs = {
-          'dojoType'  => dojo_9? ? 'ywesee.widget.Tooltip' : 'tooltip',
-          'connectId' =>	css_id,
-          'id'        =>  "#{css_id}_widget",
-          'style'			=>	'display: none',
+          'data-dojo-type' =>  'ywesee.widget.Tooltip',
+          'connectId'      =>  css_id,
+          'id'             =>  "#{css_id}_widget",
+          'style'          =>  'display: none',
         }
         unless((match = @@msie_ptrn.match(@session.user_agent)) \
                && match[1].to_i < 7)
           attrs.update({
-						'toggle'		      =>	'fade',
-						'toggleDuration'	=>	'500',
+            'toggle'         => 'fade',
+            'toggleDuration' => '500',
           })
         end
-				if(@dojo_tooltip.is_a?(String))
-          attrs.store('href', dojo_9? ? "'#@dojo_tooltip'" : @dojo_tooltip)
-					html << context.div(attrs)
-				elsif(@dojo_tooltip.respond_to?(:to_html))
-					@dojo_tooltip.attributes.update(attrs)
-					html << @dojo_tooltip.to_html(context)
-				end
-				unless(html.empty? || dojo_parse_widgets)
-					html << context.script('type' => 'text/javascript') {
-						"djConfig.searchIds.push('#{css_id}')"
-					}
-				end
-				dojo_dynamic_html(context) << html
-			end
-		end
+        if(@dojo_tooltip.is_a?(String))
+          attrs.store('href', "'#@dojo_tooltip'")
+          html << context.div(attrs)
+        elsif(@dojo_tooltip.respond_to?(:to_html))
+          @dojo_tooltip.attributes.update(attrs)
+          html << @dojo_tooltip.to_html(context)
+        end
+        unless(html.empty? || dojo_parse_widgets)
+          html << context.script('type' => 'text/javascript') {
+            "djConfig.searchIds.push('#{css_id}')"
+          }
+        end
+        dojo_dynamic_html(context) << html
+      end
+    end
 	end
 	module DojoToolkit
 		module DojoTemplate
@@ -90,8 +90,8 @@ module HtmlGrid
 			DOJO_PARSE_WIDGETS = true
 			DOJO_PREFIX = []
 			DOJO_REQUIRE = []
-			def dynamic_html_headers(context) 
-				headers = super
+      def dynamic_html_headers(context)
+        headers = super
         encoding = self.class::DOJO_ENCODING
         encoding ||= if RUBY_VERSION >= '1.9'
                        Encoding.default_external
@@ -99,69 +99,72 @@ module HtmlGrid
                        $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
                      end
         dojo_path = @lookandfeel.resource_global(:dojo_js)
-        args = {
-          'type'			=>	'text/javascript',
-        }	
+        dojo_path ||= '/resources/dojo/dojo/dojo.js'
+        args = { 'type' => 'text/javascript'}
         headers << context.script(args.dup) {
           "djConfig = {
-            isDebug: #{self.class::DOJO_DEBUG},
-            parseWidgets: #{dojo_parse_widgets},
+            isDebug:              #{self.class::DOJO_DEBUG},
+            parseWidgets:         #{dojo_parse_widgets},
             preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
-            bindEncoding: '#{encoding}',
-            searchIds: [],
-            urchin: ''
+            bindEncoding:         '#{encoding}',
+            searchIds:            [],
+            urchin:               ''
           };"
         }
-        if(dojo_9?)
-          dojo_path ||= '/resources/dojo/dojo/dojo.js'
-          config = [ "parseOnLoad:true",
-                     "isDebug:#{self.class::DOJO_DEBUG}",
-                     "preventBackButtonFix:#{!self.class::DOJO_BACK_BUTTON}",
-                     "bindEncoding:'#{encoding}'",
-                     "searchIds:[]",
-                     "urchin:''" ].join(',')
-          args.store('djConfig', config)
-        else
-          dojo_path ||= '/resources/dojo/dojo.js'
+        packages = ""
+        unless(self.class::DOJO_PREFIX.empty?)
+          packages = self.class::DOJO_PREFIX.collect { |prefix, path|
+            "{ name: '#{prefix}', location: '#{path}' }"
+          }.join(",")
         end
-				args.store('src', dojo_path)
-				headers << context.script(args)
-				unless(self.class::DOJO_PREFIX.empty?)
-          register = dojo_9? ? 'registerModulePath' : 'setModulePrefix'
-					args = {
-						'type'			=>	'text/javascript',
-					}	
-					headers << context.script(args) { 
-						self.class::DOJO_PREFIX.collect { |prefix, path|
-							"dojo.#{register}('#{prefix}', '#{path}');"
-						}.join
-					}
-				end
-				args = {
-					'type'			=>	'text/javascript',
-				}
-				headers << context.script(args) {
-					script = ''
-					self.class::DOJO_REQUIRE.each { |req|
-						script << "dojo.require('#{req}');"
-					}
-					if(@dojo_onloads)
-						@dojo_onloads.each { |onload|
-							script << "dojo.addOnLoad(function() { #{onload} });"
-						}
-					end
-					script
-				}
-        if(dojo_9?)
-          dojo_dir = File.dirname(dojo_path)
-          headers << context.style(:type => "text/css") { <<-EOS
-              @import "#{File.join(dojo_dir, "/resources/dojo.css")}";
-              @import "#{File.join(dojo_dir, "../dijit/themes/tundra/tundra.css")}";
-            EOS
+        config = [
+          "parseOnLoad:          true",
+          "isDebug:              #{self.class::DOJO_DEBUG}",
+          "preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON}",
+          "bindEncoding:         '#{encoding}'",
+          "searchIds:            []",
+          "async:                true",
+          "urchin:               ''",
+          "has: {
+             'dojo-firebug':        #{self.class::DOJO_DEBUG},
+             'dojo-debug-messages': #{self.class::DOJO_DEBUG}
+          }",
+          "packages: [ #{packages} ]"
+        ].join(',')
+        args.store('data-dojo-config', config)
+        args.store('src', dojo_path)
+
+        headers << context.script(args)
+        args = { 'type' => 'text/javascript' }
+        headers << context.script(args) {
+          script = ''
+          self.class::DOJO_REQUIRE.each { |req|
+            script << "'#{req}',"
           }
-        end
+          if(@dojo_onloads)
+            onloads = ''
+            @dojo_onloads.each { |onload|
+              onloads << "#{onload}\n"
+            }
+            script =
+            "require([#{script.chomp(',')}], function(ready, parser) {" \
+              "ready(function() {" \
+                "#{onloads}" \
+              "});" \
+            "});"
+          else
+            script = "require([#{script.chomp(',')}]);"
+          end
+          script
+        }
+        dojo_dir = File.dirname(dojo_path)
+        headers << context.style(:type => "text/css") { <<-EOS
+            @import "#{File.join(dojo_dir, "/resources/dojo.css")}";
+            @import "#{File.join(dojo_dir, "../dijit/themes/tundra/tundra.css")}";
+          EOS
+        }
         headers
-			end
+      end
 			def dojo_parse_widgets
 				self.class::DOJO_PARSE_WIDGETS
 			end
