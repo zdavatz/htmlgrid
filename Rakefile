@@ -30,5 +30,11 @@ task :rebuild do
   require "#{File.dirname(__FILE__)}/test/rebuild"
 end
 
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.pattern = "test/test_*.rb"
+end
+
 task :test => :rebuild
 # vim: syntax=ruby
