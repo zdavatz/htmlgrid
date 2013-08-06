@@ -25,16 +25,21 @@ Hoe.spec 'htmlgrid' do
   # self.rubyforge_name = 'htmlgridx' # if different than 'htmlgrid'
 end
 
-desc 'rebuild the C-library'
-task :rebuild do
-  require "#{File.dirname(__FILE__)}/test/rebuild"
+if /java/i.match(RUBY_PLATFORM)
+  puts "Don't build C-Library for JRUBY under RUBY_PLATFORM is #{RUBY_PLATFORM}"
+else
+  desc 'rebuild the C-library'
+  task :rebuild do
+    require "#{File.dirname(__FILE__)}/test/rebuild"
+  end
+  task :test => :rebuild
 end
 
-require 'rake/testtask'
+require 'minitest/reporters'
+MiniTest::Reporters.use!
 
 Rake::TestTask.new do |t|
   t.pattern = "test/test_*.rb"
 end
 
-task :test => :rebuild
 # vim: syntax=ruby

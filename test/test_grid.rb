@@ -28,7 +28,11 @@ $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
 require 'test/unit'
-require 'rebuild'
+if /java/i.match(RUBY_PLATFORM)
+  puts "Skipping rebuild for JRUBY"
+else
+  require 'rebuild'
+end
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/grid'

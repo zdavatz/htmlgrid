@@ -5,7 +5,8 @@ gem 'sbsm'
 
 group :development, :test do
   gem 'rake'
-  gem 'minitest'
+  gem "minitest"
+  gem "minitest-reporters"
   gem 'hoe-travis'
   gem 'simplecov'
   gem 'test-unit'
