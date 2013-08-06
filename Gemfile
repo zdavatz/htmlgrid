@@ -5,12 +5,14 @@ gem 'sbsm'
 
 group :development, :test do
   gem 'rake'
-  gem 'hoe'
   gem 'hoe-travis'
-  gem 'racc'
-  gem 'travis-lint'
   gem 'simplecov'
   gem 'test-unit'
+end
+
+group :development do
+  gem 'racc'
+  gem 'travis-lint'
   gem 'pry'
   gem 'pry-debugger'
 end
