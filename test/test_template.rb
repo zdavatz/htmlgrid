@@ -87,8 +87,8 @@ class TestTemplate < Test::Unit::TestCase
 		}
 		expected = [
 			'<TITLE>Test</TITLE>',
-			'<LINK href="http://testserver.com/resources/gcc/test.css" rel="stylesheet" type="text/css">',
-			'<META content="follow, index" http-equiv="robots">',
+			'<LINK rel="stylesheet" type="text/css" href="http://testserver.com/resources/gcc/test.css">',
+			'<META http-equiv="robots" content="follow, index">',
 		]
 		expected.each { |line|
 			assert(result.index(line), "Missing: #{line}")

@@ -88,23 +88,23 @@ class TestForm < Test::Unit::TestCase
 	def test_multipart
 		form = StubFormMultiPart.new(@model, @lookandfeel)
 		result = form.to_html(CGI.new)
-		expected = '<FORM ACCEPT-CHARSET="ISO-8859-1" NAME="stdform" METHOD="POST" ENCTYPE="multipart/form-data" ACTION="http://test.oddb.org/de/gcc">'
+		expected = '<FORM NAME="stdform" METHOD="POST" ACTION="http://test.oddb.org/de/gcc" ACCEPT-CHARSET="UTF-8" ENCTYPE="multipart/form-data">'
 		assert_equal(0, result.index(expected), "expected\n#{result}\nto start with\n#{expected}")
 	end
 	def test_to_html
 		result = @form.to_html(CGI.new)
 		expected = [
-			'<INPUT NAME="flavor" TYPE="hidden" VALUE="gcc">',
-			'<INPUT NAME="language" TYPE="hidden" VALUE="de">',
-			'<INPUT NAME="event" TYPE="hidden" ID="event" VALUE="foo">',
-			'<INPUT NAME="state_id" TYPE="hidden" VALUE="1">',
+			'<INPUT TYPE="hidden" NAME="flavor" VALUE="gcc">',
+			'<INPUT TYPE="hidden" NAME="language" VALUE="de">',
+			'<INPUT NAME="event" ID="event" VALUE="foo" TYPE="hidden">',
+			'<INPUT TYPE="hidden" NAME="state_id" VALUE="1">',
 		]
 		expected.each { |line|
 			assert(result.index(line), "\nmissing #{line}\n     in #{result}")
 		}
 	end
 	def test_submit
-		expected = '<INPUT name="foo" type="submit" value="Submit-Value">'
+		expected = '<INPUT value="Submit-Value" type="submit" name="foo">'    
 		assert_equal(expected, @form.submit(@model, @lookandfeel).to_html(CGI.new))
 	end
 	def test_onsubmit

@@ -55,16 +55,16 @@ end
 class TestInput < Test::Unit::TestCase
 	def test_input
 		input = HtmlGrid::Input.new(:foo, nil, StubInputLookandfeel.new)
-		assert_equal('<INPUT name="foo" value="" bar="roz">', input.to_html(CGI.new))
+		assert_equal('<INPUT bar="roz" name="foo" value="">', input.to_html(CGI.new))
 	end
 	def test_button
 		input = HtmlGrid::Button.new(:foo, nil, StubInputLookandfeel.new)
-		assert_equal('<INPUT name="foo" type="button" value="Foo" bar="roz">', input.to_html(CGI.new))
+		assert_equal('<INPUT bar="roz" value="Foo" type="button" name="foo">', input.to_html(CGI.new))
 	end
 end
 class TestInputCurrency < Test::Unit::TestCase
 	def test_to_html
 		input = HtmlGrid::InputCurrency.new(:foo, StubInputModel.new, StubInputLookandfeel.new)
-		assert_equal('<INPUT name="foo" type="text" value="12.34" bar="roz">', input.to_html(CGI.new))
+		assert_equal('<INPUT bar="roz" name="foo" value="12.34" type="text">', input.to_html(CGI.new))
 	end
 end
