@@ -19,8 +19,8 @@ Hoe.spec 'htmlgrid' do
   # HEY! If you fill these out in ~/.hoe_template/Rakefile.erb then
   # you'll never have to touch them again!
   # (delete this comment too, of course)
-
-developer('Masaomi Hatakeyama, Zeno R.R. Davatz', 'mhatakeyama@ywesee.com, zdavatz@ywesee.com')
+  license('GPL v2.1')
+  developer('Masaomi Hatakeyama, Zeno R.R. Davatz', 'mhatakeyama@ywesee.com, zdavatz@ywesee.com')
 
   # self.rubyforge_name = 'htmlgridx' # if different than 'htmlgrid'
 end
