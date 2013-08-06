@@ -25,4 +25,10 @@ Hoe.spec 'htmlgrid' do
   # self.rubyforge_name = 'htmlgridx' # if different than 'htmlgrid'
 end
 
+desc 'rebuild the C-library'
+task :rebuild do
+  require "#{File.dirname(__FILE__)}/test/rebuild"
+end
+
+task :test => :rebuild
 # vim: syntax=ruby
