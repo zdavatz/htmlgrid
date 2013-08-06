@@ -13,7 +13,7 @@ rvm:
 - 1.9.3
 - 2.0.0
 - jruby
-- ruby-head
+# - ruby-head # excluded at the moment because it does not find a bundler version
 # whitelist of branches to build
 branches:
   only:
