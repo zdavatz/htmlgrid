@@ -66,7 +66,7 @@ class TestSelect < Test::Unit::TestCase
 		expected = []
 		expected << '<SELECT name="foovals">'
 		expected << '<OPTION value="foofoo">Foo Nr. 1</OPTION>'
-		expected << '<OPTION selected value="foobar">Foo Nr. 2</OPTION>'
+		expected << '<OPTION value="foobar" selected>Foo Nr. 2</OPTION>'
 		expected << '<OPTION value="barfoo">Bar Nr. 1</OPTION>'
 		expected << '<OPTION value="barbar">Bar Nr. 2</OPTION>'
 		expected << '</SELECT>'

@@ -101,7 +101,7 @@ class TestLabel < Test::Unit::TestCase
 	def test_to_html2
 		@session.state = StubLabelState.new({:named_component => 'ein Error'})
 		composite = StubLabelComposite.new(StubLabelModel.new, @session)
-		expected = '<TABLE cellspacing="0"><TR><TD><LABEL for="componentname">Label</LABEL></TD><TD>component</TD></TR><TR><TD><LABEL class="error" for="componentname">Named Label</LABEL></TD><TD>component</TD></TR></TABLE>'
+		expected = '<TABLE cellspacing="0"><TR><TD><LABEL for="componentname">Label</LABEL></TD><TD>component</TD></TR><TR><TD><LABEL for="componentname" class="error">Named Label</LABEL></TD><TD>component</TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 	end
 =begin

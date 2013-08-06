@@ -98,12 +98,12 @@ class TestFormList < Test::Unit::TestCase
 	def test_to_html
 		result = @list.to_html(CGI.new)
 		[
-			'<FORM ACCEPT-CHARSET="ISO-8859-1" NAME="stdform" METHOD="POST" ENCTYPE="application/x-www-form-urlencoded" ACTION="http://www.ywesee.com">',
-			'<INPUT name="new_item" type="submit" value="new_item">',
-			'<INPUT NAME="flavor" TYPE="hidden" VALUE="strawberry">',
-			'<INPUT NAME="language" TYPE="hidden" VALUE="de">',
-			'<INPUT NAME="event" TYPE="hidden" ID="event" VALUE="new_item">',
-			'<INPUT NAME="state_id" TYPE="hidden" VALUE="1">',
+      '<FORM NAME="stdform" METHOD="POST" ACTION="http://www.ywesee.com" ACCEPT-CHARSET="UTF-8" ENCTYPE="application/x-www-form-urlencoded">',
+      '<INPUT value="new_item" type="submit" name="new_item"></TD></TR></TABLE><DIV style="display:none">',
+      '<INPUT TYPE="hidden" NAME="flavor" VALUE="strawberry">',      
+      '<INPUT TYPE="hidden" NAME="language" VALUE="de">',     
+      '<INPUT value="new_item" type="submit" name="new_item">',      
+      '<INPUT TYPE="hidden" NAME="state_id" VALUE="1"></DIV></FORM>',
 		].each { |expected|
 			assert_not_nil(result.index(expected), "missing:\n#{expected}\nin:\n#{result}")
 		}
