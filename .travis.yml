@@ -4,7 +4,6 @@ before_install:
 notifications:
   email:
   - ngiger@ywesee.com
-script: "ruby -w ./test/suite.rb"
 rvm:
   - ruby-head
   - 2.0.0
