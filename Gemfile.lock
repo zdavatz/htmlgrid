@@ -11,12 +11,12 @@ GEM
       hoe (~> 3.0)
       travis-lint (~> 1.2)
     minitest (4.7.5)
-    minitest-reporters (0.14.20)
+    minitest-reporters (0.14.23)
       ansi
       builder
       minitest (>= 2.12, < 5.0)
       powerbar
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     powerbar (1.0.11)
       ansi (~> 1.4.0)
       hashie (>= 1.1.0)
