@@ -32,7 +32,6 @@ module HtmlGrid
 		FOOT = nil
 		HEAD = nil
 		META_TAGS = []
-		LEGACY_INTERFACE = true
 		CSS_FILES = []
 		JAVASCRIPTS = []
 		def css_link(context, path=@lookandfeel.resource(:css))

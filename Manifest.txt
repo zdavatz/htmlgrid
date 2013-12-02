@@ -61,7 +61,6 @@ lib/htmlgrid/urllink.rb
 lib/htmlgrid/value.rb
 test/rebuild.rb
 test/stub/cgi.rb
-test/suite.rb
 test/test_component.rb
 test/test_composite.rb
 test/test_datevalue.rb
