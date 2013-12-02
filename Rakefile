@@ -1,6 +1,7 @@
 # -*- ruby -*-
 
 require 'rubygems'
+require 'bundler'
 require 'hoe'
 
 # Hoe.plugin :compiler
@@ -15,14 +16,20 @@ require 'hoe'
 # Hoe.plugin :rubyforge
 # Hoe.plugin :website
 
-Hoe.spec 'htmlgrid' do
-  # HEY! If you fill these out in ~/.hoe_template/Rakefile.erb then
-  # you'll never have to touch them again!
-  # (delete this comment too, of course)
-  license('GPL v2.1')
-  developer('Masaomi Hatakeyama, Zeno R.R. Davatz', 'mhatakeyama@ywesee.com, zdavatz@ywesee.com')
 
-  # self.rubyforge_name = 'htmlgridx' # if different than 'htmlgrid'
+require 'rubygems'
+require 'bundler'
+require 'hoe'
+
+ENV['RDOCOPT'] = '-c utf8'
+
+Hoe.plugin :git
+
+Hoe.spec('htmlgrid') do |p|
+   p.developer('Masaomi Hatakeyama, Zeno R.R. Davatz','mhatakeyama@ywesee.com, zdavatz@ywesee.com')
+   p.license('GPL v2.1')
+   p.remote_rdoc_dir = 'htmlgrid'
+   p.extra_deps << ['ruby-ole', '>=1.0']
 end
 
 if /java/i.match(RUBY_PLATFORM)
