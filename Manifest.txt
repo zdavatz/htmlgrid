@@ -1,6 +1,11 @@
+.gitignore
+.travis.yml
 COPYING
+Gemfile
+Gemfile.lock
 History.txt
 LICENCE.txt
+Manifest.txt
 README.txt
 Rakefile
 ext/htmlgrid/MANIFEST
@@ -9,6 +14,7 @@ ext/htmlgrid/grid.c
 ext/htmlgrid/htmlgrid.c
 ext/htmlgrid/include/grid.h
 ext/htmlgrid/include/htmlgrid.h
+htmlgrid.gemspec
 install.rb
 lib/htmlgrid/booleanvalue.rb
 lib/htmlgrid/button.rb
