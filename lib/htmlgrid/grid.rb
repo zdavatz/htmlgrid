@@ -25,7 +25,7 @@
 # HtmlGrid::Grid -- htmlgrid -- 23.02.2012 -- mhatakeyama@ywesee.com
 # HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
 begin
-  VERSION = '1.0.7.alpha'
+  VERSION = '1.0.7'
   begin
     # for gem install
     ext_dir = File.expand_path('../../ext/htmlgrid', File.dirname(__FILE__))
