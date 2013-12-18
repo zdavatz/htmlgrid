@@ -29,7 +29,6 @@ Hoe.spec('htmlgrid') do |p|
    p.developer('Masaomi Hatakeyama, Zeno R.R. Davatz','mhatakeyama@ywesee.com, zdavatz@ywesee.com')
    p.license('GPL v2.1')
    p.remote_rdoc_dir = 'htmlgrid'
-   p.extra_deps << ['ruby-ole', '>=1.0']
 end
 
 if /java/i.match(RUBY_PLATFORM)
@@ -42,11 +41,11 @@ else
   task :test => :rebuild
 end
 
-#require 'minitest/reporters'
-#MiniTest::Reporters.use!
+require 'minitest/reporters'
+MiniTest::Reporters.use!
 
-#Rake::TestTask.new do |t|
-#  t.pattern = "test/test_*.rb"
-#end
+Rake::TestTask.new do |t|
+  t.pattern = "test/test_*.rb"
+end
 
 # vim: syntax=ruby

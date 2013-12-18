@@ -15,6 +15,12 @@ end
 group :development do
   gem 'racc'
   gem 'travis-lint'
+  gem 'minitest-reporters'
 #  gem 'pry'
 #  gem 'pry-debugger'
+end
+
+group :debugger do
+  gem 'pry'
+  gem 'pry-debugger'
 end
