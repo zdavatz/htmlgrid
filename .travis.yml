@@ -1,12 +1,18 @@
 language: ruby
 
 bundler_args: --without debugger
+script:
+  - bundle exec rake rebuild
+  - bundle exec rake install
+  - bundle exec rake test
 
 notifications:
   email:
   - ngiger@ywesee.com
 rvm:
   - ruby-head
+  - 2.2.3
+  - 2.1.7
   - 2.0.0
   - 1.9.3
   - 1.9.2
@@ -27,3 +33,10 @@ matrix:
     - rvm: jruby-19mode
     - rvm: jruby-18mode
     - rvm: ree
+    - rvm: 2.1.7 # order is different for some hashes
+    - rvm: 2.2.3
+
+
+# Speed up things on travis by using new docker based infrastructure and caching bundler
+sudo: false
+cache: bundler
