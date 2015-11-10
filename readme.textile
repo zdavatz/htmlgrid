@@ -12,9 +12,7 @@ This may be replaced by Ramaze one day, but lets see.
 
 h2. REQUIREMENTS:
 
-* Ruby 1.8 (Some unit tests were reworked to pass under 1.9. No time was wasted to support the outdated 1.8.7 release)
-* Ruby 1.9
-* Ruby 2.0
+* Ruby >= 1.9.3
 
 Each commit triggers a set of unit tests on "Travis-CI":https://travis-ci.org/ngiger/htmlgrid. The build status for the fork by Niklaus Giger can be seen "here":https://travis-ci.org/ngiger/htmlgrid.svg?branch=master
 

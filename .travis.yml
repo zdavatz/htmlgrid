@@ -15,26 +15,10 @@ rvm:
   - 2.1.7
   - 2.0.0
   - 1.9.3
-  - 1.9.2
-  - 1.8.7
-  - rbx-19mode
-  - rbx-18mode
-  - jruby-head
-  - jruby-19mode
-  - jruby-18mode
-  - ree
 matrix:
   allow_failures:
-    - rvm: 1.8.7       # Legacy. Some patterns don't match
     - rvm: ruby-head
-    - rvm: rbx-19mode
-    - rvm: rbx-18mode
-    - rvm: jruby-head
-    - rvm: jruby-19mode
-    - rvm: jruby-18mode
-    - rvm: ree
-    - rvm: 2.1.7 # order is different for some hashes
-    - rvm: 2.2.3
+    - rvm: 2.2.3  # order is different for some hashes
 
 
 # Speed up things on travis by using new docker based infrastructure and caching bundler

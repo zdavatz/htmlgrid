@@ -16,11 +16,8 @@ else
   task :test => :rebuild
 end
 
-begin
-  require 'minitest/reporters'
-  MiniTest::Reporters.use!
-rescue LoadError # Don't choke on missing reports for Ruby 1.9.2 and earlier
-end
+require 'minitest/reporters'
+MiniTest::Reporters.use!
 
 Rake::TestTask.new do |t|
   t.pattern = "test/test_*.rb"
