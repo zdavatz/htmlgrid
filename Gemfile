@@ -5,7 +5,9 @@ gem 'sbsm'
 group :development, :test do
   gem 'rake'
   gem "minitest"
-  gem "minitest-reporters"
+  if /^2|^1.9.3/.match RUBY_VERSION
+    gem "minitest-reporters"
+  end
   gem 'simplecov'
   gem 'test-unit'
 end
