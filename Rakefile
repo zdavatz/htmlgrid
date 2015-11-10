@@ -1,35 +1,10 @@
-# -*- ruby -*-
-
-require 'rubygems'
-require 'bundler'
-require 'hoe'
-
-# Hoe.plugin :compiler
-# Hoe.plugin :cucumberfeatures
-# Hoe.plugin :gem_prelude_sucks
-# Hoe.plugin :inline
-# Hoe.plugin :inline
-# Hoe.plugin :manifest
-# Hoe.plugin :newgem
-# Hoe.plugin :racc
-# Hoe.plugin :rubyforge
-# Hoe.plugin :rubyforge
-# Hoe.plugin :website
-
-
-require 'rubygems'
-require 'bundler'
-require 'hoe'
-
-ENV['RDOCOPT'] = '-c utf8'
-
-Hoe.plugin :git
-
-Hoe.spec('htmlgrid') do |p|
-   p.developer('Masaomi Hatakeyama, Zeno R.R. Davatz','mhatakeyama@ywesee.com, zdavatz@ywesee.com')
-   p.license('GPL v2.1')
-   p.remote_rdoc_dir = 'htmlgrid'
-end
+#!/usr/bin/env ruby
+# encoding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'htmlgrid/version'
+require "bundler/gem_tasks"
+require 'rake/testtask'
 
 if /java/i.match(RUBY_PLATFORM)
   puts "Don't build C-Library for JRUBY under RUBY_PLATFORM is #{RUBY_PLATFORM}"
@@ -48,4 +23,15 @@ Rake::TestTask.new do |t|
   t.pattern = "test/test_*.rb"
 end
 
+
+# dependencies are now declared in htmlgrid.gemspec
+desc 'Offer a gem task like hoe'
+task :gem => :build do
+  Rake::Task[:build].invoke
+end
+
+task :spec => :clean
+
+require 'rake/clean'
+CLEAN.include FileList['pkg/*.gem']
 # vim: syntax=ruby

@@ -1,0 +1,71 @@
+h1. Here some hints on howto use htmlgrid
+
+Some loose thougt by one of the few programmers using Htmlgrid.
+
+One of the projects using Htmlgrid is "oddb.org":https://github.com/zdavatz/oddb.org. There you find many examples on how to use it.
+
+HtmlGrid offers for almost any HTML entity a corresponding class. When generating a view, it is easy to reorder the item, adding/deleting/filtering them.
+
+Many view are constructed by simply setting constants like COMPONENTS, CSS_MAP. A simple example is the view for "password_lost":https://github.com/zdavatz/oddb.org/blob/master/src/view/admin/password_lost.rb.
+
+To see how it works go to "http://ch.oddb.org/de/gcc/password_lost/":http://ch.oddb.org/de/gcc/password_lost/. When looking at the source code keep in mind the following conventions:
+* a component which is a Symbol is rendered by calling to_s of the same methods of the model class or by a method of the with the same name
+* a component which is a String is lookup up in the @session.lookandfeel (a language dependent Hash of symbols and their translation)
+* CSS_MAP are used to override the default CSS_CLASS
+* Mixing in AJAX and Javascript can be tricky, but is possible
+
+h2. Things to consider and useful constants
+
+Many aspects can be simply modified by changing one or more of the constants. Here is an overview to get you looking into the right directions
+
+* inherited vom AbstractComposite
+** LABELS = false
+** SYMBOL_MAP
+** CSS_MAP
+** CSS_ID_MAP
+** CSS_STYLE_MAP
+** CSS_CLASS
+** CSS_ID
+** DEFAULT_CLASS
+** LOOKANDFEEL_MAP
+* inherited from Composite
+** COLSPAN_MAP
+** COMPONENT_CSS_MAP
+** VERTICAL
+* inherited from Component
+** CSS_ID = nil
+** HTML_ATTRIBUTES = {}
+** HTTP_HEADERS = {
+** LABEL = false
+* inherited from CenteredComposite
+** TABLE_ATTRIBUTES
+** DIV_ATTRIBUTES
+* inherited from List
+** BACKGROUND_ROW
+** BACKGROUND_SUFFIX = '-bg'
+** CSS_HEAD_MAP
+** DEFAULT_HEAD_CLASS
+** EMPTY_LIST
+** EMPTY_LIST_KEY = :empty_list
+** OFFSET_STEP = [0,1]
+** OMIT_HEADER
+** OMIT_HEAD_TAG
+** SORT_DEFAULT = :to_s
+** SORT_HEADER  # Allows one to supress the headers when displaying list
+** SORT_REVERSE
+** STRIPED_BG
+* inherited from TemplateMethods
+** CONTENT
+** FOOT
+** HEAD
+** META_TAGS
+** CSS_FILES
+** JAVASCRIPTS
+* inherited from form
+** AUTOFILL = false
+** ACCEPT_CHARSET = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
+** EVENT = nil
+** FORM_ACTION = nil
+** FORM_METHOD = 'POST'
+** FORM_NAME = 'stdform'
+** TAG_METHOD  = :form

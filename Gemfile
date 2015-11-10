@@ -1,13 +1,11 @@
 source "http://rubygems.org"
 
-gem 'hoe'
 gem 'sbsm'
 
 group :development, :test do
   gem 'rake'
   gem "minitest"
   gem "minitest-reporters"
-  gem 'hoe-travis'
   gem 'simplecov'
   gem 'test-unit'
 end
@@ -15,12 +13,14 @@ end
 group :development do
   gem 'racc'
   gem 'travis-lint'
-  gem 'minitest-reporters'
-#  gem 'pry'
-#  gem 'pry-debugger'
+  gem 'rspec'
 end
 
 group :debugger do
-  gem 'pry'
-  gem 'pry-debugger'
+  if /^2/.match(RUBY_VERSION)
+    gem 'pry-byebug'
+  else
+    gem 'pry'
+    gem 'pry-debugger'
+  end
 end
