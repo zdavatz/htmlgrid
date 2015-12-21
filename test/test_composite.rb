@@ -51,10 +51,10 @@ class StubComposite < HtmlGrid::Composite
 		@barcount=0
 		super
 	end
-	def foo(model)
+	def foo(model, lookandfeell)
 		"Foo"
 	end
-	def baz(model)
+	def baz(model, lookandfeel)
 		@barcount += 1
 		"Baz#{@barcount}"
 	end

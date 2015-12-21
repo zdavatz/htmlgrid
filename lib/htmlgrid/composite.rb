@@ -42,6 +42,7 @@ end
 module HtmlGrid
 	class AbstractComposite < Component
 		LABELS = false
+		LEGACY_INTERFACE = true
 		SYMBOL_MAP = {}
 		CSS_MAP = {}
 		CSS_ID_MAP = {}
@@ -61,9 +62,9 @@ module HtmlGrid
 			elsif(component.is_a? Symbol)
 				if(self.respond_to?(component, true))
 					args = [model]
-          if(self::class::LEGACY_INTERFACE)
-            args.push(@session)
-          end
+					if(self::class::LEGACY_INTERFACE)
+						args.push(@session)
+					end
 					self.send(component, *args)
 				elsif(klass = symbol_map[component])
 					klass.new(component, model, @session, self)

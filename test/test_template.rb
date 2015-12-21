@@ -69,6 +69,7 @@ class Template < HtmlGrid::Template
 	COMPONENTS = {
 		[0,0]	=>	:foo,	
 	}
+	LEGACY_INTERFACE = false
 	def foo(model)
 		'foo'
 	end

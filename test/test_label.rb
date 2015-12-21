@@ -81,8 +81,8 @@ class TestLabel < Test::Unit::TestCase
 			[0,1]	=>	:named_component,
 		}
 		LABELS = true
-		def named_component(model)
-			@named_component ||= StubLabelComponent.new(model, self)
+		def named_component(model, session)
+			@named_component ||= StubLabelComponent.new(model, session, self)
 		end
 	end
 	def	setup

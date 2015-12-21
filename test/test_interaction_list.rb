@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # encoding: utf-8
 # A little bit more elaborated test of the list, where we add different lines
 # Constructing can be a little tricky.
@@ -33,10 +34,10 @@ class StubComposite < HtmlGrid::Composite
     @barcount=0
     super
   end
-  def foo(model)
+  def foo(model, session=@session)
     "Foo"
   end
-  def baz(model)
+  def baz(model, session=@session)
     @barcount += 1
     "Baz#{@barcount}"
   end
