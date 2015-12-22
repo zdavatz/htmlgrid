@@ -240,21 +240,17 @@ class TestComposite < Test::Unit::TestCase
             ]
     composite = StubInteractionChooserDrugList.new(models, StubCompositeSession.new)
     expected =  [ '<TABLE cellspacing="0" class="composite" id="drugs_1">',
-   '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">',
-   '<TR><TD class="small">fachinfo-Aspirin</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>',
-   '<TR><TD>interaction for Aspirin</TD></TR></TABLE> <TABLE cellspacing="0" class="composite" id="drugs_2">',
-   '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">',
-   '<TR><TD class="small">fachinfo-Marcoumar</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>',
-   '<TR><TD>interaction for Marcoumar</TD></TR>',
-   '<TR><TD>interaction for Marcoumar</TD></TR></TABLE> <DIV id="drugs"></DIV><TABLE cellspacing="0">',
-   '<TR><TH>&nbsp;</TH></TR>']
-    if RUBY_VERSION.split(".").first.eql?('1')
-      expected << '<TR><TD class="css.info"></TD></TR>'
-      expected << '<TR><TD class="css.info-bg"></TD></TR></TABLE>'
-    else
-      expected << '<TR><TD class="css.info">&nbsp;</TD></TR>'
-      expected << '</TR><TR><TD class="css.info-bg">&nbsp;</TD></TR></TABLE>'
-    end
+                  '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">',
+                  '<TR><TD class="small">fachinfo-Aspirin</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>',
+                  '<TR><TD>interaction for Aspirin</TD></TR></TABLE> <TABLE cellspacing="0" class="composite" id="drugs_2">',
+                  '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">',
+                  '<TR><TD class="small">fachinfo-Marcoumar</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>',
+                  '<TR><TD>interaction for Marcoumar</TD></TR>',
+                  '<TR><TD>interaction for Marcoumar</TD></TR></TABLE> <DIV id="drugs"></DIV><TABLE cellspacing="0">',
+                  '<TR><TH>&nbsp;</TH></TR>',
+                  '<TR><TD class="css.info"></TD></TR>',
+                  '<TR><TD class="css.info-bg"></TD></TR></TABLE>',
+    ]
     html = composite.to_html(CGI.new)
     expected.each_with_index do |line, idx|
       # puts "#{idx}: missing #{line}" unless html.index(line)
