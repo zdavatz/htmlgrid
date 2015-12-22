@@ -28,11 +28,7 @@ $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
 require 'test/unit'
-if /java/i.match(RUBY_PLATFORM)
-  puts "Skipping rebuild for JRUBY"
-else
-  require 'rebuild'
-end
+require 'rebuild'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/grid'
@@ -136,10 +132,10 @@ class TestGrid < Test::Unit::TestCase
 	end
 	def test_add_multiple__3
 	  @grid.add(["test", nil, "foo"], 0, 0)
-    assert_equal(2, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>test</TD><TD>foo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
+    assert_equal(2, @grid.width)
 	end
   def test_add_fieldx
     @grid.add("test", 1, 0)

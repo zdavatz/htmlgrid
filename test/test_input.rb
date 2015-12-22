@@ -23,7 +23,8 @@
 #
 # TestInput -- htmlgrid -- 18.11.2002 -- hwyss@ywesee.com 
 
-$: << File.expand_path("../lib", File.dirname(__FILE__))
+$LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
+$LOAD_PATH << File.dirname(__FILE__)
 
 require 'test/unit'
 require 'stub/cgi'
@@ -55,16 +56,16 @@ end
 class TestInput < Test::Unit::TestCase
 	def test_input
 		input = HtmlGrid::Input.new(:foo, nil, StubInputLookandfeel.new)
-		assert_equal('<INPUT bar="roz" name="foo" value="">', input.to_html(CGI.new))
+    assert_equal('<INPUT bar="roz" name="foo" value="">', input.to_html(CGI.new))
 	end
 	def test_button
 		input = HtmlGrid::Button.new(:foo, nil, StubInputLookandfeel.new)
-		assert_equal('<INPUT bar="roz" value="Foo" type="button" name="foo">', input.to_html(CGI.new))
+    assert_equal('<INPUT bar="roz" value="Foo" type="button" name="foo">', input.to_html(CGI.new))
 	end
 end
 class TestInputCurrency < Test::Unit::TestCase
 	def test_to_html
 		input = HtmlGrid::InputCurrency.new(:foo, StubInputModel.new, StubInputLookandfeel.new)
-		assert_equal('<INPUT bar="roz" name="foo" value="12.34" type="text">', input.to_html(CGI.new))
+    assert_equal('<INPUT bar="roz" name="foo" value="12.34" type="text">', input.to_html(CGI.new))
 	end
 end

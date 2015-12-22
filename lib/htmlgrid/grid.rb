@@ -24,6 +24,7 @@
 #
 # HtmlGrid::Grid -- htmlgrid -- 23.02.2012 -- mhatakeyama@ywesee.com
 # HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
+require 'version'
 begin
   begin
     # for gem install

@@ -23,9 +23,10 @@
 #
 # TestTemplate -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
 
-$: << File.expand_path("../lib", File.dirname(__FILE__))
-$: << File.dirname(__FILE__)
+$LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
+$LOAD_PATH << File.dirname(__FILE__)
 
+require 'minitest'
 require 'test/unit'
 require 'stub/cgi'
 require 'sbsm/lookandfeel'
@@ -69,6 +70,7 @@ class Template < HtmlGrid::Template
 	COMPONENTS = {
 		[0,0]	=>	:foo,	
 	}
+	LEGACY_INTERFACE = false
 	def foo(model)
 		'foo'
 	end
@@ -84,13 +86,13 @@ class TestTemplate < Test::Unit::TestCase
 		assert_nothing_raised {
 			result << @template.to_html(CGI.new)
 		}
-		expected = [
-			'<TITLE>Test</TITLE>',
-			'<LINK rel="stylesheet" type="text/css" href="http://testserver.com/resources/gcc/test.css">',
-			'<META http-equiv="robots" content="follow, index">',
-		]
-		expected.each { |line|
-			assert(result.index(line), "Missing: #{line}")
-		}
+    expected = [
+      '<TITLE>Test</TITLE>',
+      "<LINK rel=\"stylesheet\" type=\"text/css\" href=\"http://testserver.com/resources/gcc/test.css\">",
+      '<META http-equiv="robots" content="follow, index">',
+    ]
+    expected.each_with_index { |line, idx|
+      assert(result.index(line), "#{idx} Missing: #{line} in #{result}")
+    }
 	end
 end

@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # encoding: utf-8
 # A little bit more elaborated test of the list, where we add different lines
 # Constructing can be a little tricky.
@@ -6,6 +7,7 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
+require 'minitest'
 require 'test/unit'
 require 'stub/cgi'
 require 'htmlgrid/composite'
@@ -29,14 +31,17 @@ class StubComposite < HtmlGrid::Composite
   }
   attr_reader :model, :session
   public :resolve_offset, :labels?
+  def initialize(first, second, third = nil)
+    super(first, second)
+  end
   def init
     @barcount=0
     super
   end
-  def foo(model)
+  def foo(model, session)
     "Foo"
   end
-  def baz(model)
+  def baz(model, session)
     @barcount += 1
     "Baz#{@barcount}"
   end
@@ -234,18 +239,26 @@ class TestComposite < Test::Unit::TestCase
                 StubDrugModel.new('Marcoumar'),
             ]
     composite = StubInteractionChooserDrugList.new(models, StubCompositeSession.new)
-    expected = '<TABLE cellspacing="0" class="composite" id="drugs_1">'+
-   '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">'+
-   '<TR><TD class="small">fachinfo-Aspirin</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>'+
-   '<TR><TD>interaction for Aspirin</TD></TR></TABLE> <TABLE cellspacing="0" class="composite" id="drugs_2">'+
-   '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">'+
-   '<TR><TD class="small">fachinfo-Marcoumar</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>'+
-   '<TR><TD>interaction for Marcoumar</TD></TR>'+
-   '<TR><TD>interaction for Marcoumar</TD></TR></TABLE> <DIV id="drugs"></DIV><TABLE cellspacing="0">'+
-   '<TR><TH>&nbsp;</TH></TR>'+
-   '<TR><TD class="css.info"></TD></TR>'+
-   '<TR><TD class="css.info-bg"></TD></TR></TABLE>'
-    assert_equal(expected, composite.to_html(CGI.new))
-    assert_equal(expected, composite.to_html(CGI.new))
+    expected =  [ '<TABLE cellspacing="0" class="composite" id="drugs_1">',
+   '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">',
+   '<TR><TD class="small">fachinfo-Aspirin</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>',
+   '<TR><TD>interaction for Aspirin</TD></TR></TABLE> <TABLE cellspacing="0" class="composite" id="drugs_2">',
+   '<TR><TD class="subheading"><TABLE cellspacing="0" style="background-color:greenyellow">',
+   '<TR><TD class="small">fachinfo-Marcoumar</TD><TD class="interaction-atc">atc</TD><TD class="small">delete</TD></TR></TABLE></TD></TR>',
+   '<TR><TD>interaction for Marcoumar</TD></TR>',
+   '<TR><TD>interaction for Marcoumar</TD></TR></TABLE> <DIV id="drugs"></DIV><TABLE cellspacing="0">',
+   '<TR><TH>&nbsp;</TH></TR>']
+    if RUBY_VERSION.split(".").first.eql?('1')
+      expected << '<TR><TD class="css.info"></TD></TR>'
+      expected << '<TR><TD class="css.info-bg"></TD></TR></TABLE>'
+    else
+      expected << '<TR><TD class="css.info">&nbsp;</TD></TR>'
+      expected << '</TR><TR><TD class="css.info-bg">&nbsp;</TD></TR></TABLE>'
+    end
+    html = composite.to_html(CGI.new)
+    expected.each_with_index do |line, idx|
+      # puts "#{idx}: missing #{line}" unless html.index(line)
+      assert(html.index(line),  "#{idx}: missing #{line} in #{html}")
+    end
   end
 end

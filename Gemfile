@@ -19,10 +19,9 @@ group :development do
 end
 
 group :debugger do
-  if /^2/.match(RUBY_VERSION)
-    gem 'pry-byebug'
-  else
-    gem 'pry'
-    gem 'pry-debugger'
-  end
+if /^2/.match(RUBY_VERSION)
+  gem 'pry-byebug'
+else
+  gem 'pry-debugger'
+end
 end
