@@ -253,7 +253,6 @@ class TestComposite < Test::Unit::TestCase
     ]
     html = composite.to_html(CGI.new)
     expected.each_with_index do |line, idx|
-      # puts "#{idx}: missing #{line}" unless html.index(line)
       assert(html.index(line),  "#{idx}: missing #{line} in #{html}")
     end
   end

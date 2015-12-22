@@ -31,6 +31,7 @@ require 'stub/cgi'
 require 'htmlgrid/composite'
 require 'htmlgrid/inputtext'
 require 'htmlgrid/form'
+require 'htmlgrid/button'
 
 class StubComposite < HtmlGrid::Composite
 	attr_writer :container
@@ -58,6 +59,9 @@ class StubComposite < HtmlGrid::Composite
 		@barcount += 1
 		"Baz#{@barcount}"
 	end
+  def back
+    super
+  end
 end
 class StubCompositeComponent < HtmlGrid::Component
 	def to_html(context)
@@ -84,6 +88,9 @@ end
 class StubCompositeModel
 end
 class StubCompositeLookandfeel
+  def event_url(one)
+    return 'event_url'
+  end
 	def attributes(key)
 		{}
 	end
@@ -172,10 +179,10 @@ class TestComposite < Test::Unit::TestCase
 	def test_labels2
 		assert_equal(true, @composite.labels?)
 	end
-	def test_to_html
-		expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR></TABLE>'
-		assert_equal(expected, @composite.to_html(CGI.new))
-	end
+  def test_to_html
+    expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR></TABLE>'
+    assert_equal(expected, @composite.to_html(CGI.new))
+  end
 	def test_resolve_offset
 		matrix = [1,2,3,4]
 		assert_equal(matrix, @composite.resolve_offset(matrix))
@@ -197,5 +204,15 @@ class TestComposite < Test::Unit::TestCase
 		expected = '<TABLE cellspacing="0"><TR><TD><A class="standard">brafoo</A></TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 		composite = StubComposite4.new(StubCompositeModel.new, StubCompositeSession.new)
-	end
+  end
+  def test_to_back
+    if RUBY_VERSION.split(".").first.eql?('1')
+      expected = "<INPUT type=\"button\" name=\"back\" onClick=\"document.location.href='event_url';\">"
+    else
+      # It looks like Ruby 2.x escapes the ' which is not strictly necessary
+      expected = "<INPUT type=\"button\" name=\"back\" onClick=\"document.location.href=&#39;event_url&#39;;\">"
+    end
+    html = @composite.back().to_html(CGI.new)
+    assert_equal(expected, html)
+  end
 end
