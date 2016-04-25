@@ -27,7 +27,7 @@ $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'rebuild'
 require 'stub/cgi'
 require 'htmlgrid/label'
@@ -43,7 +43,7 @@ module HtmlGrid
 	end
 end	
 
-class TestGrid < Test::Unit::TestCase
+class TestGrid < Minitest::Test
 	class StubLabel
 		include Enumerable
 		def each
@@ -253,16 +253,16 @@ class TestGrid < Test::Unit::TestCase
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_set_colspan1
-		assert_nothing_raised { @grid.set_colspan(1,1,2) }
+    @grid.set_colspan(1,1,2)
 		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD colspan="2">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_set_colspan2
     @grid.add("test", 2, 2)
-		assert_nothing_raised { @grid.set_colspan(0,0) }
+    @grid.set_colspan(0,0)
 		expected = '<TABLE cellspacing="0"><TR><TD colspan="3">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-		assert_nothing_raised { @grid.set_colspan(1,1) }
+    @grid.set_colspan(1,1)
 		expected = '<TABLE cellspacing="0"><TR><TD colspan="3">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD colspan="2">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
@@ -276,9 +276,7 @@ class TestGrid < Test::Unit::TestCase
 	end
 	def test_matrix
 		matrix = [1,1]
-		assert_nothing_raised { 
-			@grid.add("test", *matrix)
-		}
+    @grid.add("test", *matrix)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
@@ -361,24 +359,18 @@ class TestGrid < Test::Unit::TestCase
 	end
 	def test_nil_attribute1
 		@grid.add_attribute('foo', nil, 0, 0)
-		assert_nothing_raised {
 			@grid.to_html(CGI.new)
-		}
 	end
 	def test_nil_attribute2
 		thing = StubGridComponent.new
 		thing.set_attribute("class", nil)	
 		@grid.add(thing, 0,0)
-		assert_nothing_raised {
-			@grid.to_html(CGI.new)
-		}
+    @grid.to_html(CGI.new)
 	end
 	def test_nil_component
 		thing = StubNilComponent.new
 		@grid.add(thing, 0,0)
-		assert_nothing_raised {
-			@grid.to_html(CGI.new)
-		}
+    @grid.to_html(CGI.new)
 	end
 	def test_add_negative
 		assert_raises(ArgumentError) { @grid.add('foo', -1, 0) }

@@ -26,7 +26,7 @@
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
 $LOAD_PATH << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/select'
 require 'stub/cgi'
 
@@ -58,7 +58,7 @@ class StubSelectData
 	end
 end
 
-class TestSelect < Test::Unit::TestCase
+class TestSelect < Minitest::Test
 	def setup
 		@component = HtmlGrid::Select.new(:foovals, StubSelectData.new,
 			StubSelectSession.new)

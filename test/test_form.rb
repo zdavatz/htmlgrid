@@ -26,7 +26,7 @@
 $: << File.dirname(__FILE__)
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/form'
 require 'stub/cgi'
 
@@ -76,7 +76,7 @@ class StubFormMultiPart < HtmlGrid::Form
 	TAG_METHOD = :multipart_form
 end
 
-class TestForm < Test::Unit::TestCase
+class TestForm < Minitest::Test
 	def setup
 		@model = StubFormModel.new
 		@lookandfeel = StubFormLookandfeel.new
@@ -116,7 +116,7 @@ class TestForm < Test::Unit::TestCase
 	end
 	def test_onsubmit_init
 		form = nil
-		assert_nothing_raised { form = StubForm2.new(@model, @lookandfeel) }
+		form = StubForm2.new(@model, @lookandfeel)
 		expected = 'onSubmit="submitted"'	
 		result = /<FORM[^>]+>/.match(form.to_html(CGI.new))[0]
 		assert(result.index(expected), "missing:\n#{expected}\nin:\n#{result}")

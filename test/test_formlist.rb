@@ -26,7 +26,7 @@
 $: << File.dirname(__FILE__)
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/formlist'
 require 'stub/cgi'
 
@@ -85,7 +85,7 @@ class StubFormListModel
 	end
 end
 
-class TestFormList < Test::Unit::TestCase
+class TestFormList < Minitest::Test
 	def setup
 		model = [
 			StubFormListModel.new(3),
@@ -106,7 +106,7 @@ class TestFormList < Test::Unit::TestCase
       '<INPUT TYPE="hidden" NAME="state_id" VALUE="1">',
     ]
     expectations.each_with_index { |expected, idx|
-			assert_not_nil(result.index(expected), "#{idx} missing:\n#{expected}\nin:\n#{result}")
+			refute_nil(result.index(expected), "#{idx} missing:\n#{expected}\nin:\n#{result}")
 		}
 	end
 end

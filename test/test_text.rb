@@ -25,7 +25,7 @@
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/text'
 
 class StubTextLookandfeel
@@ -43,7 +43,7 @@ class StubTextLookandfeel
 	end
 end
 
-class TestText < Test::Unit::TestCase
+class TestText < Minitest::Test
 	def setup
 		@view = HtmlGrid::Text.new(:foo, nil, StubTextLookandfeel.new)
 	end

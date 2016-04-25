@@ -26,12 +26,12 @@
 $: << File.dirname(__FILE__)
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/composite'
 
-class TestLabel < Test::Unit::TestCase
+class TestLabel < Minitest::Test
 	class StubLabelState
 		attr_reader :errors
 		def initialize(errors={})

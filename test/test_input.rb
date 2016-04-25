@@ -26,7 +26,7 @@
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
 $LOAD_PATH << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/button'
 require 'htmlgrid/inputcurrency'
@@ -53,7 +53,7 @@ class StubInputModel
 	end
 end
 
-class TestInput < Test::Unit::TestCase
+class TestInput < Minitest::Test
 	def test_input
 		input = HtmlGrid::Input.new(:foo, nil, StubInputLookandfeel.new)
     assert_equal('<INPUT bar="roz" name="foo" value="">', input.to_html(CGI.new))
@@ -63,7 +63,7 @@ class TestInput < Test::Unit::TestCase
     assert_equal('<INPUT bar="roz" value="Foo" type="button" name="foo">', input.to_html(CGI.new))
 	end
 end
-class TestInputCurrency < Test::Unit::TestCase
+class TestInputCurrency < Minitest::Test
 	def test_to_html
 		input = HtmlGrid::InputCurrency.new(:foo, StubInputModel.new, StubInputLookandfeel.new)
     assert_equal('<INPUT bar="roz" name="foo" value="12.34" type="text">', input.to_html(CGI.new))

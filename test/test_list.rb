@@ -26,7 +26,7 @@
 $: << File.dirname(__FILE__)
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/list'
 require 'stub/cgi'
 
@@ -90,7 +90,7 @@ class StubListModel
 	end
 end	
 
-class TestList < Test::Unit::TestCase
+class TestList < Minitest::Test
 	def setup
 		model = [
 			StubListModel.new(3),
@@ -120,9 +120,7 @@ class TestList < Test::Unit::TestCase
 		assert_equal(:hannes, list.lookandfeel_key(:hannes))	
 	end
 	def test_nil_robust
-		assert_nothing_raised {
-			StubList.new(nil, StubListSession.new)
-		}
+    StubList.new(nil, StubListSession.new)
 	end
 	def test_suffix
 		@list.compose

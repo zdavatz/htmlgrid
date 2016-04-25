@@ -26,7 +26,7 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/composite'
 require 'htmlgrid/inputtext'
@@ -134,42 +134,38 @@ class StubCompositeColspan4 < HtmlGrid::Composite
 	}	
 end
 
-class TestComposite < Test::Unit::TestCase
+class TestComposite < Minitest::Test
 	def setup
 		@composite = StubComposite.new(StubCompositeModel.new, StubCompositeSession.new)
 	end
 	def test_create_method
 		foo = nil
-		assert_nothing_raised {
-			foo = @composite.create(:foo, @composite.model)
-		}
+    foo = @composite.create(:foo, @composite.model)
 		assert_equal("Foo", foo)
 	end
 	def test_create_symbol
 		bar = nil
-		assert_nothing_raised {
-			bar = @composite.create(:bar, @composite.model)
-		}
+    bar = @composite.create(:bar, @composite.model)
 		assert_equal(HtmlGrid::InputText, bar.class)
 	end
 	def test_full_colspan1
 		composite = StubCompositeColspan1.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(nil, composite.full_colspan)
 	end
 	def test_full_colspan2
 		composite = StubCompositeColspan2.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(nil, composite.full_colspan)
 	end
 	def test_full_colspan3
 		composite = StubCompositeColspan3.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(2, composite.full_colspan)
 	end
 	def test_full_colspan4
 		composite = StubCompositeColspan4.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(3, composite.full_colspan)
 	end
 	def test_labels1
@@ -191,7 +187,7 @@ class TestComposite < Test::Unit::TestCase
 		assert_equal(expected, @composite.resolve_offset(matrix, offset))
 	end
 	def test_event
-		assert_nothing_raised { @composite.event() }
+    @composite.event()
 		form = StubCompositeForm.new(@composite.model, @composite.session)
 		@composite.container = form
 		assert_equal(:foo, @composite.event())

@@ -8,7 +8,7 @@ $: << File.expand_path('../lib', File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
 require 'minitest'
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/composite'
 require 'htmlgrid/inputtext'
@@ -210,15 +210,13 @@ class StubInteractionChooserDrug < HtmlGrid::Composite
     "interaction for #{model.foo}"
   end
 end
-class TestComposite < Test::Unit::TestCase
+class TestComposite < Minitest::Test
   def setup
     @composite = StubComposite.new(StubCompositeModel.new, StubCompositeSession.new)
   end
   def test_create_method
     foo = nil
-    assert_nothing_raised {
-      foo = @composite.create(:foo, @composite.model)
-    }
+    foo = @composite.create(:foo, @composite.model)
     assert_equal("Foo", foo)
   end
   def test_to_html
