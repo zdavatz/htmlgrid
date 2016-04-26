@@ -24,6 +24,7 @@
 #
 # HtmlGrid::Grid -- htmlgrid -- 23.02.2012 -- mhatakeyama@ywesee.com
 # HtmlGrid::Grid -- htmlgrid -- 12.01.2010 -- hwyss@ywesee.com
+require 'htmlgrid/version'
 begin
   VERSION = '1.0.8'
   begin
@@ -97,7 +98,7 @@ rescue LoadError
 					end
 					def component_html(cgi)
 						html = ''
-						@components.each { |component| 
+						@components.each { |component|
 							if component.respond_to? :to_html
 								html << component.to_html(cgi).to_s
 							else
@@ -196,7 +197,7 @@ rescue LoadError
             add_field(arg, x, y)
           elsif arg.kind_of? Array
             arg.each do |item|
-              add_field(item, x, y) 
+              add_field(item, x ? x : '', y)
             end
           else
             if(col)
@@ -215,7 +216,7 @@ rescue LoadError
 				}
 			end
 			def add_background(x, y, w=1, h=1)
-				each_field(x, y, w, h) { |field| 
+				each_field(x, y, w, h) { |field|
 					field.add_background(x, w)
 				}
 			end
@@ -254,7 +255,7 @@ rescue LoadError
 				}
 			end
 			def each_field(x, y, w=1, h=1)
-				y.upto([y+h, @height].min - 1) { |yy| 
+				y.upto([y+h, @height].min - 1) { |yy|
 					@rows[yy].each_field(x,w) { |field|
 						yield(field)
 					}
@@ -287,7 +288,7 @@ rescue LoadError
         # TODO
         # At the moment, offset value is not used
         # But probably offset value is used in grid.c
-				initialize_grid(0, y+1)
+        initialize_grid(offset, y + 1)
 				@rows[y].set_attributes(attr)
 			end
 			def to_html(cgi)

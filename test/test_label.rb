@@ -26,12 +26,12 @@
 $: << File.dirname(__FILE__)
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/composite'
 
-class TestLabel < Test::Unit::TestCase
+class TestLabel < Minitest::Test
 	class StubLabelState
 		attr_reader :errors
 		def initialize(errors={})
@@ -101,16 +101,7 @@ class TestLabel < Test::Unit::TestCase
 	def test_to_html2
 		@session.state = StubLabelState.new({:named_component => 'ein Error'})
 		composite = StubLabelComposite.new(StubLabelModel.new, @session)
-		expected = '<TABLE cellspacing="0"><TR><TD><LABEL for="componentname">Label</LABEL></TD><TD>component</TD></TR><TR><TD><LABEL for="componentname" class="error">Named Label</LABEL></TD><TD>component</TD></TR></TABLE>'
+    expected = '<TABLE cellspacing="0"><TR><TD><LABEL for="componentname">Label</LABEL></TD><TD>component</TD></TR><TR><TD><LABEL for="componentname" class="error">Named Label</LABEL></TD><TD>component</TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 	end
-=begin
-	def test_to_html3
-		composite = StubLabelComposite.new(StubLabelModel.new, @session)
-		composite.named_component(nil, nil).mey = 'mey'
-		@session.state = StubLabelState.new({:named_component => 'ein Error'})
-		expected = '<TABLE cellspacing="0"><TR><TD><LABEL for="componentname">Label</LABEL></TD><TD>component</TD></TR><TR><TD><LABEL class="e-mey" for="componentname">Named Label</LABEL></TD><TD>component</TD></TR></TABLE>'
-		assert_equal(expected, composite.to_html(CGI.new))
-	end
-=end
 end

@@ -26,11 +26,12 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/composite'
 require 'htmlgrid/inputtext'
 require 'htmlgrid/form'
+require 'htmlgrid/button'
 
 class StubComposite < HtmlGrid::Composite
 	attr_writer :container
@@ -51,13 +52,16 @@ class StubComposite < HtmlGrid::Composite
 		@barcount=0
 		super
 	end
-	def foo(model, lookandfeell)
+	def foo(model, lookandfeel)
 		"Foo"
 	end
 	def baz(model, lookandfeel)
 		@barcount += 1
 		"Baz#{@barcount}"
 	end
+  def back
+    super
+  end
 end
 class StubCompositeComponent < HtmlGrid::Component
 	def to_html(context)
@@ -84,6 +88,9 @@ end
 class StubCompositeModel
 end
 class StubCompositeLookandfeel
+  def event_url(one)
+    return 'event_url'
+  end
 	def attributes(key)
 		{}
 	end
@@ -127,42 +134,38 @@ class StubCompositeColspan4 < HtmlGrid::Composite
 	}	
 end
 
-class TestComposite < Test::Unit::TestCase
+class TestComposite < Minitest::Test
 	def setup
 		@composite = StubComposite.new(StubCompositeModel.new, StubCompositeSession.new)
 	end
 	def test_create_method
 		foo = nil
-		assert_nothing_raised {
-			foo = @composite.create(:foo, @composite.model)
-		}
+    foo = @composite.create(:foo, @composite.model)
 		assert_equal("Foo", foo)
 	end
 	def test_create_symbol
 		bar = nil
-		assert_nothing_raised {
-			bar = @composite.create(:bar, @composite.model)
-		}
+    bar = @composite.create(:bar, @composite.model)
 		assert_equal(HtmlGrid::InputText, bar.class)
 	end
 	def test_full_colspan1
 		composite = StubCompositeColspan1.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(nil, composite.full_colspan)
 	end
 	def test_full_colspan2
 		composite = StubCompositeColspan2.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(nil, composite.full_colspan)
 	end
 	def test_full_colspan3
 		composite = StubCompositeColspan3.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(2, composite.full_colspan)
 	end
 	def test_full_colspan4
 		composite = StubCompositeColspan4.new(StubCompositeModel.new, StubCompositeSession.new)
-		assert_nothing_raised { composite.full_colspan }
+    composite.full_colspan
 		assert_equal(3, composite.full_colspan)
 	end
 	def test_labels1
@@ -172,10 +175,10 @@ class TestComposite < Test::Unit::TestCase
 	def test_labels2
 		assert_equal(true, @composite.labels?)
 	end
-	def test_to_html
-		expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR></TABLE>'
-		assert_equal(expected, @composite.to_html(CGI.new))
-	end
+  def test_to_html
+    expected = '<TABLE cellspacing="0"><TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR></TABLE>'
+    assert_equal(expected, @composite.to_html(CGI.new))
+  end
 	def test_resolve_offset
 		matrix = [1,2,3,4]
 		assert_equal(matrix, @composite.resolve_offset(matrix))
@@ -184,7 +187,7 @@ class TestComposite < Test::Unit::TestCase
 		assert_equal(expected, @composite.resolve_offset(matrix, offset))
 	end
 	def test_event
-		assert_nothing_raised { @composite.event() }
+    @composite.event()
 		form = StubCompositeForm.new(@composite.model, @composite.session)
 		@composite.container = form
 		assert_equal(:foo, @composite.event())
@@ -197,5 +200,15 @@ class TestComposite < Test::Unit::TestCase
 		expected = '<TABLE cellspacing="0"><TR><TD><A class="standard">brafoo</A></TD></TR></TABLE>'
 		assert_equal(expected, composite.to_html(CGI.new))
 		composite = StubComposite4.new(StubCompositeModel.new, StubCompositeSession.new)
-	end
+  end
+  def test_to_back
+    if RUBY_VERSION.split(".").first.eql?('1')
+      expected = "<INPUT type=\"button\" name=\"back\" onClick=\"document.location.href='event_url';\">"
+    else
+      # It looks like Ruby 2.x escapes the ' which is not strictly necessary
+      expected = "<INPUT type=\"button\" name=\"back\" onClick=\"document.location.href=&#39;event_url&#39;;\">"
+    end
+    html = @composite.back().to_html(CGI.new)
+    assert_equal(expected, html)
+  end
 end

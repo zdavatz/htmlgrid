@@ -23,10 +23,11 @@
 #
 # TestTemplate -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
 
-$: << File.expand_path("../lib", File.dirname(__FILE__))
-$: << File.dirname(__FILE__)
+$LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
+$LOAD_PATH << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'sbsm/lookandfeel'
 require 'htmlgrid/template'
@@ -75,23 +76,21 @@ class Template < HtmlGrid::Template
 	end
 end
 
-class TestTemplate < Test::Unit::TestCase
+class TestTemplate < Minitest::Test
 	def setup
 		lookandfeel = StubTemplateLookandfeel.new(StubTemplateSession.new)
 		@template = Template.new(nil, lookandfeel, nil)
 	end
 	def test_to_html
 		result = ""
-		assert_nothing_raised {
-			result << @template.to_html(CGI.new)
-		}
-		expected = [
-			'<TITLE>Test</TITLE>',
-			'<LINK rel="stylesheet" type="text/css" href="http://testserver.com/resources/gcc/test.css">',
-			'<META http-equiv="robots" content="follow, index">',
-		]
-		expected.each { |line|
-			assert(result.index(line), "Missing: #{line}")
-		}
+    result << @template.to_html(CGI.new)
+    expected = [
+      '<TITLE>Test</TITLE>',
+      "<LINK rel=\"stylesheet\" type=\"text/css\" href=\"http://testserver.com/resources/gcc/test.css\">",
+      '<META http-equiv="robots" content="follow, index">',
+    ]
+    expected.each_with_index { |line, idx|
+      assert(result.index(line), "#{idx} Missing: #{line} in #{result}")
+    }
 	end
 end

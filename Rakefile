@@ -5,6 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'htmlgrid/version'
 require "bundler/gem_tasks"
 require 'rake/testtask'
+require "rspec/core/rake_task"
 
 if /java/i.match(RUBY_PLATFORM)
   puts "Don't build C-Library for JRUBY under RUBY_PLATFORM is #{RUBY_PLATFORM}"

@@ -3,7 +3,7 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'stub/cgi'
 require 'htmlgrid/composite'
 require 'htmlgrid/inputtext'
@@ -63,7 +63,7 @@ class StubCompositeForm < HtmlGrid::Form
   EVENT = :foo
 end
 
-class TestComposite < Test::Unit::TestCase
+class TestComposite < Minitest::Test
   def setup
     @composite = StubComposite.new([StubComposite2Model.new, StubCompositeModel.new], 
                                    StubCompositeSession.new)

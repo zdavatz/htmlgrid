@@ -3,7 +3,7 @@ language: ruby
 bundler_args: --without debugger
 script:
   - bundle exec rake rebuild
-  - bundle exec rake install
+  - bundle exec rake install:local
   - bundle exec rake test
 
 notifications:
@@ -11,15 +11,15 @@ notifications:
   - ngiger@ywesee.com
 rvm:
   - ruby-head
+  - 2.3.0
   - 2.2.3
-  - 2.1.7
-  - 2.0.0
-  - 1.9.3
+  - 2.1.9
+  - 2.0.0-p648
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - rvm: 2.2.3  # order is different for some hashes
-
+    - rvm: 2.1.9  # somehow rvm/travis have trouble installing it
+    - rvm: 2.0.0-p648 # somehow rvm/travis have trouble installing it
 
 # Speed up things on travis by using new docker based infrastructure and caching bundler
 sudo: false

@@ -10,7 +10,18 @@ spec = Gem::Specification.new do |s|
    s.platform    = Gem::Platform::RUBY
    s.license     = "GPL v2.1"
    s.files       = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
-   s.add_development_dependency "rspec"
    s.homepage	 = "https://github.com/zdavatz/htmlgrid/"
+
+   s.add_dependency "sbsm"
+   s.add_development_dependency "bundler"
+   s.add_development_dependency "rake"
+   s.add_development_dependency "rspec"
+   s.add_development_dependency "flexmock"
+   s.add_development_dependency "minitest"
+   s.add_development_dependency "minitest-reporters"
+   s.add_development_dependency "rdoc"
+   s.add_development_dependency "simplecov"
+#   s.add_development_dependency "watir"
+#   s.add_development_dependency "watir-webdriver"
 end
 

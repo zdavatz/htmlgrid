@@ -26,7 +26,7 @@
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/component'
 
 module HtmlGrid
@@ -35,7 +35,7 @@ module HtmlGrid
 	end
 end
 
-class TestComponent < Test::Unit::TestCase
+class TestComponent < Minitest::Test
 	class StubAttributeComponent < HtmlGrid::Component
 		HTML_ATTRIBUTES = { "key" => "val" }
 	end
@@ -55,23 +55,17 @@ class TestComponent < Test::Unit::TestCase
 		@component = HtmlGrid::Component.new(nil, nil)
 	end
 	def test_initialize1
-		assert_nothing_raised {
-			HtmlGrid::Component.new("foo", "bar")
-		}
+    HtmlGrid::Component.new("foo", "bar")
 		comp = HtmlGrid::Component.new("foo", "bar")
 		assert_equal("foo", comp.model)
 		assert_equal("bar", comp.session)
 		assert_equal(nil, comp.container)
 		assert_equal(false, comp.label?)
-		assert_nothing_raised {
-			comp.label = true
-		}
+    comp.label = true
 		assert_equal(true, comp.label?)
 	end
 	def test_initialize2
-		assert_nothing_raised {
-			HtmlGrid::Component.new("foo", "bar", "baz")
-		}
+    HtmlGrid::Component.new("foo", "bar", "baz")
 		comp = HtmlGrid::Component.new("foo", "bar", "baz")
 		assert_equal("foo", comp.model)
 		assert_equal("bar", comp.session)
@@ -83,17 +77,13 @@ class TestComponent < Test::Unit::TestCase
 		assert_respond_to(comp, :attributes)
 		assert_equal(expected, comp.attributes)
 		assert_equal(expected, StubAttributeComponent::HTML_ATTRIBUTES)
-		assert_nothing_raised {
-			comp.attributes.store("other", "val")
-		}
+    comp.attributes.store("other", "val")
 		expected2 = { "key" =>	"val", "other" => "val" }
 		assert_equal(expected2, comp.attributes)
 		assert_equal(expected, StubAttributeComponent::HTML_ATTRIBUTES)
 		assert_equal({}, @component.attributes)
 		assert_equal({}, HtmlGrid::Component::HTML_ATTRIBUTES)
-		assert_nothing_raised {
-			@component.attributes.store("third", "val")
-		}
+    @component.attributes.store("third", "val")
 		expected = {"third"=>"val"}
 		assert_equal(expected, @component.attributes)
 		assert_equal({}, HtmlGrid::Component::HTML_ATTRIBUTES)

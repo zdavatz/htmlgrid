@@ -25,7 +25,7 @@
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'htmlgrid/datevalue'
 require 'stub/cgi'
 require 'date'
@@ -49,7 +49,7 @@ class StubDateProvider
 	end
 end
 
-class TestDateValue < Test::Unit::TestCase
+class TestDateValue < Minitest::Test
 	def setup
 		@component = HtmlGrid::DateValue.new(:date, StubDateProvider.new,
 			StubDateSession.new)

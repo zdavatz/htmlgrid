@@ -1,6 +1,11 @@
+=== 1.0.8 / 25.04.2015
+
+* Ported to Ruby 2.3.0. Updated minitest. Use newer version of sbsm.
+* Ruby 1.9.3 is no longer supported
+
 === 1.0.7 / 03.12.2013
 
-* Remove LEGACY_INTERFACE.
+* Remove LEGACY_INTERFACE. No. LEGACY_INTERFACE was readded before release 1.0.7
 * Make travis work just fine.
 
 === 1.0.6 / 06.04.2012
