@@ -7,16 +7,6 @@ require "bundler/gem_tasks"
 require 'rake/testtask'
 require "rspec/core/rake_task"
 
-if /java/i.match(RUBY_PLATFORM)
-  puts "Don't build C-Library for JRUBY under RUBY_PLATFORM is #{RUBY_PLATFORM}"
-else
-  desc 'rebuild the C-library'
-  task :rebuild do
-    require "#{File.dirname(__FILE__)}/test/rebuild"
-  end
-  task :test => :rebuild
-end
-
 require 'minitest/reporters'
 MiniTest::Reporters.use!
 
