@@ -71,7 +71,7 @@ module HtmlGrid
           html << context.div(attrs)
         elsif(@dojo_tooltip.respond_to?(:to_html))
           @dojo_tooltip.attributes.update(attrs)
-          html << @dojo_tooltip.to_html(context)
+          html << @dojo_tooltip.to_html(context).force_encoding('utf-8')
         end
         unless(html.empty? || dojo_parse_widgets)
           html << context.script('type' => 'text/javascript') {
@@ -93,11 +93,7 @@ module HtmlGrid
       def dynamic_html_headers(context)
         headers = super
         encoding = self.class::DOJO_ENCODING
-        encoding ||= if RUBY_VERSION >= '1.9'
-                       Encoding.default_external
-                     else
-                       $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
-                     end
+        encoding ||= Encoding.default_external
         dojo_path = @lookandfeel.resource_global(:dojo_js)
         dojo_path ||= '/resources/dojo/dojo/dojo.js'
         args = { 'type' => 'text/javascript'}

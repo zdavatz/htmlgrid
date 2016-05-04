@@ -16,7 +16,7 @@ module HtmlGrid
 		def to_html(context)
 			@elements.collect { |element|
 				if(element.respond_to?(:to_html))
-					element.to_html(context) 
+					element.to_html(context).force_encoding('utf-8')
 				else
 					element.to_s
 				end

@@ -44,7 +44,7 @@ module HtmlGrid
 		def to_html(context)
 			context.a(@attributes) { 
 				if(@value.respond_to?(:to_html))
-					@value.to_html(context)
+					@value.to_html(context).force_encoding('utf-8')
 				else
 					super
 				end

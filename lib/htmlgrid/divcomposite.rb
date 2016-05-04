@@ -39,7 +39,7 @@ module HtmlGrid
         res << context.div(tag_attributes(idx)) {
           div.flatten.inject('') { |html, item|
             html << if(item.respond_to?(:to_html))
-                      item.to_html(context)
+                      item.to_html(context).force_encoding('utf-8')
                     else
                       item.to_s
                     end

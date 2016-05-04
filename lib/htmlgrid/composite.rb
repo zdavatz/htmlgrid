@@ -262,11 +262,7 @@ module HtmlGrid
 		end
 		def to_html(context)
 			@grid.set_attributes(@attributes)
-      if RUBY_VERSION > "1.9"
-        super << @grid.to_html(context).force_encoding('utf-8')
-      else
-        super << @grid.to_html(context)
-      end
+      super << @grid.to_html(context).force_encoding('utf-8')
 		end
 		private
 		def back(model=@model, session=@session)

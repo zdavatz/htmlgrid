@@ -176,11 +176,7 @@ module HtmlGrid
 				esc << if(entity = @@symbol_entities[byte])
 					'&' << entity << ';'
 				else
-          if RUBY_VERSION >= '1.9'
-            byte
-          else
-            byte.chr
-          end
+          byte
 				end
 			}
 			esc
@@ -218,18 +214,14 @@ module HtmlGrid
 			@attributes.store('tabIndex', tab.to_s)
 		end
 		def to_html(context)
-      if RUBY_VERSION > "1.9"
-        _to_html(context, @value).to_s.force_encoding('utf-8')
-      else
-        _to_html(context, @value).to_s
-      end
+      _to_html(context, @value).to_s.force_encoding('utf-8')
     end
     @@nl2br_ptrn = /(\r\n)|(\n)|(\r)/
 		def _to_html(context, value=@value)
 			if(value.is_a?(Array))
 				value.collect { |item| _to_html(context, item) }.join(' ')
 			elsif(value.respond_to?(:to_html))
-				value.to_html(context).to_s
+				value.to_html(context).to_s.force_encoding('utf-8')
 			else
 				value.to_s.gsub(@@nl2br_ptrn, '<br>')
 			end

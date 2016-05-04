@@ -35,7 +35,7 @@ module HtmlGrid
 				@grid.each_with_index { |li, idx| 
 					inner_res << context.li(tag_attributes(idx)) {
 						if(li.respond_to?(:to_html))
-							li.to_html(context)
+							li.to_html(context).force_encoding('utf-8')
 						else
 							li	
 						end

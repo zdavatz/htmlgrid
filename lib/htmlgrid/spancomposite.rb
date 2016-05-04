@@ -33,7 +33,7 @@ module HtmlGrid
 			@grid.each_with_index { |span, idx| 
 				res << context.span(tag_attributes(idx)) {
 					if(span.respond_to?(:to_html))
-						span.to_html(context)
+						span.to_html(context).force_encoding('utf-8')
 					else
 						span	
 					end

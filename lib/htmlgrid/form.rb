@@ -30,11 +30,7 @@ require 'htmlgrid/submit'
 module HtmlGrid
 	module FormMethods
 		AUTOFILL = false
-    if RUBY_VERSION >= '1.9'
-      ACCEPT_CHARSET = Encoding.default_external || 'UTF-8'
-    else
-      ACCEPT_CHARSET = $KCODE == 'UTF8' ? 'UTF-8' : 'ISO-8859-1'
-    end
+    ACCEPT_CHARSET = 'UTF-8'
 		EVENT = nil
 		FORM_ACTION = nil
 		FORM_METHOD = 'POST'

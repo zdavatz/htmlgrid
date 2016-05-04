@@ -100,7 +100,7 @@ rescue LoadError
 						html = ''
 						@components.each { |component|
 							if component.respond_to? :to_html
-								html << component.to_html(cgi).to_s
+								html << component.to_html(cgi).to_s.force_encoding('utf-8')
 							else
 								html << component.to_s
 							end
@@ -293,7 +293,7 @@ rescue LoadError
 			end
 			def to_html(cgi)
 				cgi.table(@attributes) {
-					@rows.collect { |row| row.to_html(cgi) }.join
+					@rows.collect { |row| row.to_html(cgi).force_encoding('utf-8') }.join
 				}
 			end
 			def [](x, y)
