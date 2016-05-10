@@ -1,5 +1,7 @@
-=== 1.0.8 / 25.04.2015
+=== 1.0.8 / 10.05.2015
 
+* Removed C-interface
+* Removed obsolete tests for RUBY_VERSION < 1.9
 * Ported to Ruby 2.3.0. Updated minitest. Use newer version of sbsm.
 * Ruby 1.9.3 is no longer supported
 
