@@ -12,21 +12,7 @@ module HtmlGrid
 		attr_accessor :dojo_tooltip
     # FIXME
     # DOJO_VERSION >= 1.7.0 only (removed old version support)
-		def dojo_tag(widget, args={}, inner_html='')
-			# <dojo:#{widget} ...> does not work on konqueror as of 
-			# 02.06.2006. In combination with DOJO_DEBUG = true it even 
-			# hangs konqueror.
-=begin
-			dojo_tag = "<div dojoType=\"#{widget}\""
-			args.each { |key, value|
-				if(value.is_a?(Array))
-					dojo_tag << " #{key}=\"#{value.join(';')}\""	
-				else
-					dojo_tag << " #{key}=\"#{value}\""	
-				end
-			}
-			dojo_tag << "></div>"
-=end
+    def dojo_tag(widget, args={}, inner_html='')
       div = HtmlGrid::Div.new(@model, @session, self)
       div.set_attribute('dojoType', widget)
       lim = ","
@@ -54,8 +40,8 @@ module HtmlGrid
       def dynamic_html(context)
         html = ''
         attrs = {
-          'data-dojo-type' =>  'ywesee.widget.Tooltip',
-          'connectId'      =>  css_id,
+        'data-dojo-type' => 'dijit/Tooltip',
+        'data-dojo-props' => "connectId:'#{css_id}'",
           'id'             =>  "#{css_id}_widget",
           'style'          =>  'display: none',
         }
@@ -134,7 +120,7 @@ module HtmlGrid
         args = { 'type' => 'text/javascript' }
         headers << context.script(args) {
           script = ''
-          self.class::DOJO_REQUIRE.each { |req|
+          self.class::DOJO_REQUIRE.uniq.each { |req|
             script << "'#{req}',"
           }
           if(@dojo_onloads)
