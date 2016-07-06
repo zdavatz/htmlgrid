@@ -1,3 +1,10 @@
+=== 1.1 / 06.07.2016
+
+* Rename djConfig to dojoConfig
+* Rename dojoType to data-dojo-type
+* Remove duplicated dojoConfig (use only data-dojo-config)
+* Add package support for onload script
+
 === 1.0.9 / 05.07.2016
 
 * Made tooltip work with dojo 1.11
