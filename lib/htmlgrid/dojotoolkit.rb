@@ -14,11 +14,10 @@ module HtmlGrid
     # DOJO_VERSION >= 1.7.0 only (removed old version support)
     def dojo_tag(widget, args={}, inner_html='')
       div = HtmlGrid::Div.new(@model, @session, self)
-      div.set_attribute('dojoType', widget)
-      lim = ","
+      div.set_attribute('data-dojo-type', widget)
       args.each { |key, value|
-        if(value.is_a?(Array))
-          value = value.join(lim)
+        if value.is_a?(Array)
+          value = value.join(',')
         end
         div.set_attribute(key, value)
       }
@@ -61,7 +60,7 @@ module HtmlGrid
         end
         unless(html.empty? || dojo_parse_widgets)
           html << context.script('type' => 'text/javascript') {
-            "djConfig.searchIds.push('#{css_id}')"
+            "dojoConfig.searchIds.push('#{css_id}')"
           }
         end
         dojo_dynamic_html(context) << html
@@ -83,16 +82,6 @@ module HtmlGrid
         dojo_path = @lookandfeel.resource_global(:dojo_js)
         dojo_path ||= '/resources/dojo/dojo/dojo.js'
         args = { 'type' => 'text/javascript'}
-        headers << context.script(args.dup) {
-          "djConfig = {
-            isDebug:              #{self.class::DOJO_DEBUG},
-            parseWidgets:         #{dojo_parse_widgets},
-            preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON},
-            bindEncoding:         '#{encoding}',
-            searchIds:            [],
-            urchin:               ''
-          };"
-        }
         packages = ""
         unless(self.class::DOJO_PREFIX.empty?)
           packages = self.class::DOJO_PREFIX.collect { |prefix, path|
@@ -115,27 +104,28 @@ module HtmlGrid
         ].join(',')
         args.store('data-dojo-config', config)
         args.store('src', dojo_path)
-
         headers << context.script(args)
         args = { 'type' => 'text/javascript' }
         headers << context.script(args) {
-          script = ''
-          self.class::DOJO_REQUIRE.uniq.each { |req|
-            script << "'#{req}',"
+          package_paths = self.class::DOJO_REQUIRE.map { |req|
+            "'#{req}'"
           }
-          if(@dojo_onloads)
+          package_names = self.class::DOJO_REQUIRE.map { |req|
+            req.split('/').last
+          }.join(',')
+          if @dojo_onloads
             onloads = ''
             @dojo_onloads.each { |onload|
               onloads << "#{onload}\n"
             }
             script =
-            "require([#{script.chomp(',')}], function(ready, parser) {" \
+            "require([#{package_paths}], function(#{package_names}) {" \
               "ready(function() {" \
                 "#{onloads}" \
               "});" \
             "});"
           else
-            script = "require([#{script.chomp(',')}]);"
+            script = "require([#{package_paths}]);"
           end
           script
         }
