@@ -109,7 +109,7 @@ module HtmlGrid
         headers << context.script(args) {
           package_paths = self.class::DOJO_REQUIRE.map { |req|
             "'#{req}'"
-          }
+          }.join(',')
           package_names = self.class::DOJO_REQUIRE.map { |req|
             req.split('/').last
           }.join(',')
