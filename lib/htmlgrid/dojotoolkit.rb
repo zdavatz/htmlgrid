@@ -7,10 +7,9 @@ require 'htmlgrid/component'
 require 'htmlgrid/div'
 
 module HtmlGrid
-	class Component
+  class Component
     @@msie_ptrn = /MSIE\s*(\d)/
-		attr_accessor :dojo_tooltip
-    # FIXME
+    attr_accessor :dojo_tooltip
     # DOJO_VERSION >= 1.7.0 only (removed old version support)
     def dojo_tag(widget, args={}, inner_html='')
       div = HtmlGrid::Div.new(@model, @session, self)
@@ -29,50 +28,58 @@ module HtmlGrid
       tooltip.value = value
       self.dojo_tooltip = tooltip
     end
-		def dojo_parse_widgets
-			if(@container.respond_to?(:dojo_parse_widgets))
-				@container.dojo_parse_widgets
-			end
-		end
-    unless(method_defined?(:dojo_dynamic_html))
+    def dojo_parse_on_load
+      if @container.respond_to?(:dojo_parse_on_load)
+        @container.dojo_parse_on_load
+      end
+    end
+    unless method_defined?(:dojo_dynamic_html)
       alias :dojo_dynamic_html :dynamic_html
       def dynamic_html(context)
         html = ''
         attrs = {
-        'data-dojo-type' => 'dijit/Tooltip',
-        'data-dojo-props' => "connectId:'#{css_id}'",
-          'id'             =>  "#{css_id}_widget",
-          'style'          =>  'display: none',
+          # NOTE:
+          #   DOJO >= 1.8 has support for type name separated by '/'
+          #   but, <= 1.7 must be separated with '.'
+          'data-dojo-type'  => 'dijit.Tooltip',
+          'data-dojo-props' => "connectId:'#{css_id}'",
+          'id'              => "#{css_id}_widget",
+          'style'           => 'display: none',
         }
-        unless((match = @@msie_ptrn.match(@session.user_agent)) \
-               && match[1].to_i < 7)
+        unless match = @@msie_ptrn.match(@session.user_agent) \
+               && match[1].to_i < 7
           attrs.update({
             'toggle'         => 'fade',
             'toggleDuration' => '500',
           })
         end
-        if(@dojo_tooltip.is_a?(String))
-          attrs.store('href', "'#@dojo_tooltip'")
+        if @dojo_tooltip.is_a?(String)
+          if @dojo_tooltip !~ /^http/ # e.g. javascript
+            attrs.store('href', "'#@dojo_tooltip'")
+          else
+            attrs.store('href', @dojo_tooltip)
+          end
           html << context.div(attrs)
-        elsif(@dojo_tooltip.respond_to?(:to_html))
+        elsif @dojo_tooltip.respond_to?(:to_html)
           @dojo_tooltip.attributes.update(attrs)
           html << @dojo_tooltip.to_html(context).force_encoding('utf-8')
         end
-        unless(html.empty? || dojo_parse_widgets)
+        unless html.empty? || dojo_parse_on_load
           html << context.script('type' => 'text/javascript') {
             "dojoConfig.searchIds.push('#{css_id}')"
           }
         end
+        # call original dynamic_html
         dojo_dynamic_html(context) << html
       end
     end
-	end
+  end
 	module DojoToolkit
 		module DojoTemplate
 			DOJO_DEBUG = false
 			DOJO_BACK_BUTTON = false
       DOJO_ENCODING = nil
-			DOJO_PARSE_WIDGETS = true
+      DOJO_PARSE_ON_LOAD = true
 			DOJO_PREFIX = []
 			DOJO_REQUIRE = []
       def dynamic_html_headers(context)
@@ -89,7 +96,7 @@ module HtmlGrid
           }.join(",")
         end
         config = [
-          "parseOnLoad:          true",
+          "parseOnLoad:          #{self.class::DOJO_PARSE_ON_LOAD}",
           "isDebug:              #{self.class::DOJO_DEBUG}",
           "preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON}",
           "bindEncoding:         '#{encoding}'",
@@ -131,15 +138,15 @@ module HtmlGrid
         }
         dojo_dir = File.dirname(dojo_path)
         headers << context.style(:type => "text/css") { <<-EOS
-            @import "#{File.join(dojo_dir, "/resources/dojo.css")}";
-            @import "#{File.join(dojo_dir, "../dijit/themes/tundra/tundra.css")}";
-          EOS
+          @import "#{File.join(dojo_dir, "/resources/dojo.css")}";
+          @import "#{File.join(dojo_dir, "../dijit/themes/tundra/tundra.css")}";
+        EOS
         }
         headers
       end
-			def dojo_parse_widgets
-				self.class::DOJO_PARSE_WIDGETS
-			end
+      def dojo_parse_on_load
+        self.class::DOJO_PARSE_ON_LOAD
+      end
 			def onload=(script)
 				(@dojo_onloads ||= []).push(script)
 			end
