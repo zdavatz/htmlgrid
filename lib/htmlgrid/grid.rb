@@ -44,8 +44,7 @@ rescue LoadError
 			private
 			class Row
 				class Field
-					attr_reader :components
-					attr_accessor :tag
+          attr_reader :components, :tag
 					ALLOWED_ATTRIBUTES = [
 						'align',
 						'class',
