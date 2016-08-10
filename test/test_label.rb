@@ -62,6 +62,10 @@ class TestLabel < Minitest::Test
 	end
 	class StubLabelComponent < HtmlGrid::Component
 		attr_accessor :mey
+    def initialize(model, session=nil, container=nil)
+      @mey = nil
+      super
+    end
 		def to_html(context)
 			'component'
 		end

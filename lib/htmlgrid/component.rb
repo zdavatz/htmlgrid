@@ -213,7 +213,7 @@ module HtmlGrid
 		def tabindex=(tab)
 			@attributes.store('tabIndex', tab.to_s)
 		end
-		def to_html(context)
+    def to_html(context)
       _to_html(context, @value).to_s.force_encoding('utf-8')
     end
     @@nl2br_ptrn = /(\r\n)|(\n)|(\r)/

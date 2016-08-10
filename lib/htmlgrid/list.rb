@@ -143,28 +143,28 @@ module HtmlGrid
       end
       link
     end
-		def sort_model
-			block = self::class::SORT_DEFAULT
-			if(block && (@session.event != :sort))
-				begin
-					if(block == :self)
-						@model = @model.sort
-					else
-						unless(block.is_a?(Proc))
-							block = Proc.new { |item| 
-								begin
-									item.send(self::class::SORT_DEFAULT) 
-								rescue RuntimeError => e
-									item.to_s
-								end
-							} 
-						end
-						@model = @model.sort_by(&block)
-					end
-				rescue StandardError => e
-					puts "could not sort: #{e.message}"
-				end
-			end
-		end
+    def sort_model
+      block = self::class::SORT_DEFAULT
+      if block && (@session.event != :sort)
+        begin
+          if block == :self
+            @model = @model.sort
+          else
+            unless block.is_a?(Proc)
+              block = Proc.new { |item|
+                begin
+                  item.send(self::class::SORT_DEFAULT)
+                rescue RuntimeError
+                  item.to_s
+                end
+              }
+            end
+            @model = @model.sort_by(&block)
+          end
+        rescue StandardError => e
+          puts "could not sort: #{e.message}"
+        end
+      end
+    end
 	end
 end
