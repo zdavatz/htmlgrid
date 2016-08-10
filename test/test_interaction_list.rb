@@ -223,7 +223,7 @@ module InteractionTest
       assert_equal("Foo", foo)
     end
     def test_to_html
-      assert_equal(<<~EXP.gsub(/\n|^\s*/, ''), @composite.to_html(CGI.new))
+      assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), @composite.to_html(CGI.new))
         <TABLE cellspacing="0">
           <TR><TD>Baz1FooBaz2</TD></TR><TR><TD>Baz3Baz4</TD></TR>
         </TABLE>
@@ -232,21 +232,21 @@ module InteractionTest
     def test_component_css_map
       table = StubComposite2.new(
         StubCompositeModel.new, StubCompositeSession.new)
-      assert_equal(<<~EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
+      assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
         <TABLE cellspacing="0">
           <TR><TD><A>brafoo</A></TD></TR>
         </TABLE>
       EXP
       table = StubComposite3.new(
         StubCompositeModel.new, StubCompositeSession.new)
-      assert_equal(<<~EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
+      assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
         <TABLE cellspacing="0">
           <TR><TD><A class="standard">brafoo</A></TD></TR>
         </TABLE>
       EXP
       table = StubComposite4.new(
         StubCompositeModel.new, StubCompositeSession.new)
-      assert_equal(<<~EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
+      assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
         <TABLE cellspacing="0">
           <TR><TD><A class="standard">brafoo</A></TD></TR>
         </TABLE>

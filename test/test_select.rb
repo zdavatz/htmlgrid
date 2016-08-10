@@ -63,19 +63,14 @@ class TestSelect < Minitest::Test
 		@component = HtmlGrid::Select.new(:foovals, StubSelectData.new,
 			StubSelectSession.new)
 	end
-	def test_to_html
-    expected = <<~SEL
-		<SELECT name="foovals">
+  def test_to_html
+    assert_equal(<<-SEL.gsub(/\n|^\s*/, ''), @component.to_html(CGI.new).to_s)
+    <SELECT name="foovals">
     <OPTION value="foofoo">Foo Nr. 1</OPTION>
     <OPTION value="foobar" selected>Foo Nr. 2</OPTION>
-		<OPTION value="barfoo">Bar Nr. 1</OPTION>
-		<OPTION value="barbar">Bar Nr. 2</OPTION>
-		</SELECT>'
+    <OPTION value="barfoo">Bar Nr. 1</OPTION>
+    <OPTION value="barbar">Bar Nr. 2</OPTION>
+    </SELECT>
     SEL
-		result = @component.to_html(CGI.new).to_s
-		expected.each_with_index do|line, idx|
-      assert(result.index(line),
-        "#{idx}: Missing line:\n#{line}\nin:\n#{result}")
-    end
-	end
+  end
 end

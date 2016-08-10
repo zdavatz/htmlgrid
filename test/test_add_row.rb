@@ -84,7 +84,7 @@ module RowTest
     end
 
     def test_to_html
-      assert_equal(<<~EXP.gsub(/\n|^\s*/, ''), @composite.to_html(CGI.new))
+      assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), @composite.to_html(CGI.new))
         <TABLE cellspacing="0">
           <TR><TD>Foo</TD></TR><TR><TD>Baz1</TD></TR><TR><TD>Baz2</TD></TR>
         </TABLE>
