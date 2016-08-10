@@ -106,7 +106,7 @@ module HtmlGrid
 			methname = klass.to_s.downcase.gsub('::', '_') << '_' << key.to_s
 			define_method(methname) { |*args|
 				model, session = args
-				args = [model.send(key), @session, self]
+				args = [model.send(key), session, self]
 				if(name)
 					args.unshift(name)
 					lookandfeel_map.store(methname.to_sym, name.to_sym)
