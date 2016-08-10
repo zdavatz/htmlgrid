@@ -30,9 +30,9 @@ require 'minitest/autorun'
 require 'htmlgrid/component'
 
 module HtmlGrid
-	class Component
-		attr_reader :model, :session, :container
-	end
+  class Component
+    attr_reader :session, :container
+  end
 end
 
 class TestComponent < Minitest::Test
