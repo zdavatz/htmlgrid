@@ -64,22 +64,18 @@ class TestSelect < Minitest::Test
 			StubSelectSession.new)
 	end
 	def test_to_html
-		expected = []
-		expected << '<SELECT name="foovals">'
-    expected << '<OPTION value="foofoo">Foo Nr. 1</OPTION>'
-    if RUBY_VERSION.split(".").first.eql?('1')
-      expected << 'OPTION value="foobar" selected>Foo Nr. 2</OPTION'
-    else
-      expected << '<OPTION selected value="foobar">Foo Nr. 2</OPTION>'
-    end
-		expected << '<OPTION value="barfoo">Bar Nr. 1</OPTION>'
-		expected << '<OPTION value="barbar">Bar Nr. 2</OPTION>'
-		expected << '</SELECT>'
+    expected = <<~SEL
+		<SELECT name="foovals">
+    <OPTION value="foofoo">Foo Nr. 1</OPTION>
+    <OPTION value="foobar" selected>Foo Nr. 2</OPTION>
+		<OPTION value="barfoo">Bar Nr. 1</OPTION>
+		<OPTION value="barbar">Bar Nr. 2</OPTION>
+		</SELECT>'
+    SEL
 		result = @component.to_html(CGI.new).to_s
-    # <SELECT name="foovals"><OPTION value="foofoo">Foo Nr. 1</OPTION><OPTION value="foobar" selected>Foo Nr. 2</OPTION><OPTION value="barfoo">Bar Nr. 1</OPTION><OPTION value="barbar">Bar Nr. 2</OPTION></SELECT>
 		expected.each_with_index do|line, idx|
-      puts "#{idx}: Missing line:\n#{line}\nin:\n#{result}" unless result.index(line)
-        # assert(result.index(line), "#{idx}: Missing line:\n#{line}\nin:\n#{result}")
+      assert(result.index(line),
+        "#{idx}: Missing line:\n#{line}\nin:\n#{result}")
     end
 	end
 end
