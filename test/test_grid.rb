@@ -28,7 +28,6 @@ $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
 require 'minitest/autorun'
-require 'rebuild'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/grid'
@@ -324,20 +323,24 @@ class TestGrid < Minitest::Test
 		expected = '<TABLE cellspacing="0"><TR><TD>testreihe</TD></TR><TR><TD>&nbsp;</TD></TR><TR><TD>testfeld</TD></TR></TABLE>'
 		assert_equal(expected, @grid.to_html(CGI.new))
 	end
-	def test_gc
-		100.times { |y|
-			200.times { |x|
-				str = "[#{x}, #{y}]: test"
-				@grid.add(str, x, y)
-				@grid.add(str, x, y)
-				@grid.add(str, x, y)
-				@grid.add(str, x, y)
-			}
-		}
-		assert_equal(100, @grid.height)
-		assert_equal(200, @grid.width)
-		result = @grid.to_html(CGI.new)
-	end
+
+  # @todo
+  #   What does this test? (gabage collection?)
+  def test_gc
+    100.times { |y|
+      200.times { |x|
+        str = "[#{x}, #{y}]: test"
+        @grid.add(str, x, y)
+        @grid.add(str, x, y)
+        @grid.add(str, x, y)
+        @grid.add(str, x, y)
+      }
+    }
+    assert_equal(100, @grid.height)
+    assert_equal(200, @grid.width)
+    @grid.to_html(CGI.new)
+  end
+
 	def test_label
 		label = StubLabel.new
 		@grid.add(label, 0,0)
