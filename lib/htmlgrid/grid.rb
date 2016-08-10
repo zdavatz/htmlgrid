@@ -191,25 +191,23 @@ rescue LoadError
 					}
 				end
 			end
-			def add(arg, x, y, col=false)
-				if arg.kind_of? Enumerable
-          if arg.kind_of? String
+      def add(arg, x, y, col=false)
+        if arg.kind_of?(Enumerable)
+          if arg.kind_of?(String)
             add_field(arg, x, y)
-          elsif arg.kind_of? Array
+          elsif arg.kind_of?(Array)
             arg.each do |item|
               add_field(item, x ? x : '', y)
             end
+          elsif col
+            add_column(arg, x, y)
           else
-            if(col)
-              add_column(arg, x, y)
-            else
-              add_row(arg, x, y)
-            end
+            add_row(arg, x, y)
           end
         else
           add_field(arg, x, y)
         end
-			end
+      end
 			def add_attribute(key, value, x, y, w=1, h=1)
 				each_field(x, y, w, h) { |field|
 					field.add_attribute(key, value)
