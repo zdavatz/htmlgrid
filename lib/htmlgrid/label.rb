@@ -71,20 +71,20 @@ module HtmlGrid
 			yield self if(@component.respond_to?(:label?) && @component.label?)
 			yield @component
 		end
-		def to_html(context)
-      key = @label_key
-			label = @lookandfeel.lookup(key) 
-      if(!label && @component.respond_to?(:name))
-        key = @component.name
-				label = @lookandfeel.lookup(key)
-			end
+    def to_html(context)
+      key   = @label_key
+      label = @lookandfeel.lookup(key)
+      if !label && @component.respond_to?(:name)
+        key   = @component.name
+        label = @lookandfeel.lookup(key)
+      end
       state = @session.state
-      if(label && state.respond_to?(:mandatory?) && state.mandatory?(key))
-        label += "*"
-      end 
-			if(label)
-				context.label(@attributes) { label }
-			end
-		end
+      if label && state.respond_to?(:mandatory?) && state.mandatory?(key)
+        label += '*'
+      end
+      if label
+        context.label(@attributes) { label }
+      end
+    end
 	end
 end
