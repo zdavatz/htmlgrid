@@ -127,6 +127,7 @@ module InteractionTest
     SORT_HEADER = false
     SORT_DEFAULT = :foo
     def initialize(models, session=@session)
+      @drugs = nil
       super # must come first or it will overwrite @value
       @value = []
       models.each{ |model|
