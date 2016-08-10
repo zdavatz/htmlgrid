@@ -57,6 +57,7 @@ rescue LoadError
 					def initialize
 						@components = []
 						@attributes = {}
+            @tag = nil
 					end
 					def add(item)
 						if(item.is_a? Array)
