@@ -32,16 +32,7 @@ require 'rebuild'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/grid'
-
-module HtmlGrid
-	class Grid
-		class Row
-			class Field
-				attr_reader :attributes
-			end
-		end
-	end
-end	
+require 'test_helper'
 
 class TestGrid < Minitest::Test
 	class StubLabel

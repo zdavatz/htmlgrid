@@ -29,15 +29,9 @@ $: << File.expand_path("../lib", File.dirname(__FILE__))
 require 'minitest/autorun'
 require 'htmlgrid/list'
 require 'stub/cgi'
+require 'test_helper'
 
 module HtmlGrid
-	class Grid
-		class Row
-			class Field
-				attr_reader	:attributes
-			end
-		end
-	end
 	class List < Composite
 		attr_reader :grid
 		public :lookandfeel_key
