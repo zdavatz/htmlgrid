@@ -61,7 +61,7 @@ module HtmlGrid
 		end
 		def __messages(ary, css_class, ypos=0)
 			ary.sort_by { |item|
-				(components.index(item.key) || [-1,-1]).reverse
+				(components.key(item.key) || [-1,-1]).reverse
 			}.reverse.each { |item|
 				__message(item, css_class, ypos)
 			}
