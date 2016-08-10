@@ -28,7 +28,6 @@ $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
 require 'minitest/autorun'
-require 'rebuild'
 require 'stub/cgi'
 require 'htmlgrid/label'
 require 'htmlgrid/grid'
