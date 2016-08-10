@@ -25,8 +25,6 @@
 
 $: << File.expand_path(File.dirname(__FILE__))
 
-require 'rebuild'
-
 Dir.foreach(File.dirname(__FILE__)) { |file|
 	require file if /^test_.*\.rb$/o.match(file)
 }
