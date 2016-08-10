@@ -9,6 +9,7 @@ script:
 notifications:
   email:
   - ngiger@ywesee.com
+  - yasaka@ywesee.com
 rvm:
   - ruby-head
   - 2.3.0
