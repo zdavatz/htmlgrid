@@ -186,20 +186,31 @@ class TestComposite < Minitest::Test
 		expected = [6,8,3,4]
 		assert_equal(expected, @composite.resolve_offset(matrix, offset))
 	end
-	def test_event
-    @composite.event()
-		form = StubCompositeForm.new(@composite.model, @composite.session)
-		@composite.container = form
-		assert_equal(:foo, @composite.event())
-	end
-	def test_component_css_map
-		composite = StubComposite2.new(StubCompositeModel.new, StubCompositeSession.new)
-		expected = '<TABLE cellspacing="0"><TR><TD><A>brafoo</A></TD></TR></TABLE>'
-		assert_equal(expected, composite.to_html(CGI.new))
-		composite = StubComposite3.new(StubCompositeModel.new, StubCompositeSession.new)
-		expected = '<TABLE cellspacing="0"><TR><TD><A class="standard">brafoo</A></TD></TR></TABLE>'
-		assert_equal(expected, composite.to_html(CGI.new))
-		composite = StubComposite4.new(StubCompositeModel.new, StubCompositeSession.new)
+  def test_event
+    @composite.event
+    @composite.container = StubCompositeForm.new(
+      @composite.model, @composite.session)
+    assert_equal(:foo, @composite.event)
+  end
+  def test_component_css_map
+    tbl = StubComposite2.new(StubCompositeModel.new, StubCompositeSession.new)
+    assert_equal(<<~EXPECTED.gsub(/\n|^\s*/, ''), tbl.to_html(CGI.new))
+      <TABLE cellspacing="0">
+        <TR><TD><A>brafoo</A></TD></TR>
+      </TABLE>
+    EXPECTED
+    tbl = StubComposite3.new(StubCompositeModel.new, StubCompositeSession.new)
+    assert_equal(<<~EXPECTED.gsub(/\n|^\s*/, ''), tbl.to_html(CGI.new))
+      <TABLE cellspacing="0">
+        <TR><TD><A class="standard">brafoo</A></TD></TR>
+      </TABLE>
+    EXPECTED
+    tbl = StubComposite4.new(StubCompositeModel.new, StubCompositeSession.new)
+    assert_equal(<<~EXPECTED.gsub(/\n|^\s*/, ''), tbl.to_html(CGI.new))
+      <TABLE cellspacing="0">
+        <TR><TD><A class="standard">brafoo</A></TD></TR>
+      </TABLE>
+    EXPECTED
   end
   def test_to_back
     if RUBY_VERSION.split(".").first.eql?('1')
