@@ -2,11 +2,10 @@
 .travis.yml
 COPYING
 Gemfile
-Gemfile.lock
 History.txt
 LICENCE.txt
 Manifest.txt
-README.textile
+README.md
 Rakefile
 ext/htmlgrid/MANIFEST
 ext/htmlgrid/extconf.rb
@@ -65,7 +64,6 @@ lib/htmlgrid/ulcomposite.rb
 lib/htmlgrid/ullist.rb
 lib/htmlgrid/urllink.rb
 lib/htmlgrid/value.rb
-test/rebuild.rb
 test/stub/cgi.rb
 test/test_component.rb
 test/test_composite.rb
@@ -79,5 +77,6 @@ test/test_list.rb
 test/test_select.rb
 test/test_template.rb
 test/test_text.rb
+test/test_helper.rb
 usage-en.txt
 widget/Tooltip.js
