@@ -1,3 +1,11 @@
+=== 1.1.2 / 10.08.2016
+
+* Fix warnings by syntax or coding style
+* Fix test errors
+* Fix asset (doc) files permission
+* Fix installation issues on ruby 2.0.0 and 2.1.9
+* Add ruby 2.3.1 as ci target
+
 === 1.1.1 / 07.07.2016
 
 * Improve dojotoolkit.rb
