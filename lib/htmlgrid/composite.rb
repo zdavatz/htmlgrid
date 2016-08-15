@@ -51,6 +51,21 @@ module HtmlGrid
 		CSS_ID = nil
 		DEFAULT_CLASS = Value
 		LOOKANDFEEL_MAP = {}
+
+    def self.component(klass, key, name=nil)
+      methname = klass.to_s.downcase.gsub('::', '_') << '_' << key.to_s
+      define_method(methname) { |*args|
+        model, session = args
+        args = [model.send(key), session || @session, self]
+        if(name)
+          args.unshift(name)
+          lookandfeel_map.store(methname.to_sym, name.to_sym)
+        end
+        klass.new(*args)
+      }
+      methname.to_sym
+    end
+
 		def init
 			super
 			setup_grid()
@@ -101,19 +116,6 @@ module HtmlGrid
 		end
 		def symbol_map
 			@symbol_map ||= self::class::SYMBOL_MAP.dup
-		end
-		def AbstractComposite.component(klass, key, name=nil)
-			methname = klass.to_s.downcase.gsub('::', '_') << '_' << key.to_s
-			define_method(methname) { |*args|
-				model, session = args
-				args = [model.send(key), session, self]
-				if(name)
-					args.unshift(name)
-					lookandfeel_map.store(methname.to_sym, name.to_sym)
-				end
-				klass.new(*args)
-			}
-			methname.to_sym
 		end
 	end
 	class TagComposite < AbstractComposite
