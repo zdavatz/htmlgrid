@@ -88,6 +88,9 @@ module CompositeTest
     public :labels?
   end
   class StubCompositeModel
+    def qux
+      'qux'
+    end
   end
   class StubCompositeLookandfeel
     def event_url(one)
@@ -109,6 +112,9 @@ module CompositeTest
     def error(key)
     end
   end
+
+  class StubCompositeSession2 < StubCompositeSession; end
+
   class StubCompositeForm < HtmlGrid::Form
     COMPONENTS = {
       [0, 0] => StubComposite
@@ -141,6 +147,23 @@ module CompositeTest
       @composite = StubComposite.new(
         StubCompositeModel.new, StubCompositeSession.new)
     end
+
+    def test_component_session_fallback_assignment_without_session_argment
+      StubComposite.component(StubComposite, :qux)
+      model    = StubCompositeModel.new
+      session1 = StubCompositeSession.new
+      composite = StubComposite.new(model, session1)
+      # via instance variable (without argument)
+      composite = composite.compositetest_stubcomposite_qux(model)
+      assert_kind_of(StubCompositeSession, composite.session)
+      assert_equal(session1, composite.session)
+      # via argument
+      session2 = StubCompositeSession2.new
+      composite = composite.compositetest_stubcomposite_qux(model, session2)
+      assert_kind_of(StubCompositeSession2, composite.session)
+      assert_equal(session2, composite.session)
+    end
+
     def test_create_method
       foo = nil
       foo = @composite.create(:foo, @composite.model)
