@@ -22,6 +22,7 @@ task :gem => :build do
 end
 
 task :spec => :clean
+task :default => [:clean, :test, :build]
 
 require 'rake/clean'
 CLEAN.include FileList['pkg/*.gem']

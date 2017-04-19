@@ -41,21 +41,22 @@ module HtmlGrid
           # NOTE:
           #   DOJO >= 1.8 has support for type name separated by '/'
           #   but, <= 1.7 must be separated with '.'
-          'data-dojo-type'  => 'dijit.Tooltip',
-          'data-dojo-props' => "connectId:'#{css_id}'",
+          'data-dojo-type'  => 'dijit/TooltipDialog',
+          'data-dojo-props' => "connectId:#{css_id}",
           'id'              => "#{css_id}_widget",
           'style'           => 'display: none',
         }
-        unless match = @@msie_ptrn.match(@session.user_agent) \
+        unless (match = @@msie_ptrn.match(@session.user_agent)) \
                && match[1].to_i < 7
           attrs.update({
             'toggle'         => 'fade',
             'toggleDuration' => '500',
           })
         end
+        @dojo_tooltip ||= nil
         if @dojo_tooltip.is_a?(String)
           if @dojo_tooltip !~ /^http/ # e.g. javascript
-            attrs.store('href', "'#@dojo_tooltip'")
+            attrs.store('href', "#@dojo_tooltip")
           else
             attrs.store('href', @dojo_tooltip)
           end
@@ -101,7 +102,6 @@ module HtmlGrid
           "preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON}",
           "bindEncoding:         '#{encoding}'",
           "searchIds:            []",
-          "async:                true",
           "urchin:               ''",
           "has: {
              'dojo-firebug':        #{self.class::DOJO_DEBUG},
