@@ -88,6 +88,9 @@ module InteractionTest
     end
     def error(key)
     end
+    def user_agent
+      'user_agent'
+    end
   end
   class StubCompositeForm < HtmlGrid::Form
     COMPONENTS = {
@@ -247,9 +250,7 @@ module InteractionTest
       table = StubComposite4.new(
         StubCompositeModel.new, StubCompositeSession.new)
       assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
-        <TABLE cellspacing="0">
-          <TR><TD><A class="standard">brafoo</A></TD></TR>
-        </TABLE>
+          <TABLE cellspacing=\"0\"><TR><TD class=\"dradnats\"><A class=\"standard\">brafoo</A></TD></TR></TABLE>
       EXP
     end
 
@@ -272,8 +273,8 @@ module InteractionTest
         '<TR><TD>interaction for Marcoumar</TD></TR>',
         '<TR><TD>interaction for Marcoumar</TD></TR></TABLE> <DIV id="drugs"></DIV><TABLE cellspacing="0">',
         '<TR><TH>&nbsp;</TH></TR>',
-        '<TR><TD class="css.info"></TD></TR>',
-        '<TR><TD class="css.info-bg"></TD></TR></TABLE>',
+        '<TR><TD class="css.info">&nbsp;</TD></TR>',
+        '<TR><TD class="css.info-bg">&nbsp;</TD></TR></TABLE>',
       ]
       html = composite.to_html(CGI.new)
       expected.each_with_index do |line, idx|
@@ -282,3 +283,4 @@ module InteractionTest
     end
   end
 end
+

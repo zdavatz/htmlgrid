@@ -178,13 +178,13 @@ module CompositeTest
       composite = StubCompositeColspan1.new(
         StubCompositeModel.new, StubCompositeSession.new)
       composite.full_colspan
-      assert_equal(nil, composite.full_colspan)
+      assert_nil(composite.full_colspan)
     end
     def test_full_colspan2
       composite = StubCompositeColspan2.new(
         StubCompositeModel.new, StubCompositeSession.new)
       composite.full_colspan
-      assert_equal(nil, composite.full_colspan)
+      assert_nil(composite.full_colspan)
     end
     def test_full_colspan3
       composite = StubCompositeColspan3.new(
@@ -244,9 +244,7 @@ module CompositeTest
       table = StubComposite4.new(
         StubCompositeModel.new, StubCompositeSession.new)
       assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), table.to_html(CGI.new))
-        <TABLE cellspacing="0">
-          <TR><TD><A class="standard">brafoo</A></TD></TR>
-        </TABLE>
+  <TABLE cellspacing=\"0\"><TR><TD class=\"dradnats\"><A class=\"standard\">brafoo</A></TD></TR></TABLE>
       EXP
     end
     def test_to_back

@@ -21,7 +21,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# TestComponent -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com 
+# TestComponent -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
@@ -59,7 +59,7 @@ class TestComponent < Minitest::Test
 		comp = HtmlGrid::Component.new("foo", "bar")
 		assert_equal("foo", comp.model)
 		assert_equal("bar", comp.session)
-		assert_equal(nil, comp.container)
+		assert_nil(comp.container)
 		assert_equal(false, comp.label?)
     comp.label = true
 		assert_equal(true, comp.label?)

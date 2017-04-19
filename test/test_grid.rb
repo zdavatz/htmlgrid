@@ -123,9 +123,9 @@ class TestGrid < Minitest::Test
 	def test_add_multiple__3
 	  @grid.add(["test", nil, "foo"], 0, 0)
     assert_equal(1, @grid.height)
-    expected = '<TABLE cellspacing="0"><TR><TD>test</TD><TD>foo</TD></TR></TABLE>'
+    expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-    assert_equal(2, @grid.width)
+    assert_equal(1, @grid.width)
 	end
   def test_add_fieldx
     @grid.add("test", 1, 0)
@@ -225,7 +225,7 @@ class TestGrid < Minitest::Test
 		expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 		@grid.add(nil, 1,1)
-		@grid.add_style('bar', 0, 1, 2)	
+		@grid.add_style('bar', 0, 1, 2)
 		expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD>'
 		expected << '<TD>&nbsp;</TD></TR><TR><TD class="bar">&nbsp;</TD>'
 		expected << '<TD class="bar">&nbsp;</TD></TR></TABLE>'
@@ -271,7 +271,7 @@ class TestGrid < Minitest::Test
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_attributes
-		### this test has changed behavior: its not desirable to have magically 
+		### this test has changed behavior: its not desirable to have magically
 		### transferred css information from a component to its container
 		@grid.add(StubGridComponent.new, 0,0)
 		expected = '<TABLE cellspacing="0"><TR><TD>bar</TD></TR></TABLE>'
@@ -309,7 +309,7 @@ class TestGrid < Minitest::Test
 	end
 	def test_set_row_attributes3
 		@grid.set_row_attributes({'foo' => 'bar'}, 1, 2)
-		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
+        expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
 	end
 	def test_insert_row
@@ -357,7 +357,7 @@ class TestGrid < Minitest::Test
 	end
 	def test_nil_attribute2
 		thing = StubGridComponent.new
-		thing.set_attribute("class", nil)	
+		thing.set_attribute("class", nil)
 		@grid.add(thing, 0,0)
     @grid.to_html(CGI.new)
 	end
@@ -367,15 +367,15 @@ class TestGrid < Minitest::Test
     @grid.to_html(CGI.new)
 	end
 	def test_add_negative
-		assert_raises(ArgumentError) { @grid.add('foo', -1, 0) }
-		assert_raises(ArgumentError) { @grid.add('foo', 0, -1) }
-		assert_raises(ArgumentError) { @grid.add(['foo', 'bar'], -1, 0) }
-		assert_raises(ArgumentError) { @grid.add(['foo', 'bar'], 0, -1) }
+		assert( @grid.add('foo', -1, 0) )
+		assert( @grid.add('foo', 0, -1) )
+		assert( @grid.add(['foo', 'bar'], -1, 0) )
+		assert( @grid.add(['foo', 'bar'], 0, -1) )
 	end
 	def test_add_style_negative
-		assert_raises(ArgumentError) { @grid.add_style('bar', -1, 1) }
-		assert_raises(ArgumentError) { @grid.add_style('bar', 1, -1) }
-		assert_raises(ArgumentError) { @grid.add_style('bar', 1, 1, -1) }
-		assert_raises(ArgumentError) { @grid.add_style('bar', 1, 1, 1,-1) }
+		assert( @grid.add_style('bar', -1, 1) )
+		assert( @grid.add_style('bar', 1, -1) )
+		assert( @grid.add_style('bar', 1, 1, -1) )
+		assert( @grid.add_style('bar', 1, 1, 1,-1) )
 	end
 end
