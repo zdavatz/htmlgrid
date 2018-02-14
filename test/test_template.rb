@@ -28,6 +28,7 @@ $LOAD_PATH << File.dirname(__FILE__)
 
 require 'minitest'
 require 'minitest/autorun'
+require 'flexmock/minitest'
 require 'stub/cgi'
 require 'sbsm/lookandfeel'
 require 'htmlgrid/template'
@@ -44,6 +45,9 @@ class StubTemplateSession
   end
   def server_name
     "testserver.com"
+  end
+  def server_port
+    '80'
   end
 	alias :default_language :language
 end
@@ -86,11 +90,29 @@ class TestTemplate < Minitest::Test
     result << @template.to_html(CGI.new)
     expected = [
       '<TITLE>Test</TITLE>',
-      "<LINK rel=\"stylesheet\" type=\"text/css\" href=\"http://testserver.com/resources/gcc/test.css\">",
+      '<LINK rel="stylesheet" type="text/css" async="true" href="http://testserver.com:80/resources/gcc/test.css">',
       '<META http-equiv="robots" content="follow, index">',
     ]
     expected.each_with_index { |line, idx|
       assert(result.index(line), "#{idx} Missing: #{line} in #{result}")
     }
 	end
+  def test_to_html_with_inline_css
+    @lookandfeel = flexmock('lnf', StubTemplateLookandfeel.new(StubTemplateSession.new))
+    @lookandfeel.should_receive(:resource).with(:css).and_return('test/inline.css')
+    @lookandfeel.should_receive(:lookup).with(:html_title).and_return('html_title').by_default
+    @lookandfeel.should_receive(:lookup).with(any).and_return(nil).by_default
+    @template = Template.new(nil, @lookandfeel, nil)
+    result = ""
+    result << @template.to_html(CGI.new)
+    expected = [
+      '<TITLE>html_title</TITLE>',
+      'this is a dummy CSS file, which should be inlined',
+      '<STYLE rel="stylesheet" type="text/css" async="true">',
+      '<META http-equiv="robots" content="follow, index">',
+    ]
+    expected.each_with_index { |line, idx|
+      assert(result.index(line), "#{idx} Missing: #{line} in #{result}")
+    }
+  end
 end
