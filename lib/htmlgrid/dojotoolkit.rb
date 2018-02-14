@@ -110,8 +110,10 @@ module HtmlGrid
            'text/javascript'  => dojo_path,
         }.each do |type, path|
           if (content = get_inline(path))
+        require 'pry'; binding.pry
             headers << context.style(:type =>type) { content }
           else
+        require 'pry'; binding.pry
             headers << context.style(:type =>type, :src => path) { "@import \"#{path}\";" }
           end
         end

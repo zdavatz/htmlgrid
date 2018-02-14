@@ -1,3 +1,9 @@
+# 1.1.5 / 14.02.2018
+
+* Inline *.css and *.js for faster loading.
+** This works also when the css/js files are zippe
+** But zipped css/js are unreadable via developert tools
+
 # 1.1.4 / 19.04.2017
 
 * Fix dynamic_html for MSIE browser

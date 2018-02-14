@@ -30,6 +30,7 @@ require 'stub/cgi'
 require 'htmlgrid/dojotoolkit'
 require 'test_helper'
 require 'flexmock/minitest'
+require 'sbsm/lookandfeel'
 
 class TestDojotoolkit < Minitest::Test
   class StubAttributeComponent < HtmlGrid::Component
@@ -69,6 +70,64 @@ class TestDojotoolkit < Minitest::Test
     assert_equal("foo", comp.model)
     assert_equal(false, comp.label?)
     result= comp.dynamic_html(@cgi)
+    assert(/href="my_tooltip"/.match(result))
+  end
+end
+class StubTemplateLookandfeel < SBSM::Lookandfeel
+  RESOURCES = {
+    :css	=>	"test.css"
+  }
+  DICTIONARIES = {
+    "de"	=>	{
+      :html_title	=>	"Test",
+    }
+  }
+  def lookandfeel
+    self
+  end
+end
+class StubTemplateSession
+  def flavor
+    "gcc"
+  end
+  def language
+    "de"
+  end
+  def http_protocol
+    'http'
+  end
+  def server_name
+    "testserver.com"
+  end
+  def server_port
+    '80'
+  end
+  alias :default_language :language
+end
+class PublicTemplate < HtmlGrid::Template
+  include HtmlGrid::DojoToolkit::DojoTemplate
+  COMPONENTS = {}
+  def dynamic_html_headers(context)
+    headers = super
+  end
+end
+
+class TestTemplate < Minitest::Test
+  def setup
+    lookandfeel = StubTemplateLookandfeel.new(StubTemplateSession.new)
+    @template = PublicTemplate.new(nil, lookandfeel, nil)
+  end
+  def test_dynamic_html_headers
+    result = @template.to_html(CGI.new)
+require 'pry'; binding.pry
+    
+    # @session.should_receive(:user_agent).and_return(nil)
+    comp = HtmlGrid::Component.new("foo", @session)
+    comp.dojo_tooltip = 'my_tooltip'
+    assert_equal("foo", comp.model)
+    assert_equal(false, comp.label?)
+    result= comp.to_html(@cgi)
+    require 'pry'; binding.pry
     assert(/href="my_tooltip"/.match(result))
   end
 end
