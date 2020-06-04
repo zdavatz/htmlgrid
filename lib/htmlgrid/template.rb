@@ -35,13 +35,29 @@ module HtmlGrid
 		LEGACY_INTERFACE = true
 		CSS_FILES = []
 		JAVASCRIPTS = []
+    @@local_doc_dir = File.join(Dir.pwd, 'doc')
+    def get_inline(ressource)
+      local_file = File.join(@@local_doc_dir, URI(ressource).path)
+      if File.exist?(local_file)
+        # puts "Reading #{ressource} #{local_file} #{File.size(local_file)}"
+        File.read(local_file)
+      else
+        nil
+      end
+    end
 		def css_link(context, path=@lookandfeel.resource(:css))
 			properties = {
 				"rel"		=>	"stylesheet",
 				"type"	=>	"text/css",
-				"href"	=>	path,
+				"async"	=>	"true",
+				'href'	=>	path,
 			}
-			context.link(properties)
+      if (content = get_inline(path))
+        properties.delete('href')
+        context.style(properties) { content }
+      else
+        context.link(properties)
+      end
 		end
 		def css_links(context, path=@lookandfeel.resource(:css))
 			links = self.class.const_get(:CSS_FILES).collect { |key| 
@@ -71,8 +87,8 @@ module HtmlGrid
 			context.head {
 				if(block_given?)
 					block.call
-				end.to_s <<
-				title(context) << 
+        end
+        context.head << title(context) <<
 				meta_tags(context) <<
 				other_html_headers(context) <<
 				css_links(context) <<
