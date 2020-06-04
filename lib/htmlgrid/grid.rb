@@ -86,7 +86,7 @@ module HtmlGrid
           html = ''
           @components.each { |component|
             if component.respond_to? :to_html
-              html << component.to_html(cgi).to_s.force_encoding('utf-8')
+              html << component.to_html(cgi).to_s.dup.force_encoding('utf-8')
             else
               html << component.to_s
             end

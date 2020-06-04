@@ -12,7 +12,7 @@ This may be replaced by Ramaze one day, but lets see.
 
 ## REQUIREMENTS:
 
-* Ruby >= 1.9.3
+* Ruby >= 2.1
 
 Each commit triggers a set of unit tests on "Travis-CI":https://travis-ci.org/ngiger/htmlgrid. The build status for the fork by Niklaus Giger can be seen "here":https://travis-ci.org/ngiger/htmlgrid.svg?branch=master
 

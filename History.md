@@ -1,7 +1,8 @@
-# 1.1.5 / 14.02.2018
+# 1.1.5 / 04.06.20
 
+* Update to Ruby 2.7.1
 * Inline *.css and *.js for faster loading.
-** This works also when the css/js files are zippe
+** This works also when the css/js files are zipped
 ** But zipped css/js are unreadable via developert tools
 
 # 1.1.4 / 19.04.2017

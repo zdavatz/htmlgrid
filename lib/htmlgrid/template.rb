@@ -87,8 +87,8 @@ module HtmlGrid
 			context.head {
 				if(block_given?)
 					block.call
-				end.to_s <<
-				title(context) << 
+        end
+        context.head << title(context) <<
 				meta_tags(context) <<
 				other_html_headers(context) <<
 				css_links(context) <<
