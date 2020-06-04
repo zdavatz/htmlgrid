@@ -95,7 +95,6 @@ class TestTemplate < Minitest::Test
       '<META http-equiv="robots" content="follow, index">',
     ]
     expected.each_with_index { |line, idx|
-                               require 'pry'; binding.pry unless result.index(line)
       assert(result.index(line), "#{idx} Missing: #{line} in #{result}")
     }
 	end
