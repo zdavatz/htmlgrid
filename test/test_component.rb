@@ -25,9 +25,11 @@
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
+$: << File.dirname(__FILE__)
 
 require 'minitest/autorun'
 require 'htmlgrid/component'
+require 'stub/cgi'
 
 module HtmlGrid
   class Component
@@ -36,6 +38,7 @@ module HtmlGrid
 end
 
 class TestComponent < Minitest::Test
+  STRING_WITH_UMLAUT =  "Test_with_Umlaut_üé"
 	class StubAttributeComponent < HtmlGrid::Component
 		HTML_ATTRIBUTES = { "key" => "val" }
 	end
@@ -71,6 +74,22 @@ class TestComponent < Minitest::Test
 		assert_equal("bar", comp.session)
 		assert_equal("baz", comp.container)
 	end
+  def test_to_html
+    comp = HtmlGrid::Component.new("foo", "bar", "baz").to_html(CGI.new)
+    assert_equal("", comp)
+  end
+  def test_umlaut_to_html
+    comp = HtmlGrid::Component.new('context')
+    comp.value = STRING_WITH_UMLAUT
+    result = comp.to_html(CGI.new)
+    assert_equal(STRING_WITH_UMLAUT, result)
+  end
+  def test_escaped_STRING_WITH_UMLAUT_to_html
+    comp = HtmlGrid::Component.new('context')
+    comp.value =CGI.escape(STRING_WITH_UMLAUT)
+    result = comp.to_html(CGI.new)
+    assert_equal(STRING_WITH_UMLAUT, result)
+  end
 	def test_initialize3
 		comp = StubAttributeComponent.new("foo", "bar")
 		expected = { "key" =>	"val" }

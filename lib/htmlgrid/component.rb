@@ -22,8 +22,8 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# HtmlGrid::Component -- htmlgrid -- 23.12.2012 -- mhatakeyama@ywesee.com 
-# HtmlGrid::Component -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
+# HtmlGrid::Component -- htmlgrid -- 23.12.2012 -- mhatakeyama@ywesee.com
+# HtmlGrid::Component -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com
 #++
 
 module HtmlGrid
@@ -72,7 +72,7 @@ module HtmlGrid
 			83	=>	"Sigma",    		115	=>	"sigma",
 			84	=>	"Tau",      		116	=>	"tau",
 			85	=>	"Upsilon",  		117	=>	"upsilon",
-			86	=>	"sigmaf",   		
+			86	=>	"sigmaf",
 			87	=>	"Omega",    		119	=>	"omega",
 			88	=>	"Xi",       		120	=>	"xi",
 			89	=>	"Psi",      		121	=>	"psi",
@@ -163,7 +163,7 @@ module HtmlGrid
 		end
 		# escape '&', '<' and '>' characters in txt
 		def escape(txt)
-			@@html_entities.inject(txt.to_s.dup) { |str, map| 
+			@@html_entities.inject(txt.to_s.dup) { |str, map|
 				char, entity = map
 				str.gsub!(char, '&' << entity << ';')
 				str
@@ -214,7 +214,7 @@ module HtmlGrid
 			@attributes.store('tabIndex', tab.to_s)
 		end
     def to_html(context)
-      _to_html(context, @value).to_s.force_encoding('utf-8')
+      _to_html(context, @value).to_s.encode('utf-8')
     end
     @@nl2br_ptrn = /(\r\n)|(\n)|(\r)/
 		def _to_html(context, value=@value)
@@ -223,7 +223,7 @@ module HtmlGrid
 			elsif(value.respond_to?(:to_html))
 				value.to_html(context).to_s.force_encoding('utf-8')
 			else
-				value.to_s.gsub(@@nl2br_ptrn, '<br>')
+        value =CGI.unescape(value) if value && value.is_a?(String)
 			end
 		end
 		private
