@@ -1,3 +1,8 @@
+# 1.1.6 / 12.06.20
+
+* Fix 2 problems with frozen string and Ruby 2.7.1
+** Added tests for to_html with strings: empty, with umlaut, with escaped chars
+
 # 1.1.5 / 04.06.20
 
 * Update to Ruby 2.7.1
