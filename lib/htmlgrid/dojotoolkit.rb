@@ -5,12 +5,12 @@
 
 require 'htmlgrid/component'
 require 'htmlgrid/div'
-require 'htmlgrid/template'
 
 module HtmlGrid
   class Component
     @@msie_ptrn = /MSIE\s*(\d)/
     attr_accessor :dojo_tooltip
+    # DOJO_VERSION >= 1.7.0 only (removed old version support)
     def dojo_tag(widget, args={}, inner_html='')
       div = HtmlGrid::Div.new(@model, @session, self)
       div.set_attribute('data-dojo-type', widget)
@@ -38,6 +38,9 @@ module HtmlGrid
       def dynamic_html(context)
         html = ''
         attrs = {
+          # NOTE:
+          #   DOJO >= 1.8 has support for type name separated by '/'
+          #   but, <= 1.7 must be separated with '.'
           'data-dojo-type'  => 'dijit/TooltipDialog',
           'data-dojo-props' => "connectId:#{css_id}",
           'id'              => "#{css_id}_widget",
@@ -63,7 +66,9 @@ module HtmlGrid
           html << @dojo_tooltip.to_html(context).force_encoding('utf-8')
         end
         unless html.empty? || dojo_parse_on_load
-          html << context.script('type' => 'text/javascript') { "dojoConfig.searchIds.push('#{css_id}')" }
+          html << context.script('type' => 'text/javascript') {
+            "dojoConfig.searchIds.push('#{css_id}')"
+          }
         end
         # call original dynamic_html
         dojo_dynamic_html(context) << html
@@ -72,7 +77,7 @@ module HtmlGrid
   end
 	module DojoToolkit
 		module DojoTemplate
-			DOJO_DEBUG = true
+			DOJO_DEBUG = false
 			DOJO_BACK_BUTTON = false
       DOJO_ENCODING = nil
       DOJO_PARSE_ON_LOAD = true
@@ -91,30 +96,52 @@ module HtmlGrid
             "{ name: '#{prefix}', location: '#{path}' }"
           }.join(",")
         end
-        puts "dynamic_html_headers with pkgs: #{packages}"
-        config =config = [
+        config = [
+          "parseOnLoad:          #{self.class::DOJO_PARSE_ON_LOAD}",
+          "isDebug:              #{self.class::DOJO_DEBUG}",
+          "preventBackButtonFix: #{!self.class::DOJO_BACK_BUTTON}",
+          "bindEncoding:         '#{encoding}'",
+          "searchIds:            []",
+          "urchin:               ''",
           "has: {
-             'dojo-debug-messages': true
+             'dojo-firebug':        #{self.class::DOJO_DEBUG},
+             'dojo-debug-messages': #{self.class::DOJO_DEBUG}
           }",
+          "packages: [ #{packages} ]"
         ].join(',')
-        headers << %(<script>
-       var dojoConfig = {
-            parseOnLoad: true,
-            isDebug: true,
-            async: true,
-            urchin: '',
-        };
-</script>)
+        args.store('data-dojo-config', config)
+        args.store('src', dojo_path)
         headers << context.script(args)
-        {  'text/css'         => File.join(File.dirname(dojo_path), "/resources/dojo.css"),
-           'text/javascript'  => dojo_path,
-        }.each do |type, path|
-          if (content = get_inline(path))
-            headers << context.style(:type =>type) { content }
+        args = { 'type' => 'text/javascript' }
+        headers << context.script(args) {
+          package_paths = self.class::DOJO_REQUIRE.map { |req|
+            "'#{req}'"
+          }.join(',')
+          package_names = self.class::DOJO_REQUIRE.map { |req|
+            req.split('/').last
+          }.join(',')
+          if @dojo_onloads
+            onloads = ''
+            @dojo_onloads.each { |onload|
+              onloads << "#{onload}\n"
+            }
+            script =
+            "require([#{package_paths}], function(#{package_names}) {" \
+              "ready(function() {" \
+                "#{onloads}" \
+              "});" \
+            "});"
           else
-            headers << context.style(:type =>type, :src => path) { "@import \"#{path}\";" }
+            script = "require([#{package_paths}]);"
           end
-        end
+          script
+        }
+        dojo_dir = File.dirname(dojo_path)
+        headers << context.style(:type => "text/css") { <<-EOS
+          @import "#{File.join(dojo_dir, "/resources/dojo.css")}";
+          @import "#{File.join(dojo_dir, "../dijit/themes/tundra/tundra.css")}";
+        EOS
+        }
         headers
       end
       def dojo_parse_on_load

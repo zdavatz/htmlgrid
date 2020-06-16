@@ -1,3 +1,7 @@
+# 1.1.7 / 16.06.20
+
+* revert loading javascripts, as interactions do not work
+
 # 1.1.6 / 12.06.20
 
 * Fix 2 problems with frozen string and Ruby 2.7.1

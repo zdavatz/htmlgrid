@@ -22,9 +22,10 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Template -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
+# Template -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com
 
 require 'htmlgrid/composite'
+require 'uri'
 
 module HtmlGrid
 	module TemplateMethods
@@ -36,14 +37,9 @@ module HtmlGrid
 		CSS_FILES = []
 		JAVASCRIPTS = []
     @@local_doc_dir = File.join(Dir.pwd, 'doc')
-    def get_inline(ressource)
+    def TemplateMethods.get_inline(ressource)
       local_file = File.join(@@local_doc_dir, URI(ressource).path)
-      if File.exist?(local_file)
-        # puts "Reading #{ressource} #{local_file} #{File.size(local_file)}"
-        File.read(local_file)
-      else
-        nil
-      end
+      File.exist?(local_file) ? File.read(local_file) : nil
     end
 		def css_link(context, path=@lookandfeel.resource(:css))
 			properties = {
@@ -52,7 +48,7 @@ module HtmlGrid
 				"async"	=>	"true",
 				'href'	=>	path,
 			}
-      if (content = get_inline(path))
+      if (content = TemplateMethods.get_inline(path))
         properties.delete('href')
         context.style(properties) { content }
       else
@@ -60,8 +56,8 @@ module HtmlGrid
       end
 		end
 		def css_links(context, path=@lookandfeel.resource(:css))
-			links = self.class.const_get(:CSS_FILES).collect { |key| 
-				css_link(context, @lookandfeel.resource(key)) 
+			links = self.class.const_get(:CSS_FILES).collect { |key|
+				css_link(context, @lookandfeel.resource(key))
 			}
 			links.push(css_link(context, path)) if(path)
 			links.join
@@ -101,7 +97,7 @@ module HtmlGrid
 					"language"	=>	"JavaScript",
 					"type"			=>	"text/javascript",
 					"src"				=>	@lookandfeel.resource_global(:javascript, "#{key}.js"),
-				}		
+				}
 				context.script(properties)
 			}
 			jscripts.join
