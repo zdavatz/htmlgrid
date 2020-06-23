@@ -1,3 +1,7 @@
+# 1.1.8 / 22.06.20
+
+* Handle '+' in components correctly
+
 # 1.1.7 / 16.06.20
 
 * revert loading javascripts, as interactions do not work

@@ -223,7 +223,9 @@ module HtmlGrid
 			elsif(value.respond_to?(:to_html))
 				value.to_html(context).to_s.force_encoding('utf-8')
 			else
-        value =CGI.unescape(value) if value && value.is_a?(String)
+        if value && value.is_a?(String)
+          value =CGI.unescape(value.gsub('+', CGI.escape('+')))
+        end
 			end
 		end
 		private
