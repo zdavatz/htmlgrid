@@ -24,5 +24,4 @@ matrix:
     - rvm: ruby-head
 
 # Speed up things on travis by using new docker based infrastructure and caching bundler
-sudo: false
 cache: bundler

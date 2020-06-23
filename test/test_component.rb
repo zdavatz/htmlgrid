@@ -38,6 +38,8 @@ module HtmlGrid
 end
 
 class TestComponent < Minitest::Test
+  STRING_WITH_SHARP =  "Test_#_gartenhat"
+  STRING_WITH_PLUS =  "Test_+_plus"
   STRING_WITH_UMLAUT =  "Test_with_Umlaut_üé"
 	class StubAttributeComponent < HtmlGrid::Component
 		HTML_ATTRIBUTES = { "key" => "val" }
@@ -77,6 +79,19 @@ class TestComponent < Minitest::Test
   def test_to_html
     comp = HtmlGrid::Component.new("foo", "bar", "baz").to_html(CGI.new)
     assert_equal("", comp)
+  end
+
+  def test_gartenhag_to_html
+    comp = HtmlGrid::Component.new('context')
+    comp.value = STRING_WITH_SHARP
+    result = comp.to_html(CGI.new)
+    assert_equal(STRING_WITH_SHARP, result)
+  end
+  def test_minus_to_html
+    comp = HtmlGrid::Component.new('context')
+    comp.value = STRING_WITH_PLUS
+    result = comp.to_html(CGI.new)
+    assert_equal(STRING_WITH_PLUS, result)
   end
   def test_umlaut_to_html
     comp = HtmlGrid::Component.new('context')

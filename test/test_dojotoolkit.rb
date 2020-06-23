@@ -27,6 +27,7 @@ $: << File.dirname(__FILE__)
 
 require 'minitest/autorun'
 require 'stub/cgi'
+require 'htmlgrid/template'
 require 'htmlgrid/dojotoolkit'
 require 'test_helper'
 require 'flexmock/minitest'
