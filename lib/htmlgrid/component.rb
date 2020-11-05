@@ -221,7 +221,7 @@ module HtmlGrid
 			if(value.is_a?(Array))
 				value.collect { |item| _to_html(context, item) }.join(' ')
 			elsif(value.respond_to?(:to_html))
-				value.to_html(context).to_s.force_encoding('utf-8')
+				value.to_html(context).to_s.dup.force_encoding('utf-8')
 			else
         if value && value.is_a?(String)
           value =CGI.unescape(value.gsub('+', CGI.escape('+')))
