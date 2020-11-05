@@ -1,3 +1,7 @@
+# 1.1.9 / 05.11.20
+* Handle case where to_html.to_s returns a frozen string
+  see https://github.com/zdavatz/oddb.org/issues/118
+
 # 1.1.8 / 22.06.20
 
 * Handle '+' in components correctly
