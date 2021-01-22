@@ -1,3 +1,8 @@
+# 1.2.0 / 22.01.21
+
+* .travis.yml -> GithubActions
+* Fix problem when ressource is nil
+
 # 1.1.9 / 05.11.20
 * Handle case where to_html.to_s returns a frozen string
   see https://github.com/zdavatz/oddb.org/issues/118
