@@ -21,7 +21,7 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, downloads.ywesee.com/ruby/htmlgrid
 #
-# TestTemplate -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
+# TestTemplate -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com
 
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
 $LOAD_PATH << File.dirname(__FILE__)
@@ -73,7 +73,7 @@ class Template < HtmlGrid::Template
 		},
 	]
 	COMPONENTS = {
-		[0,0]	=>	:foo,	
+		[0,0]	=>	:foo,
 	}
 	LEGACY_INTERFACE = false
 	def foo(model)
@@ -115,5 +115,8 @@ class TestTemplate < Minitest::Test
     expected.each_with_index { |line, idx|
       assert(result.index(line), "#{idx} Missing: #{line} in #{result}")
     }
+  end
+  def test_to_html_with_nil_inline
+    assert_nil(cpHtmlGrid::TemplateMethods.get_inline(nil))
   end
 end

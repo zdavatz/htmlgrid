@@ -56,6 +56,14 @@ class TestComponent < Minitest::Test
 	class StubContainer
 		attr_accessor :onsubmit
 	end
+  class ToHTMLreturnFrozen
+    def initialize  content
+      @content = content
+    end
+    def to_html(what)
+      return @content.to_s.freeze
+    end
+  end
 	def setup
 		@component = HtmlGrid::Component.new(nil, nil)
 	end
@@ -80,7 +88,13 @@ class TestComponent < Minitest::Test
     comp = HtmlGrid::Component.new("foo", "bar", "baz").to_html(CGI.new)
     assert_equal("", comp)
   end
-
+  # Next is test for https://github.com/zdavatz/oddb.org/issues/118 FrozenError at /de/just-medical
+  def test_to_html_frozen_empty
+    comp = HtmlGrid::Component.new('context')
+    comp.value = ToHTMLreturnFrozen.new('')
+    result = comp.to_html(CGI.new)
+    assert_equal('', result)
+  end
   def test_gartenhag_to_html
     comp = HtmlGrid::Component.new('context')
     comp.value = STRING_WITH_SHARP
