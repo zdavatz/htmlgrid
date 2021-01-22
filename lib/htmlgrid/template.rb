@@ -38,6 +38,7 @@ module HtmlGrid
 		JAVASCRIPTS = []
     @@local_doc_dir = File.join(Dir.pwd, 'doc')
     def TemplateMethods.get_inline(ressource)
+      return nil unless ressource
       local_file = File.join(@@local_doc_dir, URI(ressource).path)
       File.exist?(local_file) ? File.read(local_file) : nil
     end
