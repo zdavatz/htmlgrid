@@ -10,7 +10,7 @@ module HtmlGrid
 			@model.each_with_index { |item, idx|
         @list_index = idx
 				super(item)
-			} 
+			} if @model
 =begin
 			if(header = self.class.const_get(:HEADER))
 				@grid.push(create(header, @model, @session))

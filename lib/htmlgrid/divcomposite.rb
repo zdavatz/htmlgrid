@@ -45,7 +45,7 @@ module HtmlGrid
                     end
           }
         }
-			}
+			} if @grid
 			res
 		end
 	end
