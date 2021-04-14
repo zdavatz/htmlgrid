@@ -1,3 +1,8 @@
+# 1.2.1 / 14.04.21
+
+* Use standardrb
+* Fix a problem in davaz.com after deleting an item
+
 # 1.2.0 / 22.01.21
 
 * .travis.yml -> GithubActions
