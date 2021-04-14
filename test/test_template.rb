@@ -117,6 +117,6 @@ class TestTemplate < Minitest::Test
     }
   end
   def test_to_html_with_nil_inline
-    assert_nil(cpHtmlGrid::TemplateMethods.get_inline(nil))
+    assert_nil(HtmlGrid::TemplateMethods.get_inline(nil))
   end
 end

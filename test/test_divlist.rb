@@ -36,7 +36,7 @@ module HtmlGrid
 		attr_reader :grid
 	end
 end
-class StubList < HtmlGrid::DivList
+class StubDivList < HtmlGrid::DivList
 	attr_reader :model
 	COMPONENTS = {
 		[0,0]	=>	:jaguar,
@@ -49,7 +49,7 @@ class StubList < HtmlGrid::DivList
 	SORT_HEADER = false
 	SORT_DEFAULT = :foo
 end
-class StubListLookandfeel
+class StubDivListLookandfeel
 	def lookup(key)
 		key
 	end
@@ -57,13 +57,13 @@ class StubListLookandfeel
 		{}
 	end
 end
-class StubListSession
+class StubDivListSession
 	attr_accessor :event
 	def lookandfeel
-		StubListLookandfeel.new
+		StubDivListLookandfeel.new
 	end
 end
-class StubListModel
+class StubDivListModel
 	attr_reader :foo
 	def initialize(foo)
 		@foo = foo
@@ -76,26 +76,26 @@ class StubListModel
 	end
 end	
 
-class StubListEmpty
+class StubDivListEmpty
 	attr_reader :foo
 	def initialize(foo)
 		@foo = foo
 	end
 end
 
-class TestList < Minitest::Test
+class TestDivList < Minitest::Test
 	def setup
 		model = [
-			StubListModel.new(3),
-			StubListModel.new(2),
-			StubListModel.new(4),
-			StubListModel.new(1),
-			StubListModel.new(nil),
+			StubDivListModel.new(3),
+			StubDivListModel.new(2),
+			StubDivListModel.new(4),
+			StubDivListModel.new(1),
+			StubDivListModel.new(nil),
 		]
-		@list = StubList.new(model, StubListSession.new)
+		@list = StubDivList.new(model, StubDivListSession.new)
 	end
     def test_nil_robust
-        list = StubList.new(nil, StubListSession.new)
+        list = StubDivList.new(nil, StubDivListSession.new)
         assert_equal("", list.to_html(CGI.new))
     end
     def test_to_html
@@ -103,12 +103,12 @@ class TestList < Minitest::Test
         assert_equal(expected, @list.to_html(CGI.new))
     end
     def test_nil_robust_to_html
-        list = StubList.new( [nil], StubListSession.new)
+        list = StubDivList.new( [nil], StubDivListSession.new)
         expected = '<DIV></DIV>'
         assert_equal(expected, list.to_html(CGI.new))
     end
     def test_nil_robust_to_html2
-        list = StubList.new([], StubListSession.new)
+        list = StubDivList.new([], StubDivListSession.new)
         expected = ""
         assert_equal(expected, list.to_html(CGI.new))
     end
