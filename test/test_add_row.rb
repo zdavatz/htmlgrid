@@ -1,29 +1,28 @@
 #!/usr/bin/env ruby
-#encoding: utf-8
-$: << File.expand_path('../lib', File.dirname(__FILE__))
+$: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'minitest/autorun'
-require 'stub/cgi'
-require 'htmlgrid/composite'
-require 'htmlgrid/inputtext'
-require 'htmlgrid/form'
+require "minitest/autorun"
+require "stub/cgi"
+require "htmlgrid/composite"
+require "htmlgrid/inputtext"
+require "htmlgrid/form"
 
 module RowTest
   class StubComposite < HtmlGrid::Composite
     attr_writer :container
     COMPONENTS = {
-      [0, 0, 1] => :foo,
+      [0, 0, 1] => :foo
     }
     LABELS = true
     SYMBOL_MAP = {
-      :bar => HtmlGrid::InputText,
+      bar: HtmlGrid::InputText
     }
     attr_reader :model, :session
     public :resolve_offset, :labels?
 
     def init
-      @barcount=0
+      @barcount = 0
       super
     end
 
@@ -31,7 +30,7 @@ module RowTest
       1.upto(2).each { |idx|
         @grid.add(baz(model), 0, idx, 0)
       }
-      'Foo'
+      "Foo"
     end
 
     private
@@ -55,7 +54,7 @@ module RowTest
     end
 
     def base_url
-      'http://www.oddb.org/de/gcc'
+      "http://www.oddb.org/de/gcc"
     end
   end
 
@@ -84,7 +83,7 @@ module RowTest
     end
 
     def test_to_html
-      assert_equal(<<-EXP.gsub(/\n|^\s*/, ''), @composite.to_html(CGI.new))
+      assert_equal(<<-EXP.gsub(/\n|^\s*/, ""), @composite.to_html(CGI.new))
         <TABLE cellspacing="0">
           <TR><TD>Foo</TD></TR><TR><TD>Baz1</TD></TR><TR><TD>Baz2</TD></TR>
         </TABLE>

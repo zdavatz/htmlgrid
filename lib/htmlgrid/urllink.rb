@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,42 +24,44 @@
 #
 # UrlLink -- htmlgrid -- 10.06.2003 -- aschrafl@ywesee.com
 
-require 'htmlgrid/link'
+require "htmlgrid/link"
 
-module HtmlGrid 
-	class UrlLink < Link
-		def init
-			super
-			if(@model.respond_to?(@name))
-				@value = @model.send(@name).to_s 
-			end
-			compose_link
-		end
-	end
-	class HttpLink < UrlLink
+module HtmlGrid
+  class UrlLink < Link
+    def init
+      super
+      if @model.respond_to?(@name)
+        @value = @model.send(@name).to_s
+      end
+      compose_link
+    end
+  end
+
+  class HttpLink < UrlLink
     @@http_ptrn = /^http:/
-		LABEL = true
-		def compose_link
-			unless @value.nil?
-				if @@http_ptrn.match(@value)
-					self.href = @value  
-				else
-					self.href = "http://" + @value
-				end
-				set_attribute('target', '_blank')
-			end
-		end
-	end
-	class MailLink < UrlLink
-		LABEL = true
+    LABEL = true
+    def compose_link
+      unless @value.nil?
+        self.href = if @@http_ptrn.match(@value)
+          @value
+        else
+          "http://" + @value
+        end
+        set_attribute("target", "_blank")
+      end
+    end
+  end
+
+  class MailLink < UrlLink
+    LABEL = true
     @@mailto_ptrn = /^mailto:/
-		def compose_link
-			unless @value.empty?
-				self.href = @value  
-				unless @@mailto_ptrn.match(@value)
-					self.href = "mailto:"+@value
-				end
-			end
-		end
-	end
+    def compose_link
+      unless @value.empty?
+        self.href = @value
+        unless @@mailto_ptrn.match(@value)
+          self.href = "mailto:" + @value
+        end
+      end
+    end
+  end
 end

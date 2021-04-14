@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,38 +22,40 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Input -- htmlgrid -- 24.10.2002 -- hwyss@ywesee.com 
+# Input -- htmlgrid -- 24.10.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class Input < NamedComponent
-		def init
-			super
-			@attributes['name'] = @name.to_s
-			value = nil
-			if(@model.respond_to?(@name))
-				value = @model.send(@name)
-			end
-			if(value.nil? \
-				&& @session.respond_to?(:user_input))
-				value = @session.user_input(@name)
-			end
-			if(value.nil? && autofill? \
-				&& @session.respond_to?(:get_cookie_input))
-				value = @session.get_cookie_input(@name)
-			end
-			if(value.is_a? RuntimeError)
-				value = value.value 
-			end
-			self.value = value
-		end
-		def value=(value)
-			@attributes.store("value", value.to_s)
-			@value = value
-		end
-		def to_html(context)
-			context.input(@attributes)
-		end
-	end
+  class Input < NamedComponent
+    def init
+      super
+      @attributes["name"] = @name.to_s
+      value = nil
+      if @model.respond_to?(@name)
+        value = @model.send(@name)
+      end
+      if value.nil? \
+        && @session.respond_to?(:user_input)
+        value = @session.user_input(@name)
+      end
+      if value.nil? && autofill? \
+        && @session.respond_to?(:get_cookie_input)
+        value = @session.get_cookie_input(@name)
+      end
+      if value.is_a? RuntimeError
+        value = value.value
+      end
+      self.value = value
+    end
+
+    def value=(value)
+      @attributes.store("value", value.to_s)
+      @value = value
+    end
+
+    def to_html(context)
+      context.input(@attributes)
+    end
+  end
 end

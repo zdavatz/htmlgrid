@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,45 +22,47 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# PopupLink -- htmlgrid -- 20.03.2003 -- hwyss@ywesee.com 
+# PopupLink -- htmlgrid -- 20.03.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/link'
+require "htmlgrid/link"
 
-module HtmlGrid 
-	class PopupLink < Link
-		attr_writer :width, :height
-		attr_writer :locationbar, :scrollbars, :resizable, :toolbar, :menubar
-		def init
-			super
-			@scrollbars = true
-			@resizable = true
-			@toolbar = true
-			@menubar = false
-			@locationbar = false
-			@width = 750
-			@height = 460
-		end
+module HtmlGrid
+  class PopupLink < Link
+    attr_writer :width, :height
+    attr_writer :locationbar, :scrollbars, :resizable, :toolbar, :menubar
+    def init
+      super
+      @scrollbars = true
+      @resizable = true
+      @toolbar = true
+      @menubar = false
+      @locationbar = false
+      @width = 750
+      @height = 460
+    end
     @@name_ptrn = /[^a-z]+/i
-		def to_html(context)
-			props = {
-				'scrollbars'	=>	yesorno(@scrollbars),
-				'resizable'		=>	yesorno(@resizable),
-				'toolbar'			=>	yesorno(@toolbar),
-				'menubar'			=>	yesorno(@menubar),
-				'locationbar'	=>	yesorno(@locationbar),
-				'width'				=>	@width,
-				'height'			=>	@height,
-			}.collect { |key, val|
-				[key,val].join('=')
-			}.join(',')
-			name = @lookandfeel.lookup(@name).to_s.gsub(@@name_ptrn, '')
-			script = "window.open('#{href}', '#{name}', '#{props}').focus(); return false"
-			@attributes.store('onClick', script)
-			super
-		end
-		private
-		def yesorno(value)
-			value ? 'yes' : 'no'
-		end
-	end
+    def to_html(context)
+      props = {
+        "scrollbars"	=>	yesorno(@scrollbars),
+        "resizable"	=>	yesorno(@resizable),
+        "toolbar"	=>	yesorno(@toolbar),
+        "menubar"	=>	yesorno(@menubar),
+        "locationbar"	=>	yesorno(@locationbar),
+        "width"	=>	@width,
+        "height"	=>	@height
+      }.collect { |key, val|
+        [key, val].join("=")
+      }.join(",")
+      name = @lookandfeel.lookup(@name).to_s.gsub(@@name_ptrn, "")
+      script = "window.open('#{href}', '#{name}', '#{props}').focus(); return false"
+      @attributes.store("onClick", script)
+      super
+    end
+
+    private
+
+    def yesorno(value)
+      value ? "yes" : "no"
+    end
+  end
 end

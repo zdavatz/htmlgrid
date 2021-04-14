@@ -27,9 +27,9 @@ $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'minitest/autorun'
-require 'htmlgrid/component'
-require 'stub/cgi'
+require "minitest/autorun"
+require "htmlgrid/component"
+require "stub/cgi"
 
 module HtmlGrid
   class Component
@@ -38,139 +38,160 @@ module HtmlGrid
 end
 
 class TestComponent < Minitest::Test
-  STRING_WITH_SHARP =  "Test_#_gartenhat"
-  STRING_WITH_PLUS =  "Test_+_plus"
-  STRING_WITH_UMLAUT =  "Test_with_Umlaut_üé"
-	class StubAttributeComponent < HtmlGrid::Component
-		HTML_ATTRIBUTES = { "key" => "val" }
-	end
-	class StubInitComponent < HtmlGrid::Component
-		attr_reader :init_called
-		def init
-			@init_called = true
-		end
-	end
-	class StubLabelComponent < HtmlGrid::Component
-		LABEL = true
-	end
-	class StubContainer
-		attr_accessor :onsubmit
-	end
-  class ToHTMLreturnFrozen
-    def initialize  content
-      @content = content
-    end
-    def to_html(what)
-      return @content.to_s.freeze
+  STRING_WITH_SHARP = "Test_#_gartenhat"
+  STRING_WITH_PLUS = "Test_+_plus"
+  STRING_WITH_UMLAUT = "Test_with_Umlaut_üé"
+  class StubAttributeComponent < HtmlGrid::Component
+    HTML_ATTRIBUTES = {"key" => "val"}
+  end
+
+  class StubInitComponent < HtmlGrid::Component
+    attr_reader :init_called
+    def init
+      @init_called = true
     end
   end
-	def setup
-		@component = HtmlGrid::Component.new(nil, nil)
-	end
-	def test_initialize1
+
+  class StubLabelComponent < HtmlGrid::Component
+    LABEL = true
+  end
+
+  class StubContainer
+    attr_accessor :onsubmit
+  end
+
+  class ToHTMLreturnFrozen
+    def initialize content
+      @content = content
+    end
+
+    def to_html(what)
+      @content.to_s.freeze
+    end
+  end
+
+  def setup
+    @component = HtmlGrid::Component.new(nil, nil)
+  end
+
+  def test_initialize1
     HtmlGrid::Component.new("foo", "bar")
-		comp = HtmlGrid::Component.new("foo", "bar")
-		assert_equal("foo", comp.model)
-		assert_equal("bar", comp.session)
-		assert_nil(comp.container)
-		assert_equal(false, comp.label?)
+    comp = HtmlGrid::Component.new("foo", "bar")
+    assert_equal("foo", comp.model)
+    assert_equal("bar", comp.session)
+    assert_nil(comp.container)
+    assert_equal(false, comp.label?)
     comp.label = true
-		assert_equal(true, comp.label?)
-	end
-	def test_initialize2
+    assert_equal(true, comp.label?)
+  end
+
+  def test_initialize2
     HtmlGrid::Component.new("foo", "bar", "baz")
-		comp = HtmlGrid::Component.new("foo", "bar", "baz")
-		assert_equal("foo", comp.model)
-		assert_equal("bar", comp.session)
-		assert_equal("baz", comp.container)
-	end
+    comp = HtmlGrid::Component.new("foo", "bar", "baz")
+    assert_equal("foo", comp.model)
+    assert_equal("bar", comp.session)
+    assert_equal("baz", comp.container)
+  end
+
   def test_to_html
     comp = HtmlGrid::Component.new("foo", "bar", "baz").to_html(CGI.new)
     assert_equal("", comp)
   end
+
   # Next is test for https://github.com/zdavatz/oddb.org/issues/118 FrozenError at /de/just-medical
   def test_to_html_frozen_empty
-    comp = HtmlGrid::Component.new('context')
-    comp.value = ToHTMLreturnFrozen.new('')
+    comp = HtmlGrid::Component.new("context")
+    comp.value = ToHTMLreturnFrozen.new("")
     result = comp.to_html(CGI.new)
-    assert_equal('', result)
+    assert_equal("", result)
   end
+
   def test_gartenhag_to_html
-    comp = HtmlGrid::Component.new('context')
+    comp = HtmlGrid::Component.new("context")
     comp.value = STRING_WITH_SHARP
     result = comp.to_html(CGI.new)
     assert_equal(STRING_WITH_SHARP, result)
   end
+
   def test_minus_to_html
-    comp = HtmlGrid::Component.new('context')
+    comp = HtmlGrid::Component.new("context")
     comp.value = STRING_WITH_PLUS
     result = comp.to_html(CGI.new)
     assert_equal(STRING_WITH_PLUS, result)
   end
+
   def test_umlaut_to_html
-    comp = HtmlGrid::Component.new('context')
+    comp = HtmlGrid::Component.new("context")
     comp.value = STRING_WITH_UMLAUT
     result = comp.to_html(CGI.new)
     assert_equal(STRING_WITH_UMLAUT, result)
   end
+
   def test_escaped_STRING_WITH_UMLAUT_to_html
-    comp = HtmlGrid::Component.new('context')
-    comp.value =CGI.escape(STRING_WITH_UMLAUT)
+    comp = HtmlGrid::Component.new("context")
+    comp.value = CGI.escape(STRING_WITH_UMLAUT)
     result = comp.to_html(CGI.new)
     assert_equal(STRING_WITH_UMLAUT, result)
   end
-	def test_initialize3
-		comp = StubAttributeComponent.new("foo", "bar")
-		expected = { "key" =>	"val" }
-		assert_respond_to(comp, :attributes)
-		assert_equal(expected, comp.attributes)
-		assert_equal(expected, StubAttributeComponent::HTML_ATTRIBUTES)
+
+  def test_initialize3
+    comp = StubAttributeComponent.new("foo", "bar")
+    expected = {"key" =>	"val"}
+    assert_respond_to(comp, :attributes)
+    assert_equal(expected, comp.attributes)
+    assert_equal(expected, StubAttributeComponent::HTML_ATTRIBUTES)
     comp.attributes.store("other", "val")
-		expected2 = { "key" =>	"val", "other" => "val" }
-		assert_equal(expected2, comp.attributes)
-		assert_equal(expected, StubAttributeComponent::HTML_ATTRIBUTES)
-		assert_equal({}, @component.attributes)
-		assert_equal({}, HtmlGrid::Component::HTML_ATTRIBUTES)
+    expected2 = {"key" =>	"val", "other" => "val"}
+    assert_equal(expected2, comp.attributes)
+    assert_equal(expected, StubAttributeComponent::HTML_ATTRIBUTES)
+    assert_equal({}, @component.attributes)
+    assert_equal({}, HtmlGrid::Component::HTML_ATTRIBUTES)
     @component.attributes.store("third", "val")
-		expected = {"third"=>"val"}
-		assert_equal(expected, @component.attributes)
-		assert_equal({}, HtmlGrid::Component::HTML_ATTRIBUTES)
-	end
-	def test_initialize4
-		comp = StubInitComponent.new("foo", "bar")
-		assert_equal(true, comp.init_called)
-	end
-	def test_initialize5
-		comp = StubLabelComponent.new(nil, nil)
-		assert_equal(true, comp.label?)
-	end
-	def test_escape
-		txt = "Guten Tag! & wie gehts uns denn heute? '<' schlechter oder '>' besser?"
-		control = txt.dup
-		expected = "Guten Tag! &amp; wie gehts uns denn heute? '&lt;' schlechter oder '&gt;' besser?"
-		assert_equal(expected, @component.escape(txt))
-		assert_equal(control, txt)
-		assert_equal(expected, @component.escape(txt))
-	end
-	def test_escape_symbols
-		txt = "\263"
-		expected = "&ge;"
-		assert_equal(expected, @component.escape_symbols(txt))
-	end
-	def test_onsubmit
-		@component.onsubmit = 'submitted'
-		assert_equal({}, @component.attributes)
-		cont = StubContainer.new
-		comp = HtmlGrid::Component.new("foo", "bar", cont)
-		comp.onsubmit = 'submitted'
-		assert_equal('submitted', cont.onsubmit)
-	end
-	def test_set_attribute
-		assert_equal({}, @component.attributes)
-		@component.set_attribute('href', 'http://www.ywesee.com')
-		expected = {
-			'href'	=>	'http://www.ywesee.com',
-		}
-		assert_equal(expected, @component.attributes)
-	end
+    expected = {"third" => "val"}
+    assert_equal(expected, @component.attributes)
+    assert_equal({}, HtmlGrid::Component::HTML_ATTRIBUTES)
+  end
+
+  def test_initialize4
+    comp = StubInitComponent.new("foo", "bar")
+    assert_equal(true, comp.init_called)
+  end
+
+  def test_initialize5
+    comp = StubLabelComponent.new(nil, nil)
+    assert_equal(true, comp.label?)
+  end
+
+  def test_escape
+    txt = "Guten Tag! & wie gehts uns denn heute? '<' schlechter oder '>' besser?"
+    control = txt.dup
+    expected = "Guten Tag! &amp; wie gehts uns denn heute? '&lt;' schlechter oder '&gt;' besser?"
+    assert_equal(expected, @component.escape(txt))
+    assert_equal(control, txt)
+    assert_equal(expected, @component.escape(txt))
+  end
+
+  def test_escape_symbols
+    txt = "\263"
+    expected = "&ge;"
+    assert_equal(expected, @component.escape_symbols(txt))
+  end
+
+  def test_onsubmit
+    @component.onsubmit = "submitted"
+    assert_equal({}, @component.attributes)
+    cont = StubContainer.new
+    comp = HtmlGrid::Component.new("foo", "bar", cont)
+    comp.onsubmit = "submitted"
+    assert_equal("submitted", cont.onsubmit)
+  end
+
+  def test_set_attribute
+    assert_equal({}, @component.attributes)
+    @component.set_attribute("href", "http://www.ywesee.com")
+    expected = {
+      "href"	=>	"http://www.ywesee.com"
+    }
+    assert_equal(expected, @component.attributes)
+  end
 end

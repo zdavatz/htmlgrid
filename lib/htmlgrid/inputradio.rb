@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,14 +24,14 @@
 #
 # InputRadio -- htmlgrid -- 29.04.2003 -- mhuggler@ywesee.com
 
-require 'htmlgrid/input'
+require "htmlgrid/input"
 
 module HtmlGrid
-	class InputRadio < Input
-		LABEL = true
-		def init
-			super
-			@attributes['type'] = 'radio'
-		end
-	end
+  class InputRadio < Input
+    LABEL = true
+    def init
+      super
+      @attributes["type"] = "radio"
+    end
+  end
 end

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,33 +22,37 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Link -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
+# Link -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class Link < NamedComponent
-		def init
-			super
-			@value = @lookandfeel.lookup(@name)
-		end
-		def href
-			@attributes['href']
-		end
-		def href=(url)
-			@attributes['href'] = url
-		end
-		def target=(trg)
-			@attributes['target']	= trg
-		end
-		def to_html(context)
-			context.a(@attributes) { 
-				if(@value.respond_to?(:to_html))
-					@value.to_html(context).force_encoding('utf-8')
-				else
-					super
-				end
-			} << dynamic_html(context)
-		end
-	end
+  class Link < NamedComponent
+    def init
+      super
+      @value = @lookandfeel.lookup(@name)
+    end
+
+    def href
+      @attributes["href"]
+    end
+
+    def href=(url)
+      @attributes["href"] = url
+    end
+
+    def target=(trg)
+      @attributes["target"]	= trg
+    end
+
+    def to_html(context)
+      context.a(@attributes) {
+        if @value.respond_to?(:to_html)
+          @value.to_html(context).force_encoding("utf-8")
+        else
+          super
+        end
+      } << dynamic_html(context)
+    end
+  end
 end

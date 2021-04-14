@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,14 +22,14 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com
 #
-# LabelText -- oddb -- 22.07.2003 -- hwyss@ywesee.com 
+# LabelText -- oddb -- 22.07.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/text'
+require "htmlgrid/text"
 
 module HtmlGrid
-	class LabelText < Text
-		def to_html(context)
-			context.label { super }
-		end
-	end
+  class LabelText < Text
+    def to_html(context)
+      context.label { super }
+    end
+  end
 end

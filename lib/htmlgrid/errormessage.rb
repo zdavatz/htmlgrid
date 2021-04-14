@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -25,46 +25,50 @@
 # ErrorMessage -- htmlgrid -- 10.04.2003 -- benfay@ywesee.com
 
 module HtmlGrid
-	module ErrorMessage
-		private
-		def error_message(ypos = 0)
-			@displayed_messages = []
-			if(@session.warning?)
-				__messages(@session.warnings, 'warning', ypos)
-			end
-			if(@session.error?)
-				__messages(@session.errors, 'processingerror', ypos)
-			end
-		end
-		def error_text(obj)
-			message = obj.message
-			txt = HtmlGrid::Text.new(message, @model, @session, self)
-			if(txt.value.nil?)
-				txt.value = @lookandfeel.lookup(message, escape(obj.value))
-			end
-			if(txt.value.nil? && (match = /^(._[^_]+)_(.*)$/.match(message.to_s)) \
-				&& (label = @lookandfeel.lookup(match[2])))
-				txt.value = @lookandfeel.lookup(match[1], label)
-			end
-			txt
-		end
-		def __message(obj, css_class, ypos=0)
-			@displayed_messages ||= []
-			message = obj.message
-			unless(@displayed_messages.include?(message))
-				@displayed_messages.push(message)
-				txt = error_text(obj)
-				unless(txt.value.nil?)
-					insert_row(ypos, txt, css_class)
-				end
-			end
-		end
-		def __messages(ary, css_class, ypos=0)
-			ary.sort_by { |item|
-				(components.key(item.key) || [-1,-1]).reverse
-			}.reverse.each { |item|
-				__message(item, css_class, ypos)
-			}
-		end
-	end
+  module ErrorMessage
+    private
+
+    def error_message(ypos = 0)
+      @displayed_messages = []
+      if @session.warning?
+        __messages(@session.warnings, "warning", ypos)
+      end
+      if @session.error?
+        __messages(@session.errors, "processingerror", ypos)
+      end
+    end
+
+    def error_text(obj)
+      message = obj.message
+      txt = HtmlGrid::Text.new(message, @model, @session, self)
+      if txt.value.nil?
+        txt.value = @lookandfeel.lookup(message, escape(obj.value))
+      end
+      if txt.value.nil? && (match = /^(._[^_]+)_(.*)$/.match(message.to_s)) \
+        && (label = @lookandfeel.lookup(match[2]))
+        txt.value = @lookandfeel.lookup(match[1], label)
+      end
+      txt
+    end
+
+    def __message(obj, css_class, ypos = 0)
+      @displayed_messages ||= []
+      message = obj.message
+      unless @displayed_messages.include?(message)
+        @displayed_messages.push(message)
+        txt = error_text(obj)
+        unless txt.value.nil?
+          insert_row(ypos, txt, css_class)
+        end
+      end
+    end
+
+    def __messages(ary, css_class, ypos = 0)
+      ary.sort_by { |item|
+        (components.key(item.key) || [-1, -1]).reverse
+      }.reverse_each { |item|
+        __message(item, css_class, ypos)
+      }
+    end
+  end
 end

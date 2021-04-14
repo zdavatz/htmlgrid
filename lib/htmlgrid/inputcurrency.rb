@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,15 +22,15 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# InputCurrency -- htmlgrid -- 14.03.2003 -- hwyss@ywesee.com 
+# InputCurrency -- htmlgrid -- 14.03.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/inputtext'
+require "htmlgrid/inputtext"
 
 module HtmlGrid
-	class InputCurrency < InputText
-		def init
-			super
-			@attributes['value'] = @lookandfeel.format_price(@value)
-		end
-	end
+  class InputCurrency < InputText
+    def init
+      super
+      @attributes["value"] = @lookandfeel.format_price(@value)
+    end
+  end
 end

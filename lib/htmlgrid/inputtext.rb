@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,16 +22,16 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# InputText -- htmlgrid -- 24.10.2002 -- hwyss@ywesee.com 
+# InputText -- htmlgrid -- 24.10.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/input'
+require "htmlgrid/input"
 
 module HtmlGrid
-	class InputText < Input
-		LABEL = true
-		def init
-			super
-			@attributes['type'] = 'text'
-		end
-	end
+  class InputText < Input
+    LABEL = true
+    def init
+      super
+      @attributes["type"] = "text"
+    end
+  end
 end

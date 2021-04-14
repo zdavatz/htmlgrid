@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,19 +24,19 @@
 #
 # FormList -- htmlgrid -- 25.03.2003 -- aschrafl@ywesee.com
 
-require 'htmlgrid/list'
-require 'htmlgrid/form'
-require 'htmlgrid/value'
-require 'htmlgrid/button'
+require "htmlgrid/list"
+require "htmlgrid/form"
+require "htmlgrid/value"
+require "htmlgrid/button"
 
 module HtmlGrid
-	class FormList < List
-		include FormMethods
-		DEFAULT_CLASS = Value
-		EVENT = :new_item
-		def compose_footer(matrix)
-			@grid.add(submit(), *matrix)
-			@grid.set_colspan(*matrix)
-		end
-	end
+  class FormList < List
+    include FormMethods
+    DEFAULT_CLASS = Value
+    EVENT = :new_item
+    def compose_footer(matrix)
+      @grid.add(submit, *matrix)
+      @grid.set_colspan(*matrix)
+    end
+  end
 end

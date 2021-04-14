@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,32 +22,34 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Select -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com 
+# Select -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class AbstractSelect < NamedComponent
-		LABEL = true
-		attr_accessor :selected, :valid_values
-		def to_html(context)
-			context.select(@attributes) {
-				sel = selection(context)
-				sel.is_a?(Array) ? sel.join : sel.to_s
-			}
-		end
-	end
-	class Select < AbstractSelect
-		private
-		def selection(context)
-			@selected ||= (@model.send(@name).to_s if(@model.respond_to?(@name)))
-			@valid_values ||= @session.valid_values(@name)
-			@valid_values.collect { |value|
-				val = value.to_s
-				attributes = { "value" => val }
-				attributes.store("selected", true) if(val == selected)
-				context.option(attributes) { @lookandfeel.lookup(value) { val } }
-			}
-		end
-	end
+  class AbstractSelect < NamedComponent
+    LABEL = true
+    attr_accessor :selected, :valid_values
+    def to_html(context)
+      context.select(@attributes) {
+        sel = selection(context)
+        sel.is_a?(Array) ? sel.join : sel.to_s
+      }
+    end
+  end
+
+  class Select < AbstractSelect
+    private
+
+    def selection(context)
+      @selected ||= (@model.send(@name).to_s if @model.respond_to?(@name))
+      @valid_values ||= @session.valid_values(@name)
+      @valid_values.collect { |value|
+        val = value.to_s
+        attributes = {"value" => val}
+        attributes.store("selected", true) if val == selected
+        context.option(attributes) { @lookandfeel.lookup(value) { val } }
+      }
+    end
+  end
 end

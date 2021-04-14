@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,31 +22,34 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# NamedComponent -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
+# NamedComponent -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/component'
+require "htmlgrid/component"
 
 module HtmlGrid
-	class NamedComponent < Component
-		attr_reader :name
-		def initialize(name, model, session, container=nil)
-			@name = name
-			super(model, session, container)
-			@attributes['name'] = @name.to_s
-		end
-		def init
-			super
-			@attributes.update(@lookandfeel.attributes(@name)) if @lookandfeel
-		end
-		def data_origin
-			if(@model.respond_to?(:data_origin))
-				@model.data_origin(@name)
-			end
-		end
-		def error?
-			if(@model.respond_to?(:error?))
-				@model.error?(@name)
-			end
-		end
-	end
+  class NamedComponent < Component
+    attr_reader :name
+    def initialize(name, model, session, container = nil)
+      @name = name
+      super(model, session, container)
+      @attributes["name"] = @name.to_s
+    end
+
+    def init
+      super
+      @attributes.update(@lookandfeel.attributes(@name)) if @lookandfeel
+    end
+
+    def data_origin
+      if @model.respond_to?(:data_origin)
+        @model.data_origin(@name)
+      end
+    end
+
+    def error?
+      if @model.respond_to?(:error?)
+        @model.error?(@name)
+      end
+    end
+  end
 end

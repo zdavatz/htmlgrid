@@ -21,43 +21,48 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# TextText -- htmlgrid -- 20.11.2002 -- hwyss@ywesee.com 
+# TextText -- htmlgrid -- 20.11.2002 -- hwyss@ywesee.com
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'minitest/autorun'
-require 'htmlgrid/text'
+require "minitest/autorun"
+require "htmlgrid/text"
 
 class StubTextLookandfeel
-	def lookup(key)
-		{
-			:foo	=>	"Foo Text!",
-			:navigation_divider =>	"&nbsp;|&nbsp;",
-		}[key]
-	end
-	def attributes(key)
-		{"foo"	=>	"bar"} if key==:foo
-	end
-	def lookandfeel
-		self
-	end
+  def lookup(key)
+    {
+      foo: "Foo Text!",
+      navigation_divider: "&nbsp;|&nbsp;"
+    }[key]
+  end
+
+  def attributes(key)
+    {"foo"	=>	"bar"} if key == :foo
+  end
+
+  def lookandfeel
+    self
+  end
 end
 
 class TestText < Minitest::Test
-	def setup
-		@view = HtmlGrid::Text.new(:foo, nil, StubTextLookandfeel.new)
-	end
-	def test_respond_to_attributes
-		assert_respond_to(@view, :attributes)
-	end
-	def test_to_html
-		assert_equal("Foo Text!", @view.to_html(nil))
-	end
-	def test_init
-		expected = {
-			"foo"		=>	"bar",
-			"name"	=>	"foo",
-		}
-		assert_equal(expected, @view.attributes)
-	end
+  def setup
+    @view = HtmlGrid::Text.new(:foo, nil, StubTextLookandfeel.new)
+  end
+
+  def test_respond_to_attributes
+    assert_respond_to(@view, :attributes)
+  end
+
+  def test_to_html
+    assert_equal("Foo Text!", @view.to_html(nil))
+  end
+
+  def test_init
+    expected = {
+      "foo"	=>	"bar",
+      "name"	=>	"foo"
+    }
+    assert_equal(expected, @view.attributes)
+  end
 end

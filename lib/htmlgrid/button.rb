@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,15 +22,15 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Button -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com 
+# Button -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/staticinput'
+require "htmlgrid/staticinput"
 
 module HtmlGrid
-	class Button < StaticInput
-		def init
-			super
-			@attributes['type'] = 'button'
-		end
-	end
+  class Button < StaticInput
+    def init
+      super
+      @attributes["type"] = "button"
+    end
+  end
 end

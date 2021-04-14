@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,69 +22,73 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Label -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com 
+# Label -- htmlgrid -- 26.11.2002 -- hwyss@ywesee.com
 
-require 'delegate'
-require 'htmlgrid/namedcomponent'
+require "delegate"
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class SimpleLabel < NamedComponent
-		def init
-			super
-			@value = @lookandfeel.lookup(@name)
+  class SimpleLabel < NamedComponent
+    def init
+      super
+      @value = @lookandfeel.lookup(@name)
       state = @session.state
-      if(state.respond_to?(:mandatory?) && state.mandatory?(@name))
+      if state.respond_to?(:mandatory?) && state.mandatory?(@name)
         @value += "*"
-      end 
-		end
-		def to_html(context)
-			context.label(@attributes) { @value }
-		end
-	end
-	class Label < SimpleDelegator
-		include Enumerable
-		def initialize(component, session, label_key=nil)
-			@component = component
-			@attributes = {}
-			@session = session
-			@lookandfeel = session.lookandfeel
-			@label_key = label_key 
-			if(@component.respond_to? :name)
-				@attributes['for'] = @component.name.to_s
-				@label_key ||= @component.name
-			end
-			if(@component.respond_to?(:data_origin) \
-				 && (origin = @component.data_origin))
-				@attributes.store('title', origin.to_s)
-			end
-			if(@session.error(@label_key) \
-         || (@component.respond_to?(:name) && @session.error(@component.name)))
-				@attributes["class"] = "error" 
-			end
-			if(@component.respond_to?(:attributes) \
-				&& (id = @component.attributes['id']))
-				@attributes.store('id', "label_#{id}")
-			end
-			super(component)
-		end
-		def each
-			yield self if(@component.respond_to?(:label?) && @component.label?)
-			yield @component
-		end
+      end
+    end
+
     def to_html(context)
-      key   = @label_key
+      context.label(@attributes) { @value }
+    end
+  end
+
+  class Label < SimpleDelegator
+    include Enumerable
+    def initialize(component, session, label_key = nil)
+      @component = component
+      @attributes = {}
+      @session = session
+      @lookandfeel = session.lookandfeel
+      @label_key = label_key
+      if @component.respond_to? :name
+        @attributes["for"] = @component.name.to_s
+        @label_key ||= @component.name
+      end
+      if @component.respond_to?(:data_origin) \
+         && (origin = @component.data_origin)
+        @attributes.store("title", origin.to_s)
+      end
+      if @session.error(@label_key) \
+         || (@component.respond_to?(:name) && @session.error(@component.name))
+        @attributes["class"] = "error"
+      end
+      if @component.respond_to?(:attributes) \
+        && (id = @component.attributes["id"])
+        @attributes.store("id", "label_#{id}")
+      end
+      super(component)
+    end
+
+    def each
+      yield self if @component.respond_to?(:label?) && @component.label?
+      yield @component
+    end
+
+    def to_html(context)
+      key = @label_key
       label = @lookandfeel.lookup(key)
       if !label && @component.respond_to?(:name)
-        key   = @component.name
+        key = @component.name
         label = @lookandfeel.lookup(key)
       end
       state = @session.state
       if label && state.respond_to?(:mandatory?) && state.mandatory?(key)
-        label += '*'
+        label += "*"
       end
       if label
         context.label(@attributes) { label }
       end
     end
-	end
+  end
 end

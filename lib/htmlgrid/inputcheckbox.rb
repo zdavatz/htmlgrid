@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,18 +24,18 @@
 #
 # InputCheckbox -- htmlgrid -- 29.04.2003 -- mhuggler@ywesee.com
 
-require 'htmlgrid/input'
+require "htmlgrid/input"
 
 module HtmlGrid
-	class InputCheckbox < Input
-		LABEL = true
-		def init
-			super
-			if(@value)
-				@attributes.store('checked', true)
-			end
-			@attributes.store('value', '1') 
-			@attributes['type'] = 'checkbox'
-		end
-	end
+  class InputCheckbox < Input
+    LABEL = true
+    def init
+      super
+      if @value
+        @attributes.store("checked", true)
+      end
+      @attributes.store("value", "1")
+      @attributes["type"] = "checkbox"
+    end
+  end
 end

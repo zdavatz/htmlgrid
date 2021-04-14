@@ -21,23 +21,26 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# CGI -- htmlgrid -- hwyss@ywesee.com	
+# CGI -- htmlgrid -- hwyss@ywesee.com
 
-require 'cgi'
+require "cgi"
 
 class CGI
   attr_accessor :params
-	alias :old_initialize :initialize
-  def initialize throwaway=nil
-		ARGV.push('')
-		old_initialize('html4')
+  alias_method :old_initialize, :initialize
+  def initialize throwaway = nil
+    ARGV.push("")
+    old_initialize("html4")
   end
+
   def cookies
     {}
   end
+
   def []key
-    @params[key]  
+    @params[key]
   end
+
   def []=key, value
     @params[key] = value
   end

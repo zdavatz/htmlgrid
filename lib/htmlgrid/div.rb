@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,14 +24,14 @@
 #
 # Div -- oddb -- 12.11.2004 -- jlang@ywesee.com, usenguel@ywesee.com
 
-require 'htmlgrid/component'
+require "htmlgrid/component"
 
 module HtmlGrid
-	class Div < Component
-		def to_html(context)
-			context.div(@attributes) {
-				super << dynamic_html(context)
-			}
-		end
-	end
+  class Div < Component
+    def to_html(context)
+      context.div(@attributes) {
+        super << dynamic_html(context)
+      }
+    end
+  end
 end

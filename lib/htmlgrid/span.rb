@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,14 +24,14 @@
 #
 # Span -- oddb -- 12.08.2003 -- mhuggler@ywesee.com
 
-require 'htmlgrid/component'
+require "htmlgrid/component"
 
 module HtmlGrid
-	class Span < Component
-		def to_html(context)
-			context.span(@attributes) {
-				super << dynamic_html(context)
-			}
-		end
-	end
+  class Span < Component
+    def to_html(context)
+      context.span(@attributes) {
+        super << dynamic_html(context)
+      }
+    end
+  end
 end

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,68 +22,76 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Form -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
+# Form -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/composite'
-require 'htmlgrid/submit'
+require "htmlgrid/composite"
+require "htmlgrid/submit"
 
 module HtmlGrid
-	module FormMethods
-		AUTOFILL = false
-    ACCEPT_CHARSET = 'UTF-8'
-		EVENT = nil
-		FORM_ACTION = nil
-		FORM_METHOD = 'POST'
-		FORM_NAME = 'stdform'
-		TAG_METHOD	= :form
-		def autofill?
-			self.class.const_get(:AUTOFILL)
-		end
-		def event
-			self::class::EVENT
-		end
-		def formname
-			if(defined? self::class::FORM_NAME)
-				self::class::FORM_NAME 
-			end
-		end
-		def onsubmit=(onsubmit)
-			@form_properties["onSubmit"] = onsubmit
-		end
-		def to_html(context)
-			context.send(self::class::TAG_METHOD, @form_properties) {
-				super << context.div('style'=>'display:none') { hidden_fields(context) }
-			}
-		end
-		private
-		def hidden_fields(context)
-			'' << 
-			context.hidden('flavor', @lookandfeel.flavor) << 
-			context.hidden('language', @lookandfeel.language) << 
-			context.hidden({'NAME' => 'event', 'ID' => 'event', 
-				'VALUE' => event.to_s}) << 
-			context.hidden('state_id', @session.state.object_id.to_s)
-		end
-		def init
-			@form_properties = {}
-			if(defined? self::class::FORM_CSS_CLASS)
-				@form_properties.store('class', self::class::FORM_CSS_CLASS)
-			end
-			if(defined? self::class::FORM_NAME)
-				@form_properties.store('NAME', self::class::FORM_NAME)
-			end
-			if(defined? self::class::FORM_ID)
-				@form_properties.store('ID', self::class::FORM_ID)
-			end
-			super
-			@form_properties.update({
-				'METHOD'					=>	self::class::FORM_METHOD.dup,
-				'ACTION'					=>	(self::class::FORM_ACTION || @lookandfeel.base_url),
-				'ACCEPT-CHARSET'	=>	self::class::ACCEPT_CHARSET,
-			})
-		end
-	end
-	class Form < Composite
-		include FormMethods
-	end
+  module FormMethods
+    AUTOFILL = false
+    ACCEPT_CHARSET = "UTF-8"
+    EVENT = nil
+    FORM_ACTION = nil
+    FORM_METHOD = "POST"
+    FORM_NAME = "stdform"
+    TAG_METHOD	= :form
+    def autofill?
+      self.class.const_get(:AUTOFILL)
+    end
+
+    def event
+      self.class::EVENT
+    end
+
+    def formname
+      if defined? self.class::FORM_NAME
+        self.class::FORM_NAME
+      end
+    end
+
+    def onsubmit=(onsubmit)
+      @form_properties["onSubmit"] = onsubmit
+    end
+
+    def to_html(context)
+      context.send(self.class::TAG_METHOD, @form_properties) {
+        super << context.div("style" => "display:none") { hidden_fields(context) }
+      }
+    end
+
+    private
+
+    def hidden_fields(context)
+      "" <<
+        context.hidden("flavor", @lookandfeel.flavor) <<
+        context.hidden("language", @lookandfeel.language) <<
+        context.hidden({"NAME" => "event", "ID" => "event",
+                        "VALUE" => event.to_s}) <<
+        context.hidden("state_id", @session.state.object_id.to_s)
+    end
+
+    def init
+      @form_properties = {}
+      if defined? self.class::FORM_CSS_CLASS
+        @form_properties.store("class", self.class::FORM_CSS_CLASS)
+      end
+      if defined? self.class::FORM_NAME
+        @form_properties.store("NAME", self.class::FORM_NAME)
+      end
+      if defined? self.class::FORM_ID
+        @form_properties.store("ID", self.class::FORM_ID)
+      end
+      super
+      @form_properties.update({
+        "METHOD"	=>	self.class::FORM_METHOD.dup,
+        "ACTION"	=>	(self.class::FORM_ACTION || @lookandfeel.base_url),
+        "ACCEPT-CHARSET"	=>	self.class::ACCEPT_CHARSET
+      })
+    end
+  end
+
+  class Form < Composite
+    include FormMethods
+  end
 end

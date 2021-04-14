@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,26 +22,27 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# CenteredComposite -- htmlgrid -- 7.1.2003 -- hwyss@ywesee.com 
+# CenteredComposite -- htmlgrid -- 7.1.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/composite'
+require "htmlgrid/composite"
 
 module HtmlGrid
-	class CenteredComposite < Composite
-		TABLE_ATTRIBUTES = {
-			"style"	=>	"margin-left:auto;margin-right:auto;text-align:left",
-		}
-		DIV_ATTRIBUTES = {
-			"style"	=>	"text-align:center;margin-left:auto;margin-right:auto;text-align:left",
-		}
-		def to_html(context)
-			context.div(self::class::DIV_ATTRIBUTES) {
-				super 
-			}
-		end
-		def init
-			super
-			@attributes.update(self::class::TABLE_ATTRIBUTES)
-		end
-	end
+  class CenteredComposite < Composite
+    TABLE_ATTRIBUTES = {
+      "style"	=>	"margin-left:auto;margin-right:auto;text-align:left"
+    }
+    DIV_ATTRIBUTES = {
+      "style"	=>	"text-align:center;margin-left:auto;margin-right:auto;text-align:left"
+    }
+    def to_html(context)
+      context.div(self.class::DIV_ATTRIBUTES) {
+        super
+      }
+    end
+
+    def init
+      super
+      @attributes.update(self.class::TABLE_ATTRIBUTES)
+    end
+  end
 end

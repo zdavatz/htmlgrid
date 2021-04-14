@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,14 +22,14 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Form -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
+# Form -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/form'
-require 'htmlgrid/divcomposite'
-require 'htmlgrid/submit'
+require "htmlgrid/form"
+require "htmlgrid/divcomposite"
+require "htmlgrid/submit"
 
 module HtmlGrid
-	class DivForm < DivComposite
-		include FormMethods
-	end
+  class DivForm < DivComposite
+    include FormMethods
+  end
 end

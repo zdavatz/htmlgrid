@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,20 +22,20 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com
 #
-# BooleanValue -- oddb -- 28.07.2003 -- hwyss@ywesee.com 
+# BooleanValue -- oddb -- 28.07.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class BooleanValue < NamedComponent
-		LABEL = true
-		def init
-			bool = if(@model.respond_to?(@name) && @model.send(@name))
-				:true
-			else
-				:false
-			end
-			@value = @lookandfeel.lookup(bool)
-		end
-	end
+  class BooleanValue < NamedComponent
+    LABEL = true
+    def init
+      bool = if @model.respond_to?(@name) && @model.send(@name)
+        :true
+      else
+        :false
+      end
+      @value = @lookandfeel.lookup(bool)
+    end
+  end
 end

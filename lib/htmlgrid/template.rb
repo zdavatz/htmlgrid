@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,120 +24,135 @@
 #
 # Template -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/composite'
-require 'uri'
+require "htmlgrid/composite"
+require "uri"
 
 module HtmlGrid
-	module TemplateMethods
-		CONTENT = nil
-		FOOT = nil
-		HEAD = nil
-		META_TAGS = []
-		LEGACY_INTERFACE = true
-		CSS_FILES = []
-		JAVASCRIPTS = []
-    @@local_doc_dir = File.join(Dir.pwd, 'doc')
-    def TemplateMethods.get_inline(ressource)
+  module TemplateMethods
+    CONTENT = nil
+    FOOT = nil
+    HEAD = nil
+    META_TAGS = []
+    LEGACY_INTERFACE = true
+    CSS_FILES = []
+    JAVASCRIPTS = []
+    @@local_doc_dir = File.join(Dir.pwd, "doc")
+    def self.get_inline(ressource)
       return nil unless ressource
       local_file = File.join(@@local_doc_dir, URI(ressource).path)
       File.exist?(local_file) ? File.read(local_file) : nil
     end
-		def css_link(context, path=@lookandfeel.resource(:css))
-			properties = {
-				"rel"		=>	"stylesheet",
-				"type"	=>	"text/css",
-				"async"	=>	"true",
-				'href'	=>	path,
-			}
+
+    def css_link(context, path = @lookandfeel.resource(:css))
+      properties = {
+        "rel"	=>	"stylesheet",
+        "type"	=>	"text/css",
+        "async"	=>	"true",
+        "href"	=>	path
+      }
       if (content = TemplateMethods.get_inline(path))
-        properties.delete('href')
+        properties.delete("href")
         context.style(properties) { content }
       else
         context.link(properties)
       end
-		end
-		def css_links(context, path=@lookandfeel.resource(:css))
-			links = self.class.const_get(:CSS_FILES).collect { |key|
-				css_link(context, @lookandfeel.resource(key))
-			}
-			links.push(css_link(context, path)) if(path)
-			links.join
-		end
-		def content(model, session=nil)
-			__standard_component(model, self::class::CONTENT)
-		end
-		def dynamic_html_headers(context)
-			''
-		end
-		def foot(model, session=nil)
-			__standard_component(model, self::class::FOOT)
-		end
-		def head(model, session=nil)
-			__standard_component(model, self::class::HEAD)
-		end
-		def __standard_component(model, klass)
-			if(klass.is_a?(Class))
-				klass.new(model, @session, self)
-			end
-		end
-		def html_head(context, &block)
-			context.head {
-				if(block_given?)
-					block.call
-        end
+    end
+
+    def css_links(context, path = @lookandfeel.resource(:css))
+      links = self.class.const_get(:CSS_FILES).collect { |key|
+        css_link(context, @lookandfeel.resource(key))
+      }
+      links.push(css_link(context, path)) if path
+      links.join
+    end
+
+    def content(model, session = nil)
+      __standard_component(model, self.class::CONTENT)
+    end
+
+    def dynamic_html_headers(context)
+      ""
+    end
+
+    def foot(model, session = nil)
+      __standard_component(model, self.class::FOOT)
+    end
+
+    def head(model, session = nil)
+      __standard_component(model, self.class::HEAD)
+    end
+
+    def __standard_component(model, klass)
+      if klass.is_a?(Class)
+        klass.new(model, @session, self)
+      end
+    end
+
+    def html_head(context, &block)
+      context.head {
+        block&.call
         context.head << title(context) <<
-				meta_tags(context) <<
-				other_html_headers(context) <<
-				css_links(context) <<
-				javascripts(context)
-			}
-		end
-		def javascripts(context)
-			jscripts = self.class.const_get(:JAVASCRIPTS).collect { |key|
-				properties = {
-					"language"	=>	"JavaScript",
-					"type"			=>	"text/javascript",
-					"src"				=>	@lookandfeel.resource_global(:javascript, "#{key}.js"),
-				}
-				context.script(properties)
-			}
-			jscripts.join
-		end
-		def meta_tags(context)
-			self::class::META_TAGS.inject('') { |inj, properties|
-				inj << context.meta(properties)
-			}
-		end
-		def onload=(script)
-			@attributes['onload'] = script
-		end
-		def other_html_headers(context)
-			dynamic_html_headers(context)
-		end
-		def template_html(context, &block)
-			args = {}
-			if(dtd = @lookandfeel.lookup(:DOCTYPE))
-				args.store('DOCTYPE', dtd)
-			end
-			context.html(args) {
-				html_head(context) << context.body(@attributes) {
-					template_tags(context, &block)
-				}
-			}
-		end
-		def template_tags(context, &block)
-			block.call
-		end
-		def title(context)
-			context.title { @lookandfeel.lookup(:html_title) }
-		end
-		def to_html(context)
-			template_html(context) {
-				super(context)
-			}
-		end
-	end
-	class Template < Composite
-		include TemplateMethods
-	end
+          meta_tags(context) <<
+          other_html_headers(context) <<
+          css_links(context) <<
+          javascripts(context)
+      }
+    end
+
+    def javascripts(context)
+      jscripts = self.class.const_get(:JAVASCRIPTS).collect { |key|
+        properties = {
+          "language"	=>	"JavaScript",
+          "type"	=>	"text/javascript",
+          "src"	=>	@lookandfeel.resource_global(:javascript, "#{key}.js")
+        }
+        context.script(properties)
+      }
+      jscripts.join
+    end
+
+    def meta_tags(context)
+      self.class::META_TAGS.inject("") { |inj, properties|
+        inj << context.meta(properties)
+      }
+    end
+
+    def onload=(script)
+      @attributes["onload"] = script
+    end
+
+    def other_html_headers(context)
+      dynamic_html_headers(context)
+    end
+
+    def template_html(context, &block)
+      args = {}
+      if (dtd = @lookandfeel.lookup(:DOCTYPE))
+        args.store("DOCTYPE", dtd)
+      end
+      context.html(args) {
+        html_head(context) << context.body(@attributes) {
+          template_tags(context, &block)
+        }
+      }
+    end
+
+    def template_tags(context, &block)
+      block.call
+    end
+
+    def title(context)
+      context.title { @lookandfeel.lookup(:html_title) }
+    end
+
+    def to_html(context)
+      template_html(context) {
+        super(context)
+      }
+    end
+  end
+
+  class Template < Composite
+    include TemplateMethods
+  end
 end

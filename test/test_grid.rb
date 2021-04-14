@@ -27,53 +27,62 @@ $: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.expand_path("../ext", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'minitest/autorun'
-require 'stub/cgi'
-require 'htmlgrid/label'
-require 'htmlgrid/grid'
-require 'test_helper'
+require "minitest/autorun"
+require "stub/cgi"
+require "htmlgrid/label"
+require "htmlgrid/grid"
+require "test_helper"
 
 class TestGrid < Minitest::Test
-	class StubLabel
-		include Enumerable
-		def each
-			yield "foo"
-			yield "bar"
-		end
-		def to_html(cgi)
-			"foo"
-		end
-	end
-	class StubGridComponent
-		attr_reader :attributes
-		def initialize
-			@attributes = {"class"	=>	"foo"}
-		end
-		def to_html(context)
-			"bar"
-		end
-		def set_attribute(key, value)
-			@attributes.store(key, value)
-		end
-	end
-	class StubNilComponent
-		attr_reader :attributes
-		def initialize
-			@attributes = {}
-		end
-		def to_html(context)
-			nil
-		end
-	end
+  class StubLabel
+    include Enumerable
+    def each
+      yield "foo"
+      yield "bar"
+    end
+
+    def to_html(cgi)
+      "foo"
+    end
+  end
+
+  class StubGridComponent
+    attr_reader :attributes
+    def initialize
+      @attributes = {"class"	=>	"foo"}
+    end
+
+    def to_html(context)
+      "bar"
+    end
+
+    def set_attribute(key, value)
+      @attributes.store(key, value)
+    end
+  end
+
+  class StubNilComponent
+    attr_reader :attributes
+    def initialize
+      @attributes = {}
+    end
+
+    def to_html(context)
+      nil
+    end
+  end
+
   def setup
     @grid = HtmlGrid::Grid.new
   end
+
   def test_initialize
     assert_equal(1, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR></TABLE>'
-		assert_equal(expected, @grid.to_html(CGI.new))
+    assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add
     @grid.add("test", 0, 0)
     assert_equal(1, @grid.width)
@@ -81,6 +90,7 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add2
     @grid.add(nil, 0, 0)
     @grid.add(nil, 0, 0)
@@ -89,6 +99,7 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add3
     @grid.add(2, 0, 0)
     assert_equal(1, @grid.width)
@@ -96,6 +107,7 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_field
     @grid.add_field("test", 0, 0)
     assert_equal(1, @grid.width)
@@ -103,30 +115,34 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
-	def test_add_multiple
-	  @grid.add("test", 0, 0)
+
+  def test_add_multiple
+    @grid.add("test", 0, 0)
     assert_equal(1, @grid.width)
     assert_equal(1, @grid.height)
-	  @grid.add("foo", 0, 0)
-    assert_equal(1, @grid.width)
-    assert_equal(1, @grid.height)
-    expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
-    assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_add_multiple__2
-	  @grid.add(["test", "foo"], 0, 0)
+    @grid.add("foo", 0, 0)
     assert_equal(1, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_add_multiple__3
-	  @grid.add(["test", nil, "foo"], 0, 0)
+  end
+
+  def test_add_multiple__2
+    @grid.add(["test", "foo"], 0, 0)
+    assert_equal(1, @grid.width)
+    assert_equal(1, @grid.height)
+    expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+  end
+
+  def test_add_multiple__3
+    @grid.add(["test", nil, "foo"], 0, 0)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>testfoo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
     assert_equal(1, @grid.width)
-	end
+  end
+
   def test_add_fieldx
     @grid.add("test", 1, 0)
     assert_equal(2, @grid.width)
@@ -134,6 +150,7 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_fieldy
     @grid.add("test", 0, 1)
     assert_equal(1, @grid.width)
@@ -141,6 +158,7 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_fieldxy
     @grid.add("test", 1, 1)
     assert_equal(2, @grid.width)
@@ -148,6 +166,7 @@ class TestGrid < Minitest::Test
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_fieldyx
     @grid.add("test", 0, 1)
     @grid.add("test", 1, 0)
@@ -155,174 +174,197 @@ class TestGrid < Minitest::Test
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>test</TD></TR><TR><TD>test</TD><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-
   end
+
   def test_add_row1
-    @grid.add_row(["test1", "test2"], 0,0)
+    @grid.add_row(["test1", "test2"], 0, 0)
     assert_equal(2, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>test1</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_row2
-    @grid.add_row(["test1", "test2"], 0,1)
+    @grid.add_row(["test1", "test2"], 0, 1)
     assert_equal(2, @grid.width)
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>test1</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_row3
-    @grid.add_row(["test1", "test2"], 1,0)
+    @grid.add_row(["test1", "test2"], 1, 0)
     assert_equal(3, @grid.width)
     assert_equal(1, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>test1</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_column1
-    @grid.add_column(["test1", "test2"], 0,0)
+    @grid.add_column(["test1", "test2"], 0, 0)
     assert_equal(1, @grid.width)
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>test1</TD></TR><TR><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_column2
-    @grid.add_column(["test1", "test2"], 0,1)
+    @grid.add_column(["test1", "test2"], 0, 1)
     assert_equal(1, @grid.width)
     assert_equal(3, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR><TD>test1</TD></TR><TR><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
+
   def test_add_column3
-    @grid.add_column(["test1", "test2"], 1,0)
+    @grid.add_column(["test1", "test2"], 1, 0)
     assert_equal(2, @grid.width)
     assert_equal(2, @grid.height)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>test1</TD></TR><TR><TD>&nbsp;</TD><TD>test2</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
-	def test_add_tag1
-		@grid.add_tag('TH', 0, 0)
-		expected = '<TABLE cellspacing="0"><TR><TH>&nbsp;</TH></TR></TABLE>'
+
+  def test_add_tag1
+    @grid.add_tag("TH", 0, 0)
+    expected = '<TABLE cellspacing="0"><TR><TH>&nbsp;</TH></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_add_tag2
-		@grid.add_tag('TH', 0, 0, 2)
-		expected = '<TABLE cellspacing="0"><TR><TH>&nbsp;</TH><TH>&nbsp;</TH></TR></TABLE>'
+  end
+
+  def test_add_tag2
+    @grid.add_tag("TH", 0, 0, 2)
+    expected = '<TABLE cellspacing="0"><TR><TH>&nbsp;</TH><TH>&nbsp;</TH></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_add_tag3
-		@grid.add_tag('TH', 0, 0, 1, 2)
-		expected = '<TABLE cellspacing="0"><TR><TH>&nbsp;</TH></TR><TR><TH>&nbsp;</TH></TR></TABLE>'
+  end
+
+  def test_add_tag3
+    @grid.add_tag("TH", 0, 0, 1, 2)
+    expected = '<TABLE cellspacing="0"><TR><TH>&nbsp;</TH></TR><TR><TH>&nbsp;</TH></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_add_component_style
-		thing = StubGridComponent.new
-		@grid.add(thing, 1,1)
-		@grid.add_component_style('foobar', 0,0,2,2)
-		assert_equal('foobar', thing.attributes['class'])
-	end
-	def test_add_style
-		@grid.add_style('foo', 0,0)
-		expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_add_component_style
+    thing = StubGridComponent.new
+    @grid.add(thing, 1, 1)
+    @grid.add_component_style("foobar", 0, 0, 2, 2)
+    assert_equal("foobar", thing.attributes["class"])
+  end
+
+  def test_add_style
+    @grid.add_style("foo", 0, 0)
+    expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-		@grid.add(nil, 1,1)
-		@grid.add_style('bar', 0, 1, 2)
-		expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD>'
-		expected << '<TD>&nbsp;</TD></TR><TR><TD class="bar">&nbsp;</TD>'
-		expected << '<TD class="bar">&nbsp;</TD></TR></TABLE>'
+    @grid.add(nil, 1, 1)
+    @grid.add_style("bar", 0, 1, 2)
+    expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD>'
+    expected << '<TD>&nbsp;</TD></TR><TR><TD class="bar">&nbsp;</TD>'
+    expected << '<TD class="bar">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-		@grid.add_style('foobar', 0,0,2,2)
-		expected = '<TABLE cellspacing="0"><TR><TD class="foobar">&nbsp;</TD>'
-		expected << '<TD class="foobar">&nbsp;</TD></TR>'
-		expected << '<TR><TD class="foobar">&nbsp;</TD>'
-		expected << '<TD class="foobar">&nbsp;</TD></TR></TABLE>'
+    @grid.add_style("foobar", 0, 0, 2, 2)
+    expected = '<TABLE cellspacing="0"><TR><TD class="foobar">&nbsp;</TD>'
+    expected << '<TD class="foobar">&nbsp;</TD></TR>'
+    expected << '<TR><TD class="foobar">&nbsp;</TD>'
+    expected << '<TD class="foobar">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_add_attribute
-		@grid.add_attribute('foo', 'bar', 0, 0)
-		expected = '<TABLE cellspacing="0"><TR><TD foo="bar">&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_add_attribute
+    @grid.add_attribute("foo", "bar", 0, 0)
+    expected = '<TABLE cellspacing="0"><TR><TD foo="bar">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_colspan1
-    @grid.set_colspan(1,1,2)
-		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD colspan="2">&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_set_colspan1
+    @grid.set_colspan(1, 1, 2)
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD colspan="2">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_colspan2
+  end
+
+  def test_set_colspan2
     @grid.add("test", 2, 2)
-    @grid.set_colspan(0,0)
-		expected = '<TABLE cellspacing="0"><TR><TD colspan="3">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
+    @grid.set_colspan(0, 0)
+    expected = '<TABLE cellspacing="0"><TR><TD colspan="3">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-    @grid.set_colspan(1,1)
-		expected = '<TABLE cellspacing="0"><TR><TD colspan="3">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD colspan="2">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
+    @grid.set_colspan(1, 1)
+    expected = '<TABLE cellspacing="0"><TR><TD colspan="3">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD colspan="2">&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_push
-		@grid.add("bar",4,0)
-		@grid.push("foo")
-		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD>'
-		expected << '<TD>&nbsp;</TD><TD>&nbsp;</TD><TD>bar</TD></TR>'
-		expected << '<TR><TD colspan="5">foo</TD></TR></TABLE>'
-		assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_matrix
-		matrix = [1,1]
+  end
+
+  def test_push
+    @grid.add("bar", 4, 0)
+    @grid.push("foo")
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD>'
+    expected << "<TD>&nbsp;</TD><TD>&nbsp;</TD><TD>bar</TD></TR>"
+    expected << '<TR><TD colspan="5">foo</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+  end
+
+  def test_matrix
+    matrix = [1, 1]
     @grid.add("test", *matrix)
     expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR><TD>&nbsp;</TD><TD>test</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_attributes
-		### this test has changed behavior: its not desirable to have magically
-		### transferred css information from a component to its container
-		@grid.add(StubGridComponent.new, 0,0)
-		expected = '<TABLE cellspacing="0"><TR><TD>bar</TD></TR></TABLE>'
+  end
+
+  def test_attributes
+    ### this test has changed behavior: its not desirable to have magically
+    ### transferred css information from a component to its container
+    @grid.add(StubGridComponent.new, 0, 0)
+    expected = '<TABLE cellspacing="0"><TR><TD>bar</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_attribute1
-		@grid.set_attribute("foo", "bar")
-		expected = '<TABLE cellspacing="0" foo="bar"><TR><TD>&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_set_attribute1
+    @grid.set_attribute("foo", "bar")
+    expected = '<TABLE cellspacing="0" foo="bar"><TR><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_attribute2
-		@grid.set_attribute("foo", nil)
-		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_set_attribute2
+    @grid.set_attribute("foo", nil)
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_attributes
-		hash = {"foo"=>"bar", "baz"=>"bash"}
-		@grid.set_attributes(hash)
-		expected = [
-			'<TABLE cellspacing="0" foo="bar" baz="bash"><TR><TD>&nbsp;</TD></TR></TABLE>',
-			'<TABLE cellspacing="0" baz="bash" foo="bar"><TR><TD>&nbsp;</TD></TR></TABLE>',
-		]
-		result = @grid.to_html(CGI.new)
+  end
+
+  def test_set_attributes
+    hash = {"foo" => "bar", "baz" => "bash"}
+    @grid.set_attributes(hash)
+    expected = [
+      '<TABLE cellspacing="0" foo="bar" baz="bash"><TR><TD>&nbsp;</TD></TR></TABLE>',
+      '<TABLE cellspacing="0" baz="bash" foo="bar"><TR><TD>&nbsp;</TD></TR></TABLE>'
+    ]
+    result = @grid.to_html(CGI.new)
     assert_equal(true, expected.include?(result), result)
-	end
-	def test_set_row_attributes1
-		@grid.set_row_attributes({'foo' => 'bar'}, 0)
-		expected = '<TABLE cellspacing="0"><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_set_row_attributes1
+    @grid.set_row_attributes({"foo" => "bar"}, 0)
+    expected = '<TABLE cellspacing="0"><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_row_attributes2
-		@grid.set_row_attributes({'foo' => 'bar'}, 1)
-		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_set_row_attributes2
+    @grid.set_row_attributes({"foo" => "bar"}, 1)
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_set_row_attributes3
-		@grid.set_row_attributes({'foo' => 'bar'}, 1, 2)
-        expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD><TD>&nbsp;</TD></TR></TABLE>'
+  end
+
+  def test_set_row_attributes3
+    @grid.set_row_attributes({"foo" => "bar"}, 1, 2)
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD></TR><TR foo="bar"><TD>&nbsp;</TD><TD>&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
-	end
-	def test_insert_row
-		assert_equal(1, @grid.height)
-		@grid.add("testfeld", 0, 1)
-		assert_equal(2, @grid.height)
-		expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR><TD>testfeld</TD></TR></TABLE>'
-		assert_equal(expected, @grid.to_html(CGI.new))
-		@grid.insert_row(0, "testreihe")
-		assert_equal(3, @grid.height)
-		expected = '<TABLE cellspacing="0"><TR><TD>testreihe</TD></TR><TR><TD>&nbsp;</TD></TR><TR><TD>testfeld</TD></TR></TABLE>'
-		assert_equal(expected, @grid.to_html(CGI.new))
-	end
+  end
+
+  def test_insert_row
+    assert_equal(1, @grid.height)
+    @grid.add("testfeld", 0, 1)
+    assert_equal(2, @grid.height)
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD></TR><TR><TD>testfeld</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+    @grid.insert_row(0, "testreihe")
+    assert_equal(3, @grid.height)
+    expected = '<TABLE cellspacing="0"><TR><TD>testreihe</TD></TR><TR><TD>&nbsp;</TD></TR><TR><TD>testfeld</TD></TR></TABLE>'
+    assert_equal(expected, @grid.to_html(CGI.new))
+  end
 
   # @todo
   #   What does this test? (gabage collection?)
@@ -341,41 +383,47 @@ class TestGrid < Minitest::Test
     @grid.to_html(CGI.new)
   end
 
-	def test_label
-		label = StubLabel.new
-		@grid.add(label, 0,0)
-		result = @grid.to_html(CGI.new)
-		assert_equal('<TABLE cellspacing="0"><TR><TD>foo</TD><TD>bar</TD></TR></TABLE>', result)
-	end
-	def test_field_attribute
-		@grid.add_attribute('foo', 'bar', 0, 0)
-		assert_equal('bar', @grid.field_attribute('foo', 0, 0))
-	end
-	def test_nil_attribute1
-		@grid.add_attribute('foo', nil, 0, 0)
-			@grid.to_html(CGI.new)
-	end
-	def test_nil_attribute2
-		thing = StubGridComponent.new
-		thing.set_attribute("class", nil)
-		@grid.add(thing, 0,0)
+  def test_label
+    label = StubLabel.new
+    @grid.add(label, 0, 0)
+    result = @grid.to_html(CGI.new)
+    assert_equal('<TABLE cellspacing="0"><TR><TD>foo</TD><TD>bar</TD></TR></TABLE>', result)
+  end
+
+  def test_field_attribute
+    @grid.add_attribute("foo", "bar", 0, 0)
+    assert_equal("bar", @grid.field_attribute("foo", 0, 0))
+  end
+
+  def test_nil_attribute1
+    @grid.add_attribute("foo", nil, 0, 0)
     @grid.to_html(CGI.new)
-	end
-	def test_nil_component
-		thing = StubNilComponent.new
-		@grid.add(thing, 0,0)
+  end
+
+  def test_nil_attribute2
+    thing = StubGridComponent.new
+    thing.set_attribute("class", nil)
+    @grid.add(thing, 0, 0)
     @grid.to_html(CGI.new)
-	end
-	def test_add_negative
-		assert( @grid.add('foo', -1, 0) )
-		assert( @grid.add('foo', 0, -1) )
-		assert( @grid.add(['foo', 'bar'], -1, 0) )
-		assert( @grid.add(['foo', 'bar'], 0, -1) )
-	end
-	def test_add_style_negative
-		assert( @grid.add_style('bar', -1, 1) )
-		assert( @grid.add_style('bar', 1, -1) )
-		assert( @grid.add_style('bar', 1, 1, -1) )
-		assert( @grid.add_style('bar', 1, 1, 1,-1) )
-	end
+  end
+
+  def test_nil_component
+    thing = StubNilComponent.new
+    @grid.add(thing, 0, 0)
+    @grid.to_html(CGI.new)
+  end
+
+  def test_add_negative
+    assert(@grid.add("foo", -1, 0))
+    assert(@grid.add("foo", 0, -1))
+    assert(@grid.add(["foo", "bar"], -1, 0))
+    assert(@grid.add(["foo", "bar"], 0, -1))
+  end
+
+  def test_add_style_negative
+    assert(@grid.add_style("bar", -1, 1))
+    assert(@grid.add_style("bar", 1, -1))
+    assert(@grid.add_style("bar", 1, 1, -1))
+    assert(@grid.add_style("bar", 1, 1, 1, -1))
+  end
 end

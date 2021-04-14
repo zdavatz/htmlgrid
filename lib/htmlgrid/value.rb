@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,15 +22,15 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Value -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com 
+# Value -- htmlgrid -- 19.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class Value < NamedComponent
-		LABEL = true
-		def init
-			@value = @model.send(@name) if @model.respond_to?(@name)
-		end
-	end
+  class Value < NamedComponent
+    LABEL = true
+    def init
+      @value = @model.send(@name) if @model.respond_to?(@name)
+    end
+  end
 end

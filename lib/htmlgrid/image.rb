@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,22 +22,23 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Image -- htmlgrid -- 27.11.2002 -- hwyss@ywesee.com 
+# Image -- htmlgrid -- 27.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class Image < NamedComponent
-		def init
-			super
-			if(@lookandfeel)
-				@attributes['src'] = @lookandfeel.resource(@name)
-				@attributes['alt'] = @lookandfeel.lookup(@name)
-			end
-			#@attributes['border'] = "0"
-		end
-		def to_html(context)
-			context.img(@attributes)
-		end
-	end
+  class Image < NamedComponent
+    def init
+      super
+      if @lookandfeel
+        @attributes["src"] = @lookandfeel.resource(@name)
+        @attributes["alt"] = @lookandfeel.lookup(@name)
+      end
+      # @attributes['border'] = "0"
+    end
+
+    def to_html(context)
+      context.img(@attributes)
+    end
+  end
 end

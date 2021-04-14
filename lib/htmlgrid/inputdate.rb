@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,17 +22,17 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-#InputDate -- htmlgrid -- 22.04.2003 -- benfay@ywesee.com
+# InputDate -- htmlgrid -- 22.04.2003 -- benfay@ywesee.com
 
-require	'htmlgrid/inputtext'
+require	"htmlgrid/inputtext"
 
 module HtmlGrid
-	class InputDate < InputText
-		def init
-			super
-			if(@value.respond_to?(:strftime))
-				@attributes['value'] = @value.strftime(@lookandfeel.lookup(:date_format))
-			end
-		end
-	end
+  class InputDate < InputText
+    def init
+      super
+      if @value.respond_to?(:strftime)
+        @attributes["value"] = @value.strftime(@lookandfeel.lookup(:date_format))
+      end
+    end
+  end
 end

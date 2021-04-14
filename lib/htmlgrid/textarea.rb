@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,26 +24,28 @@
 #
 # Textarea -- htmlgrid  -- 12.12.2002 -- benfay@ywesee.com
 
-require 'htmlgrid/input'
+require "htmlgrid/input"
 
 module HtmlGrid
-	class Textarea < Input
-		attr_writer :value
+  class Textarea < Input
+    attr_writer :value
     attr_accessor :unescaped
-		def to_html(context)
-			context.textarea(@attributes) {
-				_to_html(context, @value)
-			}
-		end
+    def to_html(context)
+      context.textarea(@attributes) {
+        _to_html(context, @value)
+      }
+    end
+
     def escape_value(elm)
       @unescaped ? elm.to_s : escape(elm.to_s)
     end
-		def _to_html(context, value=@value)
-			if(value.is_a?(Array))
-				value.collect { |elm| escape_value elm }.join("\n")
-			else
-				escape_value value
-			end.strip
-		end
-	end
+
+    def _to_html(context, value = @value)
+      if value.is_a?(Array)
+        value.collect { |elm| escape_value elm }.join("\n")
+      else
+        escape_value value
+      end.strip
+    end
+  end
 end

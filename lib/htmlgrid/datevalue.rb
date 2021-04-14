@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,18 +22,18 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# DateValue -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com 
+# DateValue -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class DateValue < NamedComponent
-		LABEL = true
-		def to_html(context)
-			date = @model.send(@name)
-			if(date.respond_to?(:strftime))
-				date.strftime(@lookandfeel.lookup(:date_format)) 
-			end
-		end
-	end
+  class DateValue < NamedComponent
+    LABEL = true
+    def to_html(context)
+      date = @model.send(@name)
+      if date.respond_to?(:strftime)
+        date.strftime(@lookandfeel.lookup(:date_format))
+      end
+    end
+  end
 end

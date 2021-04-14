@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -25,17 +25,18 @@
 # InfoMessage -- htmlgrid -- 25.08.2003 -- mhuggler@ywesee.com
 
 module HtmlGrid
-	module InfoMessage
-		private
-		def info_message
-			if @session.info?
-				@session.infos.each { |info|
-					txt = HtmlGrid::Text.new(info, @model, @session, self)
-					@grid.insert_row(0, txt)
-					@grid.set_colspan(0,0)
-					@grid.add_style('info', 0, 0)
-				}
-			end
-		end
-	end
+  module InfoMessage
+    private
+
+    def info_message
+      if @session.info?
+        @session.infos.each { |info|
+          txt = HtmlGrid::Text.new(info, @model, @session, self)
+          @grid.insert_row(0, txt)
+          @grid.set_colspan(0, 0)
+          @grid.add_style("info", 0, 0)
+        }
+      end
+    end
+  end
 end

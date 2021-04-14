@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,24 +22,24 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Template -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com 
+# Template -- htmlgrid -- 23.10.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/composite'
+require "htmlgrid/composite"
 
 module HtmlGrid
-	class SpanComposite < TagComposite
-		def to_html(context)
-			res = ''
-			@grid.each_with_index { |span, idx| 
-				res << context.span(tag_attributes(idx)) {
-					if(span.respond_to?(:to_html))
-						span.to_html(context).force_encoding('utf-8')
-					else
-						span	
-					end
-				}	
-			}
-			res
-		end
-	end
+  class SpanComposite < TagComposite
+    def to_html(context)
+      res = ""
+      @grid.each_with_index { |span, idx|
+        res << context.span(tag_attributes(idx)) {
+          if span.respond_to?(:to_html)
+            span.to_html(context).force_encoding("utf-8")
+          else
+            span
+          end
+        }
+      }
+      res
+    end
+  end
 end

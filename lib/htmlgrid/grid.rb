@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -27,118 +27,141 @@
 module HtmlGrid
   class Grid
     attr_accessor :width, :height
+
     private
+
     class Row
       class Field
         attr_reader :components, :tag
         ALLOWED_ATTRIBUTES = [
-          'align',
-          'class',
-          'colspan',
-          'style',
-          'tag',
-          'title',
+          "align",
+          "class",
+          "colspan",
+          "style",
+          "tag",
+          "title"
         ]
         def initialize
           @components = []
           @attributes = {}
           @tag = nil
         end
+
         def add(item)
-          if(item.is_a? Array)
+          if item.is_a? Array
             @components += item
           else
             @components.push item
           end
         end
+
         def add_background
           compose
-          @components.each { |component| 
+          @components.each { |component|
             component.add_background
           }
-          if(@attributes["class"])
-            @attributes["class"] += "-bg" unless @attributes["class"] =~ /-bg/
+          if @attributes["class"]
+            @attributes["class"] += "-bg" unless /-bg/.match?(@attributes["class"])
           else
             @attributes["class"] = "bg"
           end
         end
+
         def add_attribute(key, value)
           @attributes.store(key.to_s, value.to_s)
         end
+
         def add_component_style(style)
-          @components.each { |cmp| 
+          @components.each { |cmp|
             cmp.set_attribute("class", style) if cmp.respond_to?(:set_attribute)
           }
         end
+
         def add_style(style)
           @attributes["class"] = style
         end
+
         def attribute(key)
           @attributes[key]
         end
+
         def colspan
           @attributes.fetch("colspan", 1).to_i
         end
+
         def colspan=(span)
           @attributes["colspan"] = span.to_s if span.to_i > 1
         end
+
         def component_html(cgi)
-          html = ''
+          html = ""
           @components.each { |component|
-            if component.respond_to? :to_html
-              html << component.to_html(cgi).to_s.dup.force_encoding('utf-8')
+            html << if component.respond_to? :to_html
+              component.to_html(cgi).to_s.dup.force_encoding("utf-8")
             else
-              html << component.to_s
+              component.to_s
             end
           }
           html = "&nbsp;" if html.empty?
           html
         end
+
         def tag=(tag)
           @tag = tag.to_s.downcase
         end
+
         def to_html(context)
-          if(@tag && context.respond_to?(@tag))
-            context.send(@tag, @attributes) { 
-              component_html(context) }
+          if @tag && context.respond_to?(@tag)
+            context.send(@tag, @attributes) {
+              component_html(context)
+            }
           else
             context.td(@attributes) {
-              component_html(context) }
+              component_html(context)
+            }
           end
         end
       end
-      def initialize # Row
+
+      # Row
+      def initialize
         @width = 1
         @fields = [Field.new]
         @attributes = {}
       end
+
       def initialize_row w
-        if(w > @width)
-          @width.upto(w-1) { |ii| @fields[ii] ||= Field.new }
+        if w > @width
+          @width.upto(w - 1) { |ii| @fields[ii] ||= Field.new }
           @width = w
         end
       end
+
       def add(item, x)
         (@fields[x] ||= Field.new).add item
       end
-      def each_field(x, w=1)
-        x.upto([x+w, @width].min - 1) { |xx|
+
+      def each_field(x, w = 1)
+        x.upto([x + w, @width].min - 1) { |xx|
           yield(@fields[xx])
         }
       end
+
       def to_html cgi
         cgi.tr(@attributes) {
           field_html(cgi)
         }
       end
-      def field_attribute(key, x=0)
+
+      def field_attribute(key, x = 0)
         @fields[x].attribute(key)
       end
+
       def field_html(cgi)
         html = ""
         span = 1
         @fields.each { |field|
-          if(span < 2)
+          if span < 2
             html << field.to_html(cgi)
             span = field.colspan
           else
@@ -147,29 +170,33 @@ module HtmlGrid
         }
         html
       end
+
       def set_attributes(attr)
         @attributes = attr
       end
+
       def [](x)
-        begin
-          @fields[x]
-        rescue StandardError
-          nil
-        end
+        @fields[x]
+      rescue
+        nil
       end
     end
+
     public
-    def initialize(attributes={}) # Grid
+
+    # Grid
+    def initialize(attributes = {})
       @height = 1
       @width = 1
       @rows = [Row.new]
       @attributes = {
-        "cellspacing" =>  "0",
+        "cellspacing" => "0"
       }.update(attributes)
     end
+
     def initialize_grid(w, h)
-      if(w > @width || h > @height)
-        floor = (w > @width) ? 0 : @height
+      if w > @width || h > @height
+        floor = w > @width ? 0 : @height
         @width = [w, @width].max
         @height = [h, @height].max
         floor.upto(@height - 1) { |ii|
@@ -177,13 +204,14 @@ module HtmlGrid
         }
       end
     end
-    def add(arg, x, y, col=false)
-      if arg.kind_of?(Enumerable)
-        if arg.kind_of?(String)
+
+    def add(arg, x, y, col = false)
+      if arg.is_a?(Enumerable)
+        if arg.is_a?(String)
           add_field(arg, x, y)
-        elsif arg.kind_of?(Array)
+        elsif arg.is_a?(Array)
           arg.each do |item|
-            add_field(item, x ? x : '', y)
+            add_field(item, x || "", y)
           end
         elsif col
           add_column(arg, x, y)
@@ -194,16 +222,19 @@ module HtmlGrid
         add_field(arg, x, y)
       end
     end
-    def add_attribute(key, value, x, y, w=1, h=1)
+
+    def add_attribute(key, value, x, y, w = 1, h = 1)
       each_field(x, y, w, h) { |field|
         field.add_attribute(key, value)
       }
     end
-    def add_background(x, y, w=1, h=1)
+
+    def add_background(x, y, w = 1, h = 1)
       each_field(x, y, w, h) { |field|
         field.add_background(x, w)
       }
     end
+
     def add_column(arg, x, y)
       offset = 0
       arg.each do |item|
@@ -211,15 +242,18 @@ module HtmlGrid
         offset = offset.next
       end
     end
-    def add_component_style(style, x, y, w=1, h=1)
+
+    def add_component_style(style, x, y, w = 1, h = 1)
       each_field(x, y, w, h) { |field|
         field.add_component_style(style)
       }
     end
+
     def add_field(arg, x, y)
-      initialize_grid(x+1, y+1)
+      initialize_grid(x + 1, y + 1)
       (@rows[y] ||= Row.new).add(arg, x)
     end
+
     def add_row(arg, x, y)
       offset = 0
       arg.each do |item|
@@ -227,65 +261,75 @@ module HtmlGrid
         offset = offset.next
       end
     end
-    def add_style(style, x, y, w=1, h=1)
+
+    def add_style(style, x, y, w = 1, h = 1)
       each_field(x, y, w, h) { |field|
         field.add_style(style)
       }
     end
-    def add_tag(tag, x, y, w=1, h=1)
-      initialize_grid(x+w, y+h)
-      each_field(x, y, w, h) { |field| 
+
+    def add_tag(tag, x, y, w = 1, h = 1)
+      initialize_grid(x + w, y + h)
+      each_field(x, y, w, h) { |field|
         field.tag = tag
       }
     end
-    def each_field(x, y, w=1, h=1)
-      y.upto([y+h, @height].min - 1) { |yy|
-        @rows[yy].each_field(x,w) { |field|
+
+    def each_field(x, y, w = 1, h = 1)
+      y.upto([y + h, @height].min - 1) { |yy|
+        @rows[yy].each_field(x, w) { |field|
           yield(field)
         }
       }
     end
-    def field_attribute(key, x=0, y=0)
+
+    def field_attribute(key, x = 0, y = 0)
       @rows[y].field_attribute(key, x)
     end
-    def insert_row(y=0, arg=nil)
-      @rows[y, 0] = Row.new	
+
+    def insert_row(y = 0, arg = nil)
+      @rows[y, 0] = Row.new
       @height += 1
       add(arg, 0, y)
     end
-    def push(arg, x=0, y=height)
+
+    def push(arg, x = 0, y = height)
       add(arg, x, y)
-      set_colspan(x,y)
+      set_colspan(x, y)
     end
+
     def set_attribute(key, value)
       @attributes[key] = value
     end
+
     def set_attributes(hash)
       @attributes.update(hash)
     end
-    def set_colspan(x=0, y=0, span=(@width - x))
+
+    def set_colspan(x = 0, y = 0, span = (@width - x))
       span = span.to_i
-      initialize_grid(x+span, y+1)
-      self[x,y].colspan = span
+      initialize_grid(x + span, y + 1)
+      self[x, y].colspan = span
     end
-    def set_row_attributes(attr={}, y=0, offset=0)
+
+    def set_row_attributes(attr = {}, y = 0, offset = 0)
       # TODO
       # At the moment, offset value is not used
       # But probably offset value is used in grid.c
       initialize_grid(offset, y + 1)
       @rows[y].set_attributes(attr)
     end
+
     def to_html(cgi)
       cgi.table(@attributes) {
-        @rows.collect { |row| row.to_html(cgi).force_encoding('utf-8') }.join
+        @rows.collect { |row| row.to_html(cgi).force_encoding("utf-8") }.join
       }
     end
+
     def [](x, y)
-      begin
-        @rows[y][x]
-      rescue StandardError
-        nil
-      end
+      @rows[y][x]
+    rescue
+      nil
     end
   end
 end

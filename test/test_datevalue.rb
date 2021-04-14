@@ -21,40 +21,44 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# TestDateValue -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com 
+# TestDateValue -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com
 
 $: << File.expand_path("../lib", File.dirname(__FILE__))
 
-require 'minitest/autorun'
-require 'htmlgrid/datevalue'
-require 'stub/cgi'
-require 'date'
+require "minitest/autorun"
+require "htmlgrid/datevalue"
+require "stub/cgi"
+require "date"
 
 class StubDateLookandfeel
-	def lookup(key)
-		'%d.%m.%Y'
-	end
-	def attributes(key)
-		{}
-	end
+  def lookup(key)
+    "%d.%m.%Y"
+  end
+
+  def attributes(key)
+    {}
+  end
 end
+
 class StubDateSession
-	def lookandfeel
-		StubDateLookandfeel.new
-	end
+  def lookandfeel
+    StubDateLookandfeel.new
+  end
 end
+
 class StubDateProvider
-	def date
-		Date.new(2002,1,1)
-	end
+  def date
+    Date.new(2002, 1, 1)
+  end
 end
 
 class TestDateValue < Minitest::Test
-	def setup
-		@component = HtmlGrid::DateValue.new(:date, StubDateProvider.new,
-			StubDateSession.new)
-	end
-	def test_formatted
-		assert_equal('01.01.2002', @component.to_html(CGI.new))
-	end
+  def setup
+    @component = HtmlGrid::DateValue.new(:date, StubDateProvider.new,
+      StubDateSession.new)
+  end
+
+  def test_formatted
+    assert_equal("01.01.2002", @component.to_html(CGI.new))
+  end
 end

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,13 +24,13 @@
 #
 # Reset -- htmlgrid -- 14.01.2003 -- benfay@ywesee.com
 
-require 'htmlgrid/staticinput'
+require "htmlgrid/staticinput"
 
 module HtmlGrid
-	class Reset < StaticInput
-		def init
-			super
-			@attributes['type']	=	'reset'
-		end
-	end
+  class Reset < StaticInput
+    def init
+      super
+      @attributes["type"]	=	"reset"
+    end
+  end
 end

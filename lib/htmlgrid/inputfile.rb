@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -24,17 +24,18 @@
 #
 # InputFile -- oddb -- 29.07.2003 -- mhuggler@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class InputFile < NamedComponent
-		LABEL = true
-		def init
-			super
-			@attributes["type"] = 'file'
-		end
-		def to_html(context)
-			context.input(@attributes)
-		end
-	end
+  class InputFile < NamedComponent
+    LABEL = true
+    def init
+      super
+      @attributes["type"] = "file"
+    end
+
+    def to_html(context)
+      context.input(@attributes)
+    end
+  end
 end

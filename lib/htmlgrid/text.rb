@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -22,15 +22,15 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# Text -- htmlgrid -- 20.11.2002 -- hwyss@ywesee.com 
+# Text -- htmlgrid -- 20.11.2002 -- hwyss@ywesee.com
 
-require 'htmlgrid/namedcomponent'
+require "htmlgrid/namedcomponent"
 
 module HtmlGrid
-	class Text < NamedComponent
-		def init
-			super
-			@value = @lookandfeel.lookup(@name)
-		end
-	end
+  class Text < NamedComponent
+    def init
+      super
+      @value = @lookandfeel.lookup(@name)
+    end
+  end
 end

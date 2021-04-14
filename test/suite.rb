@@ -21,10 +21,10 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# suite.rb -- htmlgrid -- 20.11.2002 -- hwyss@ywesee.com 
+# suite.rb -- htmlgrid -- 20.11.2002 -- hwyss@ywesee.com
 
-$: << File.expand_path(File.dirname(__FILE__))
+$: << __dir__
 
 Dir.foreach(File.dirname(__FILE__)) { |file|
-	require file if /^test_.*\.rb$/o.match(file)
+  require file if /^test_.*\.rb$/o.match?(file)
 }

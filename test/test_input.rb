@@ -21,51 +21,57 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# TestInput -- htmlgrid -- 18.11.2002 -- hwyss@ywesee.com 
+# TestInput -- htmlgrid -- 18.11.2002 -- hwyss@ywesee.com
 
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
 $LOAD_PATH << File.dirname(__FILE__)
 
-require 'minitest/autorun'
-require 'stub/cgi'
-require 'htmlgrid/button'
-require 'htmlgrid/inputcurrency'
+require "minitest/autorun"
+require "stub/cgi"
+require "htmlgrid/button"
+require "htmlgrid/inputcurrency"
 
 class StubInputLookandfeel
-	def attributes(key)
-		{
-			"bar"	=>	"roz",
-		}
-	end
-	def lookup(key)
-		'Foo'
-	end
-	def lookandfeel
-		self
-	end
-	def format_price(price)
-		sprintf('%.2f', price.to_f/100.0) if price.to_i > 0
-	end
+  def attributes(key)
+    {
+      "bar"	=>	"roz"
+    }
+  end
+
+  def lookup(key)
+    "Foo"
+  end
+
+  def lookandfeel
+    self
+  end
+
+  def format_price(price)
+    sprintf("%.2f", price.to_f / 100.0) if price.to_i > 0
+  end
 end
+
 class StubInputModel
-	def foo
-		1234
-	end
+  def foo
+    1234
+  end
 end
 
 class TestInput < Minitest::Test
-	def test_input
-		input = HtmlGrid::Input.new(:foo, nil, StubInputLookandfeel.new)
+  def test_input
+    input = HtmlGrid::Input.new(:foo, nil, StubInputLookandfeel.new)
     assert_equal('<INPUT bar="roz" name="foo" value="">', input.to_html(CGI.new))
-	end
-	def test_button
-		input = HtmlGrid::Button.new(:foo, nil, StubInputLookandfeel.new)
+  end
+
+  def test_button
+    input = HtmlGrid::Button.new(:foo, nil, StubInputLookandfeel.new)
     assert_equal('<INPUT bar="roz" value="Foo" type="button" name="foo">', input.to_html(CGI.new))
-	end
+  end
 end
+
 class TestInputCurrency < Minitest::Test
-	def test_to_html
-		input = HtmlGrid::InputCurrency.new(:foo, StubInputModel.new, StubInputLookandfeel.new)
+  def test_to_html
+    input = HtmlGrid::InputCurrency.new(:foo, StubInputModel.new, StubInputLookandfeel.new)
     assert_equal('<INPUT bar="roz" name="foo" value="12.34" type="text">', input.to_html(CGI.new))
-	end
+  end
 end

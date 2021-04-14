@@ -21,50 +21,55 @@
 #	ywesee - intellectual capital connected, Winterthurerstrasse 52, CH-8006 Zuerich, Switzerland
 #	htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
-# TestSelect -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com 
+# TestSelect -- htmlgrid -- 10.03.2003 -- hwyss@ywesee.com
 
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
 $LOAD_PATH << File.dirname(__FILE__)
 
-require 'minitest/autorun'
-require 'htmlgrid/select'
-require 'stub/cgi'
+require "minitest/autorun"
+require "htmlgrid/select"
+require "stub/cgi"
 
 class StubSelectLookandfeel
-	def attributes(key)
-		{}
-	end
-	def lookup(key)
-		{
-			'foofoo'	=>	'Foo Nr. 1',
-			'foobar'	=>	'Foo Nr. 2',
-			'barfoo'	=>	'Bar Nr. 1',
-			'barbar'	=>	'Bar Nr. 2',
-			'foovals'	=>	'FooLabel',
-		}.fetch(key)
-	end
+  def attributes(key)
+    {}
+  end
+
+  def lookup(key)
+    {
+      "foofoo"	=>	"Foo Nr. 1",
+      "foobar"	=>	"Foo Nr. 2",
+      "barfoo"	=>	"Bar Nr. 1",
+      "barbar"	=>	"Bar Nr. 2",
+      "foovals"	=>	"FooLabel"
+    }.fetch(key)
+  end
 end
+
 class StubSelectSession
-	def valid_values(key)
-		[ 'foofoo', 'foobar', 'barfoo', 'barbar' ]
-	end
-	def lookandfeel
-		StubSelectLookandfeel.new
-	end
+  def valid_values(key)
+    ["foofoo", "foobar", "barfoo", "barbar"]
+  end
+
+  def lookandfeel
+    StubSelectLookandfeel.new
+  end
 end
+
 class StubSelectData
-	def foovals
-		'foobar'
-	end
+  def foovals
+    "foobar"
+  end
 end
 
 class TestSelect < Minitest::Test
-	def setup
-		@component = HtmlGrid::Select.new(:foovals, StubSelectData.new,
-			StubSelectSession.new)
-	end
+  def setup
+    @component = HtmlGrid::Select.new(:foovals, StubSelectData.new,
+      StubSelectSession.new)
+  end
+
   def test_to_html
-    assert_equal(<<-SEL.gsub(/\n|^\s*/, ''), @component.to_html(CGI.new).to_s)
+    assert_equal(<<-SEL.gsub(/\n|^\s*/, ""), @component.to_html(CGI.new).to_s)
     <SELECT name="foovals">
     <OPTION value="foofoo">Foo Nr. 1</OPTION>
     <OPTION value="foobar" selected>Foo Nr. 2</OPTION>

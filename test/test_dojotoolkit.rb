@@ -22,94 +22,107 @@
 # htmlgrid@ywesee.com, www.ywesee.com/htmlgrid
 #
 
-$: << File.expand_path('../lib', File.dirname(__FILE__))
+$: << File.expand_path("../lib", File.dirname(__FILE__))
 $: << File.dirname(__FILE__)
 
-require 'minitest/autorun'
-require 'stub/cgi'
-require 'htmlgrid/template'
-require 'htmlgrid/dojotoolkit'
-require 'test_helper'
-require 'flexmock/minitest'
-require 'sbsm/lookandfeel'
+require "minitest/autorun"
+require "stub/cgi"
+require "htmlgrid/template"
+require "htmlgrid/dojotoolkit"
+require "test_helper"
+require "flexmock/minitest"
+require "sbsm/lookandfeel"
 
 class TestDojotoolkit < Minitest::Test
   class StubAttributeComponent < HtmlGrid::Component
-    HTML_ATTRIBUTES = { "key" => "val" }
+    HTML_ATTRIBUTES = {"key" => "val"}
   end
+
   class StubInitComponent < HtmlGrid::Component
     attr_reader :init_called
     def init
       @init_called = true
     end
   end
+
   class StubLabelComponent < HtmlGrid::Component
     LABEL = true
   end
+
   class StubContainer
     attr_accessor :onsubmit
   end
+
   def setup
     @component = HtmlGrid::Component.new(nil, nil)
-    @session = flexmock('session') do |s|
-      s.should_receive(:user_agent).and_return('user_agent').by_default
+    @session = flexmock("session") do |s|
+      s.should_receive(:user_agent).and_return("user_agent").by_default
     end
     @cgi = CGI.new
   end
+
   def test_dynamic_html
     comp = HtmlGrid::Component.new("foo", @session)
-    comp.dojo_tooltip = 'my_tooltip'
+    comp.dojo_tooltip = "my_tooltip"
     assert_equal("foo", comp.model)
     assert_equal(false, comp.label?)
-    result= comp.dynamic_html(@cgi)
+    result = comp.dynamic_html(@cgi)
     assert(/href="my_tooltip"/.match(result))
   end
+
   def test_dynamic_html_with_msie
-    @session.should_receive(:user_agent).and_return('MSIE 4')
+    @session.should_receive(:user_agent).and_return("MSIE 4")
     comp = HtmlGrid::Component.new("foo", @session)
-    comp.dojo_tooltip = 'my_tooltip'
+    comp.dojo_tooltip = "my_tooltip"
     assert_equal("foo", comp.model)
     assert_equal(false, comp.label?)
-    result= comp.dynamic_html(@cgi)
+    result = comp.dynamic_html(@cgi)
     assert(/href="my_tooltip"/.match(result))
   end
 end
+
 class StubTemplateLookandfeel < SBSM::Lookandfeel
   RESOURCES = {
-    :css	=>	"test.css"
+    css: "test.css"
   }
   DICTIONARIES = {
     "de"	=>	{
-      :html_title	=>	"Test",
+      html_title: "Test"
     }
   }
   def lookandfeel
     self
   end
 end
+
 class StubTemplateSession
   def flavor
     "gcc"
   end
+
   def language
     "de"
   end
+
   def http_protocol
-    'http'
+    "http"
   end
+
   def server_name
     "testserver.com"
   end
+
   def server_port
-    '80'
+    "80"
   end
-  alias :default_language :language
+  alias_method :default_language, :language
 end
+
 class PublicTemplate < HtmlGrid::Template
   include HtmlGrid::DojoToolkit::DojoTemplate
   COMPONENTS = {}
   def dynamic_html_headers(context)
-    headers = super
+    _headers = super
   end
 end
 
@@ -118,16 +131,17 @@ class TestTemplate < Minitest::Test
     lookandfeel = StubTemplateLookandfeel.new(StubTemplateSession.new)
     @template = PublicTemplate.new(nil, lookandfeel, nil)
   end
+
   def test_dynamic_html_headers
     @cgi = CGI.new
-    result = @template.to_html(@cgi)
-    @session = flexmock('session')
+    _result = @template.to_html(@cgi)
+    @session = flexmock("session")
     comp = HtmlGrid::Component.new("foo", @session)
-    comp.dojo_tooltip = 'my_tooltip'
+    comp.dojo_tooltip = "my_tooltip"
     assert_equal("foo", comp.model)
     assert_equal(false, comp.label?)
-    result= comp.to_html(@cgi)
-    skip 'tooltip test does not work'
+    result = comp.to_html(@cgi)
+    skip "tooltip test does not work"
     assert(/href="my_tooltip"/.match(result))
   end
 end

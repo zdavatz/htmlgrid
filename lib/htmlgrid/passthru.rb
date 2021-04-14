@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+
 #
 #	HtmlGrid -- HyperTextMarkupLanguage Framework
 #	Copyright (C) 2003 ywesee - intellectual capital connected
@@ -25,20 +25,23 @@
 # PassThru -- HtmlGrid -- 29.10.2003 -- hwyss@ywesee.com
 
 module HtmlGrid
-	class PassThru
-		def initialize(model, session, container=nil)
-			@model = model
-			@session = session
-			@lookandfeel = @session.lookandfeel
-			init()
-		end
-		def init
-		end
-		def http_headers
-			{}
-		end
-		def to_html(context)
-			''
-		end
-	end
+  class PassThru
+    def initialize(model, session, container = nil)
+      @model = model
+      @session = session
+      @lookandfeel = @session.lookandfeel
+      init
+    end
+
+    def init
+    end
+
+    def http_headers
+      {}
+    end
+
+    def to_html(context)
+      ""
+    end
+  end
 end
