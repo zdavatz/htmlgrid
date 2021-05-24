@@ -163,7 +163,7 @@ module HtmlGrid
       end
     rescue => exc
       exc.backtrace.push(sprintf("%s::COMPONENTS[%s] in create(%s)",
-        self.class, components.index(component).inspect, component))
+        self.class, components.key(component).inspect, component))
       raise exc
     end
 
