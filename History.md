@@ -1,3 +1,6 @@
+# 1.2.2 / 24.05.21
+* https://github.com/zdavatz/davaz.com/issues/20
+
 # 1.2.1 / 14.04.21
 
 * Use standardrb
