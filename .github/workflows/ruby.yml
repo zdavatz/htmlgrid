@@ -15,21 +15,17 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-# Using a matrix fails, because /setup-ruby always invokes bundle install without any additional args
-# Fixed by adding not defining the debugger group in the Gemfile
+  # see https://github.com/ruby/setup-ruby
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu]
-        ruby: [2.7, 3.0, head]
-    continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
+        os: [ubuntu-latest]
+        ruby: [ '2.7', '3.0', '3.1']
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-
-    - name: Run tests via rake test
-      run: bundle exec rake test
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - run: bundle exec rake spec
