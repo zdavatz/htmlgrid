@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   if !RUBY_VERSION.match?(/^2\.(2|3)/)
     s.add_development_dependency "rack", "~> 1.6.4"
   else
-    s.add_development_dependency "rack"
+    s.add_development_dependency "rack", ">= 2.1.4"
   end
   s.add_development_dependency "bundler"
   s.add_development_dependency "rake"
