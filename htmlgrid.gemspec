@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   else
     s.add_development_dependency "rack", ">= 2.1.4"
   end
+  s.add_development_dependency "psych", "< 4.0.0"
   s.add_development_dependency "bundler"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
