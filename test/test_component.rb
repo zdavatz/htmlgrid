@@ -162,6 +162,13 @@ class TestComponent < Minitest::Test
     assert_equal(true, comp.label?)
   end
 
+  def test_integer_to_html
+    comp = HtmlGrid::Component.new("context")
+    comp.value = 3
+    result = comp.to_html(CGI.new)
+    assert_equal("3", result)
+  end
+
   def test_escape
     txt = "Guten Tag! & wie gehts uns denn heute? '<' schlechter oder '>' besser?"
     control = txt.dup
