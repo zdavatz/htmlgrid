@@ -1,3 +1,8 @@
+# 1.2.3 / 21.01.23
+
+* Passing an integer instead of string resulted in empty HTML (since 1.1.6)
+  see https://github.com/zdavatz/ydim-html/issues/19
+
 # 1.2.2 / 24.05.21
 * https://github.com/zdavatz/davaz.com/issues/20
 
