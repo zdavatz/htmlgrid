@@ -9,7 +9,7 @@ require "rspec/core/rake_task"
 require "standard/rake"
 
 require "minitest/reporters"
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 Rake::TestTask.new do |t|
   t.pattern = "test/test_*.rb"
