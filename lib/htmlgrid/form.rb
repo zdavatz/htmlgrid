@@ -63,11 +63,10 @@ module HtmlGrid
     private
 
     def hidden_fields(context)
-      "" <<
-        context.hidden("flavor", @lookandfeel.flavor) <<
-        context.hidden("language", @lookandfeel.language) <<
+        context.hidden("flavor", @lookandfeel.flavor) +
+        context.hidden("language", @lookandfeel.language) +
         context.hidden({"NAME" => "event", "ID" => "event",
-                        "VALUE" => event.to_s}) <<
+                        "VALUE" => event.to_s}) +
         context.hidden("state_id", @session.state.object_id.to_s)
     end
 

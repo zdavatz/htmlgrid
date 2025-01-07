@@ -113,7 +113,7 @@ module HtmlGrid
 
     def meta_tags(context)
       self.class::META_TAGS.inject("") { |inj, properties|
-        inj << context.meta(properties)
+        inj += context.meta(properties)
       }
     end
 

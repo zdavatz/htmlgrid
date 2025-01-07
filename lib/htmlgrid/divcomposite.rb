@@ -37,9 +37,9 @@ module HtmlGrid
     def to_html(context)
       res = ""
       @grid&.each_with_index { |div, idx|
-        res << context.div(tag_attributes(idx)) {
+        res += context.div(tag_attributes(idx)) {
           div.flatten.inject("") { |html, item|
-            html << if item.respond_to?(:to_html)
+            html += if item.respond_to?(:to_html)
               item.to_html(context).force_encoding("utf-8")
             else
               item.to_s

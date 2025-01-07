@@ -96,10 +96,10 @@ module HtmlGrid
         def component_html(cgi)
           html = ""
           @components.each { |component|
-            html << if component.respond_to? :to_html
-              component.to_html(cgi).to_s.dup.force_encoding("utf-8")
+            if component.respond_to? :to_html
+              html += component.to_html(cgi).to_s.dup.force_encoding("utf-8")
             else
-              component.to_s
+              html += component.to_s
             end
           }
           html = "&nbsp;" if html.empty?
@@ -162,7 +162,7 @@ module HtmlGrid
         span = 1
         @fields.each { |field|
           if span < 2
-            html << field.to_html(cgi)
+            html += field.to_html(cgi)
             span = field.colspan
           else
             span -= 1
