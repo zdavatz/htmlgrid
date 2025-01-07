@@ -1,3 +1,8 @@
+# 1.2.4 / 07.01.25
+
+* Add devenv environment for Ruby 3.3 (see https://devenv.sh/)
+* Updates for Ruby 3.4
+
 # 1.2.3 / 21.01.23
 
 * Passing an integer instead of string resulted in empty HTML (since 1.1.6)
