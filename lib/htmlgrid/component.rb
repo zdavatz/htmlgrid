@@ -172,7 +172,7 @@ module HtmlGrid
     def escape(txt)
       @@html_entities.each_with_object(txt.to_s.dup) { |map, str|
         char, entity = map
-        str.gsub!(char, "&" << entity << ";")
+        str.gsub!(char, "&" + entity + ";")
       }
     end
 
@@ -180,8 +180,8 @@ module HtmlGrid
     def escape_symbols(txt)
       esc = ""
       txt.to_s.each_byte { |byte|
-        esc << if (entity = @@symbol_entities[byte])
-          "&" << entity << ";"
+        esc += if (entity = @@symbol_entities[byte])
+          "&" + entity + ";"
         else
           byte
         end

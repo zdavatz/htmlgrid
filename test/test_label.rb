@@ -109,10 +109,10 @@ class TestLabel < Minitest::Test
   def test_to_html1
     composite = StubLabelComposite.new(StubLabelModel.new, @session)
     expected = '<TABLE cellspacing="0"><TR>'
-    expected << '<TD><LABEL for="componentname">Label</LABEL></TD>'
-    expected << "<TD>component</TD></TR>"
-    expected << '<TR><TD><LABEL for="componentname">Named Label</LABEL></TD>'
-    expected << "<TD>component</TD></TR></TABLE>"
+    expected += '<TD><LABEL for="componentname">Label</LABEL></TD>'
+    expected += "<TD>component</TD></TR>"
+    expected += '<TR><TD><LABEL for="componentname">Named Label</LABEL></TD>'
+    expected += "<TD>component</TD></TR></TABLE>"
     assert_equal(expected, composite.to_html(CGI.new))
   end
 

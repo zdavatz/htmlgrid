@@ -62,10 +62,10 @@ module HtmlGrid
           else
             attrs.store("href", @dojo_tooltip)
           end
-          html << context.div(attrs)
+          html += context.div(attrs)
         elsif @dojo_tooltip.respond_to?(:to_html)
           @dojo_tooltip.attributes.update(attrs)
-          html << @dojo_tooltip.to_html(context).force_encoding("utf-8")
+          html += @dojo_tooltip.to_html(context).force_encoding("utf-8")
         end
         unless html.empty? || dojo_parse_on_load
           html << context.script("type" => "text/javascript") {
@@ -73,7 +73,7 @@ module HtmlGrid
           }
         end
         # call original dynamic_html
-        dojo_dynamic_html(context) << html
+        "#{dojo_dynamic_html(context)}#{html}"
       end
     end
   end
@@ -114,7 +114,7 @@ module HtmlGrid
         ].join(",")
         args.store("data-dojo-config", config)
         args.store("src", dojo_path)
-        headers << context.script(args)
+        headers += context.script(args)
         args = {"type" => "text/javascript"}
         headers << context.script(args) {
           package_paths = self.class::DOJO_REQUIRE.map { |req|

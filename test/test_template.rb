@@ -93,8 +93,7 @@ class TestTemplate < Minitest::Test
   end
 
   def test_to_html
-    result = ""
-    result << @template.to_html(CGI.new)
+    result = @template.to_html(CGI.new)
     expected = [
       "<TITLE>Test</TITLE>",
       '<LINK rel="stylesheet" type="text/css" async="true" href="http://testserver.com:80/resources/gcc/test.css">',
@@ -111,8 +110,7 @@ class TestTemplate < Minitest::Test
     @lookandfeel.should_receive(:lookup).with(:html_title).and_return("html_title").by_default
     @lookandfeel.should_receive(:lookup).with(any).and_return(nil).by_default
     @template = Template.new(nil, @lookandfeel, nil)
-    result = ""
-    result << @template.to_html(CGI.new)
+    result = @template.to_html(CGI.new)
     expected = [
       "<TITLE>html_title</TITLE>",
       "this is a dummy CSS file, which should be inlined",

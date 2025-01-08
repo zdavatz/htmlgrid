@@ -3,4 +3,13 @@ ext/htmlgrid/Makefile
 pkg/
 .bundle/
 Gemfile.lock
-.ruby-version
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+

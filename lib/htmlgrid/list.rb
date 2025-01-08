@@ -90,7 +90,7 @@ module HtmlGrid
       ystep = step.at(1)
       components.each { |matrix, component|
         key = lookandfeel_key(component)
-        header_key = "th_" << key.to_s
+        header_key = "th_" + key.to_s
         if (txt = @lookandfeel.lookup(header_key))
           if self.class::SORT_HEADER
             @grid.add(sort_link(header_key, matrix, component), *matrix)

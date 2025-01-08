@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.license = "GPL v2.1"
   s.files = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
   s.homepage = "https://github.com/zdavatz/htmlgrid/"
+  s.metadata["changelog_uri"] = s.homepage + "/blob/master/History.md"
 
   s.add_dependency "sbsm", ">= 1.2.7"
   if !RUBY_VERSION.match?(/^2\.(2|3)/)

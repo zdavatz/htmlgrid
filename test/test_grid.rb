@@ -255,15 +255,15 @@ class TestGrid < Minitest::Test
     assert_equal(expected, @grid.to_html(CGI.new))
     @grid.add(nil, 1, 1)
     @grid.add_style("bar", 0, 1, 2)
-    expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD>'
-    expected << '<TD>&nbsp;</TD></TR><TR><TD class="bar">&nbsp;</TD>'
-    expected << '<TD class="bar">&nbsp;</TD></TR></TABLE>'
+    expected = '<TABLE cellspacing="0"><TR><TD class="foo">&nbsp;</TD>'+
+    '<TD>&nbsp;</TD></TR><TR><TD class="bar">&nbsp;</TD>' +
+    '<TD class="bar">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
     @grid.add_style("foobar", 0, 0, 2, 2)
-    expected = '<TABLE cellspacing="0"><TR><TD class="foobar">&nbsp;</TD>'
-    expected << '<TD class="foobar">&nbsp;</TD></TR>'
-    expected << '<TR><TD class="foobar">&nbsp;</TD>'
-    expected << '<TD class="foobar">&nbsp;</TD></TR></TABLE>'
+    expected = '<TABLE cellspacing="0"><TR><TD class="foobar">&nbsp;</TD>' +
+    '<TD class="foobar">&nbsp;</TD></TR>' +
+    '<TR><TD class="foobar">&nbsp;</TD>' +
+    '<TD class="foobar">&nbsp;</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
 
@@ -292,9 +292,9 @@ class TestGrid < Minitest::Test
   def test_push
     @grid.add("bar", 4, 0)
     @grid.push("foo")
-    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD>'
-    expected << "<TD>&nbsp;</TD><TD>&nbsp;</TD><TD>bar</TD></TR>"
-    expected << '<TR><TD colspan="5">foo</TD></TR></TABLE>'
+    expected = '<TABLE cellspacing="0"><TR><TD>&nbsp;</TD><TD>&nbsp;</TD>' +
+    "<TD>&nbsp;</TD><TD>&nbsp;</TD><TD>bar</TD></TR>" +
+    '<TR><TD colspan="5">foo</TD></TR></TABLE>'
     assert_equal(expected, @grid.to_html(CGI.new))
   end
 
